@@ -1,0 +1,53 @@
+version: '3'
+
+volumes:
+  point_and_clickle_local_postgres_data: {}
+  point_and_clickle_local_postgres_data_backups: {}
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: point_and_clickle_local_django
+    container_name: point_and_clickle_local_django
+    platform: linux/x86_64
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "8000:8000"
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: point_and_clickle_production_postgres
+    container_name: point_and_clickle_local_postgres
+    volumes:
+      - point_and_clickle_local_postgres_data:/var/lib/postgresql/data:Z
+      - point_and_clickle_local_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.local/.postgres
+
+  docs:
+    image: point_and_clickle_local_docs
+    container_name: point_and_clickle_local_docs
+    platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./point_and_clickle:/app/point_and_clickle:z
+    ports:
+      - "9000:9000"
+    command: /start-docs

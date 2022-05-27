@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=point_and_clickle
+POSTGRES_USER=GQtFrwJNAdAMAWXhIwmiuRNjDDUTNyTx
+POSTGRES_PASSWORD=HvCucc7eP4BLxqSkUyPsmR1VHChYI7i3CcYlXiefe4jNd3RIamfNSu3azQkMG03S
