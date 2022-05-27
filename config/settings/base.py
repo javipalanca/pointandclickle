@@ -80,7 +80,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "point_and_clickle.users",
     "point_and_clickle.games.apps.GamesConfig",
-    # Your stuff: custom apps go here
+    'dal',
+    'dal_select2',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

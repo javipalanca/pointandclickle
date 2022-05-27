@@ -18,7 +18,7 @@ urlpatterns = [
     #path("users/", include("point_and_clickle.users.urls", namespace="users")),
     #path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
-    path("game/", include("point_and_clickle.games.urls"), name="game"),
+    path("game/", include("point_and_clickle.games.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS
