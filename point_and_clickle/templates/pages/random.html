@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% load resize %}
+
+{% block content %}
+    <img class="screenshot" src="{{ game.screenshots.0 | resize }}" alt="First screenshot">
+{% endblock %}

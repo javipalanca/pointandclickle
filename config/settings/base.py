@@ -68,9 +68,9 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
-    #"allauth",
-    #"allauth.account",
-    #"allauth.socialaccount",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
@@ -79,6 +79,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "point_and_clickle.users",
+    "point_and_clickle.games.apps.GamesConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
