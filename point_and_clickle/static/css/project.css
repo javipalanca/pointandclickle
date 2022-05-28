@@ -22,23 +22,10 @@
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  background-color: transparent;
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-origin: content-box;
-  background-clip: border-box;
-  background-attachment: scroll;
-  background-image: none;
-  cursor: pointer;
-  overflow: hidden;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
+}
+
+.hide {
+  display: none;
 }
 
 @font-face {

@@ -2,15 +2,36 @@
 {% load resize %}
 
 {% block content %}
-    <img class="screenshot" src="{{ game.screenshots.5 | resize }}" alt="First screenshot">
-    <div>
-        <form action="" method="post">
-            {% csrf_token %}
-            <div id="remote" class="twitter-typeahead">
-                <input type="text" class="form-control input-lg typeahead tt-input" name="q" placeholder=""/>
-            </div>
-        </form>
+
+    <div id="cover" class="hide">
+        <h1></h1>
+        <img class="screenshot" src="{{ game.cover | resize }}" alt="Game cover">
     </div>
+
+    <img class="screenshot hide" id="img0" src="{{ game.screenshots.5 | resize }}" alt="First screenshot">
+    <img class="screenshot hide" id="img1" src="{{ game.screenshots.4 | resize }}" alt="Second screenshot">
+    <img class="screenshot hide" id="img2" src="{{ game.screenshots.3 | resize }}" alt="Third screenshot">
+    <img class="screenshot hide" id="img3" src="{{ game.screenshots.2 | resize }}" alt="Fourth screenshot">
+    <img class="screenshot hide" id="img4" src="{{ game.screenshots.1 | resize }}" alt="Fifth screenshot">
+    <img class="screenshot hide" id="img5" src="{{ game.screenshots.0 | resize }}" alt="Sixth screenshot">
+
+    <div>
+        <button id="button0" class="guess hide">1</button>
+        <button id="button1" class="guess hide">2</button>
+        <button id="button2" class="guess hide">3</button>
+        <button id="button3" class="guess hide">4</button>
+        <button id="button4" class="guess hide">5</button>
+        <button id="button5" class="guess hide">6</button>
+    </div>
+
+    <div id="divguesses"><span id="remaining"></span> guesses remaining.</div>
+    <div>
+        <div id="remote" class="twitter-typeahead">
+            <input type="text" id="input" class="form-control input-lg typeahead tt-input" name="q" placeholder=""/>
+        </div>
+        <input type="submit" class="btn btn-primary btn-lg" id="submit" value="Submit">
+    </div>
+
 {% endblock %}
 
 {% block inline_javascript %}
@@ -47,4 +68,95 @@
                 });
         });
     </script>
+
+    <script type="text/javascript">
+$( document ).ready(function() {
+    console.log("Hello, World!")
+
+    function fromBinary(str) {
+        // Going backwards: from bytestream, to percent-encoding, to original string.
+        return decodeURIComponent(atob(str).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
+
+    let result = "{{ result }}";
+    console.log(fromBinary(result));
+
+    today = new Date().setHours(0, 0, 0, 0);
+
+    let guess;
+
+    if (localStorage.getItem("last_played") === null || localStorage.getItem("last_played") < today) {
+        console.log("Initializing storage");
+        localStorage.setItem("last_played", today);
+        localStorage.setItem("current_guess", "0");
+        guess = 0;
+
+    } else {
+        console.log("Storage already initialized");
+        guess = parseInt(localStorage.getItem("current_guess"));
+    }
+
+    function update_guesses(guess) {
+        for (let i = 0; i < 6; i++) {
+            if (i <= guess) {
+                $("#button" + i).removeClass("hide");
+            } else {
+                $("#button" + i).addClass("hide");
+            }
+            if (i === guess) {
+                $("#img" + i).removeClass("hide");
+            } else {
+                $("#img" + i).addClass("hide");
+            }
+        }
+        $("#remaining").text(6 - guess);
+    }
+
+    update_guesses(guess);
+
+    $(".guess").click(function() {
+        let id = parseInt($(this).attr("id").replace("button", ""));
+        for (let i = 0; i < 6; i++) {
+            if (i === id) {
+                $("#img" + i).removeClass("hide");
+            } else {
+                $("#img" + i).addClass("hide");
+            }
+        }
+    });
+
+    $("#submit").click(function() {
+
+        if($("#input").val() === fromBinary(result)) {
+            console.log("Correct!");
+
+        }
+        else {
+            console.log("Incorrect!");
+            guess++;
+            if(guess < 6) {
+                update_guesses(guess);
+                localStorage.setItem("current_guess", guess.toString());
+            }
+            else {
+                console.log("Game over!");
+                $("#divguesses").text("Try again tomorrow!");
+                showResult();
+            }
+        }
+
+    });
+
+    function showResult(){
+        $("#submit").hide();
+        $("#input").hide();
+        $("#cover h1").text(fromBinary(result));
+        $("#cover").show();
+    }
+
+});
+    </script>
+
 {% endblock %}
