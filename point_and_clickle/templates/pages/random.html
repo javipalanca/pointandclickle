@@ -25,6 +25,9 @@
     </div>
 
     <div id="divguesses"><span id="remaining"></span> guesses remaining.</div>
+
+    <ul id="guesses-list"></ul>
+
     <div>
         <div id="remote" class="twitter-typeahead">
             <input type="text" id="input" class="form-control input-lg typeahead tt-input" name="q" placeholder=""/>
@@ -49,7 +52,7 @@
                 limit: 100,
                 remote: {
                     wildcard: '%QUERY',
-                    url: "/game/game-autocomplete/?q=%QUERY",
+                    url: "/game-autocomplete/?q=%QUERY",
                     //transform: response => $.map(response.results, game => ({value: game.text}))
                 }
             });
@@ -66,97 +69,11 @@
                     source: titlesDisplay.ttAdapter(),
                     //displayKey: 'value'
                 });
+
+            let result = "{{ result }}";
+            init_wordle(result);
         });
-    </script>
 
-    <script type="text/javascript">
-$( document ).ready(function() {
-    console.log("Hello, World!")
-
-    function fromBinary(str) {
-        // Going backwards: from bytestream, to percent-encoding, to original string.
-        return decodeURIComponent(atob(str).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-    }
-
-    let result = "{{ result }}";
-    console.log(fromBinary(result));
-
-    today = new Date().setHours(0, 0, 0, 0);
-
-    let guess;
-
-    if (localStorage.getItem("last_played") === null || localStorage.getItem("last_played") < today) {
-        console.log("Initializing storage");
-        localStorage.setItem("last_played", today);
-        localStorage.setItem("current_guess", "0");
-        guess = 0;
-
-    } else {
-        console.log("Storage already initialized");
-        guess = parseInt(localStorage.getItem("current_guess"));
-    }
-
-    function update_guesses(guess) {
-        for (let i = 0; i < 6; i++) {
-            if (i <= guess) {
-                $("#button" + i).removeClass("hide");
-            } else {
-                $("#button" + i).addClass("hide");
-            }
-            if (i === guess) {
-                $("#img" + i).removeClass("hide");
-            } else {
-                $("#img" + i).addClass("hide");
-            }
-        }
-        $("#remaining").text(6 - guess);
-    }
-
-    update_guesses(guess);
-
-    $(".guess").click(function() {
-        let id = parseInt($(this).attr("id").replace("button", ""));
-        for (let i = 0; i < 6; i++) {
-            if (i === id) {
-                $("#img" + i).removeClass("hide");
-            } else {
-                $("#img" + i).addClass("hide");
-            }
-        }
-    });
-
-    $("#submit").click(function() {
-
-        if($("#input").val() === fromBinary(result)) {
-            console.log("Correct!");
-
-        }
-        else {
-            console.log("Incorrect!");
-            guess++;
-            if(guess < 6) {
-                update_guesses(guess);
-                localStorage.setItem("current_guess", guess.toString());
-            }
-            else {
-                console.log("Game over!");
-                $("#divguesses").text("Try again tomorrow!");
-                showResult();
-            }
-        }
-
-    });
-
-    function showResult(){
-        $("#submit").hide();
-        $("#input").hide();
-        $("#cover h1").text(fromBinary(result));
-        $("#cover").show();
-    }
-
-});
     </script>
 
 {% endblock %}

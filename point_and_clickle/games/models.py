@@ -38,3 +38,11 @@ class Game(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+
+class DailyGame(TimeStampedModel):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    date = models.DateField(unique=True)
+
+    def __str__(self):
+        return self.game.title + ' ' + str(self.date)
