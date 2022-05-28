@@ -21,7 +21,18 @@ Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings
 
         $ python manage.py createsuperuser
 
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
+### Importing GamesDB
+
+-   To import the games database you need  the **gamesdb.json** result of running the scrapper.
+
+-   To import the **games database**, use this command:
+
+        $ python manage.py importdb gamesdb.json
+
+-   Finally you need to filter the database, use this command:
+
+        $ python manage.py filtergames
+
 
 ### Type checks
 
