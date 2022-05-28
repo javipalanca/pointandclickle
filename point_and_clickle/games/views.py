@@ -1,8 +1,8 @@
 from dal import autocomplete
+from django import http
 
 from django.views.generic import TemplateView
 
-from point_and_clickle.games.forms import TitleForm
 from point_and_clickle.games.models import Game
 
 
@@ -12,7 +12,6 @@ class RandomView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['game'] = Game.objects.filter(is_valid=True, is_pointandclick=True).order_by('?').first()
-        context["form"] = TitleForm()
         return context
 
 
@@ -21,6 +20,12 @@ class TitleAutocomplete(autocomplete.Select2QuerySetView):
         qs = Game.objects.filter(is_pointandclick=True)
 
         if self.q:
-            qs = qs.filter(title__istartswith=self.q)
+            qs = qs.filter(title__icontains=self.q)
 
         return qs
+
+    def get_results(self, context):
+        return [self.get_result_label(result) for result in context['object_list']]
+
+    def render_to_response(self, context):
+        return http.JsonResponse(self.get_results(context), safe=False)
