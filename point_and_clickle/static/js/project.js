@@ -34,7 +34,6 @@ function init_wordle(result) {
         let title = $("#input").val();
         if (title === fromBinary(result)) {
             console.log("Correct!");
-            guess = 6;
             update_guesses(guess);
             showResult(result);
         } else {
@@ -85,7 +84,7 @@ function update_guesses(guess) {
 function showResult(result) {
     $("#submit").hide();
     $("#input").hide();
-    console.log("Titulo: " + fromBinary(result));
+
     $("#cover h1").text(fromBinary(result));
     $("#cover").show();
 
@@ -93,7 +92,17 @@ function showResult(result) {
         $("#divguesses").text("Try again tomorrow!");
     }
     else {
+        let guess = localStorage.getItem("current_guess");
         $("#divguesses").text("You won!");
+        for (let i = 0; i < 6; i++) {
+            let button = $("#result" + i);
+            button.removeClass("hide");
+            if (i <= guess) {
+                button.addClass("btn-success");
+                button.removeClass("btn-secondary");
+            }
+        }
+
     }
 }
 
