@@ -1,53 +1,178 @@
+const MAX_GUESS = 6; // Define the maximum number of guesses
+
 function init_wordle(result) {
-    today = new Date().setHours(0, 0, 0, 0);
 
-    let guess;
+    // Load save states
+    let guess_list = load_game();
+    play_guess(guess_list, result);
 
-    if (localStorage.getItem("last_played") === null || localStorage.getItem("last_played") < today) {
-        console.log("Initializing storage");
-        localStorage.setItem("last_played", today);
-        localStorage.setItem("current_guess", "0");
-        localStorage.setItem("guess_list", "[]");
-        guess = 0;
+    // User submit guess action
+    $("#submit").click(function () {
+        // update the guess list
+        let user_title = $("#input").val();
+        $("#input").val("");
+        if (user_title && guess_list.length < MAX_GUESS) {
+            guess_list.push(user_title);
+            set_guess_list(guess_list);
+        }
+        // Check de result
+        play_guess(guess_list, result);
+    });
 
-    } else {
-        console.log("Storage already initialized");
-        guess = parseInt(localStorage.getItem("current_guess"));
-    }
-    update_guesses(guess);
-    if (guess>=6  || check_win_condition(result)) {
-        showResult(result);
-    }
-
+    // Change image button action
     $(".guess").click(function () {
         let id = parseInt($(this).attr("id").replace("button", ""));
-        for (let i = 0; i < 6; i++) {
-            if (i === id) {
-                $("#img" + i).removeClass("hide");
-            } else {
-                $("#img" + i).addClass("hide");
-            }
-        }
+        show_image(id);
     });
+}
 
-    $("#submit").click(function () {
-        let title = $("#input").val();
-        if (title === fromBinary(result)) {
-            console.log("Correct!");
-            update_guesses(guess);
-            showResult(result);
+// Loads the save state from localStorage. Returns the current guess list
+function load_game() {
+    let today = new Date().setHours(0, 0, 0, 0); // Today timestap
+
+    let guess_list = [];
+
+    if (localStorage.getItem("last_played") === null || localStorage.getItem("last_played") < today) {
+        // New game
+        console.log("Creating new game...");
+        localStorage.setItem("last_played", today);
+        set_guess_list(guess_list);
+    } else {
+        // Restore saved game
+        console.log("Loading saved game...");
+        guess_list = get_guess_list();
+    }
+
+    return guess_list;
+}
+
+
+// Checks the last played guess
+function play_guess(guess_list, result) {
+    // show image
+    show_image(guess_list.length);
+
+    // Update game buttons
+    update_guess_button(guess_list.length);
+
+    // Update number guesses
+    $("#remaining").text(MAX_GUESS - guess_list.length);
+
+    // Update guess list
+    if (guess_list && guess_list.length > 0) {
+        // Print guess list
+        print_guess_list(guess_list);
+
+        // Get current guess
+        let guess = guess_list[guess_list.length - 1];
+        console.log("Playing " + guess + " ...")
+
+        // Check if the result is correct
+        if (guess === fromBinary(result)) {
+            show_game_data(true, result);
         } else {
-            console.log("Incorrect!");
-            guess++;
-            update_guesses(guess);
-            if (guess >= 6) {
-                console.log("Game over!");
-                showResult(result);
+            if (guess_list.length < MAX_GUESS) {
+                console.log("Try again...");
+            } else {
+                show_game_data(false, result);
             }
         }
-        $("#input").val('');
+    }
+}
 
-    });
+
+// Shows the game
+function show_game_data(is_winner, result) {
+    // Show title
+    $("#cover h1").text(fromBinary(result));
+
+    // Show cover
+    $("#cover").show();
+
+    // Hide image
+    show_image(-1);
+
+    // Hide buttons
+    update_guess_button(-1);
+
+    // Hide remaining guesses
+    $("#remaining").hide();
+
+    // Hide submit button
+    $("#submit").hide();
+    $("#input").hide();
+
+    // Show result
+    if (is_winner) {
+        $("#divguesses").text("You won!");
+    } else {
+        $("#divguesses").text("Try again tomorrow!");
+    }
+    show_win_bar(result);
+}
+
+function show_win_bar(result) {
+    for (let i = 0; i < 6; i++) {
+        let button = $("#result" + i);
+        button.removeClass("hide");
+        let guess_list = get_guess_list();
+        let guess = guess_list.length - 1;
+        if (i < guess) {
+            button.addClass("btn-danger");
+            button.removeClass("btn-secondary");
+        } else if (i === guess && guess_list[i] === fromBinary(result)) {
+            button.addClass("btn-success");
+            button.removeClass("btn-secondary");
+        }
+    }
+}
+
+// Shows an image guess
+function show_image(num_guess) {
+    for (let i = 0; i < MAX_GUESS; i++) {
+        if (i === num_guess) {
+            $("#img" + i).removeClass("hide");
+        } else {
+            $("#img" + i).addClass("hide");
+        }
+    }
+}
+
+// Shows the button number...
+function update_guess_button(num_guess) {
+    for (let i = 0; i < MAX_GUESS; i++) {
+        if (i <= num_guess) {
+            $("#button" + i).removeClass("hide");
+        } else {
+            $("#button" + i).addClass("hide");
+        }
+    }
+}
+
+// Gets the localStorage guess list as an object
+function get_guess_list() {
+    let list = [];
+    let local = localStorage.getItem("guess_list");
+    if (local) {
+        list = JSON.parse(local);
+    }
+    return list;
+}
+
+// Sets the list in localStorage as string
+function set_guess_list(list) {
+    if (list) {
+        let local = JSON.stringify(list);
+        localStorage.setItem("guess_list", local);
+    }
+}
+
+function print_guess_list(guess_list) {
+    let ul_guesses = $("#guesses-list");
+    ul_guesses.empty();
+    for (let i = 0; i < guess_list.length; i++) {
+        ul_guesses.append("<li>" + guess_list[i] + "</li>");
+    }
 }
 
 function fromBinary(str) {
@@ -57,82 +182,3 @@ function fromBinary(str) {
     }).join(''));
 }
 
-function update_guesses(guess) {
-    for (let i = 0; i < 6; i++) {
-        if (i <= guess) {
-            $("#button" + i).removeClass("hide");
-        } else {
-            $("#button" + i).addClass("hide");
-        }
-        if (i === guess) {
-            $("#img" + i).removeClass("hide");
-        } else {
-            $("#img" + i).addClass("hide");
-        }
-        if (guess >= 6) {
-            $("#img0").removeClass("hide");
-        }
-    }
-    $("#remaining").text(6 - guess);
-
-    localStorage.setItem("current_guess", guess.toString());
-
-    update_guess_list();
-}
-
-
-function showResult(result) {
-    $("#submit").hide();
-    $("#input").hide();
-
-    $("#cover h1").text(fromBinary(result));
-    $("#cover").show();
-
-    if (!check_win_condition(result)) {
-        $("#divguesses").text("Try again tomorrow!");
-    }
-    else {
-        let guess = localStorage.getItem("current_guess");
-        $("#divguesses").text("You won!");
-        for (let i = 0; i < 6; i++) {
-            let button = $("#result" + i);
-            button.removeClass("hide");
-            if (i <= guess) {
-                button.addClass("btn-success");
-                button.removeClass("btn-secondary");
-            }
-        }
-
-    }
-}
-
-function check_win_condition(result) {
-    let list = localStorage.getItem("guess_list");
-    if (list !== "[]" && list !== undefined) {
-        list = JSON.parse(list);
-        return list[list.length - 1] === fromBinary(result);
-    }
-    return false;
-}
-
-function update_guess_list() {
-    let title = $("#input").val();
-    let list = localStorage.getItem("guess_list");
-    if (title) {
-        if (list !== "[]" && list !== undefined) {
-            list = JSON.parse(list);
-            list.push(title.toString());
-            list = JSON.stringify(list);
-        } else {
-            list = '["' + title.toString() + '"]';
-        }
-        localStorage.setItem("guess_list", list);
-    }
-    $("#guesses-list").empty();
-    if (list !== "[]" && list !== undefined) {
-        list = JSON.parse(list);
-        for (let i = 0; i < list.length; i++) {
-            $("#guesses-list").append("<li>" + list[i] + "</li>");
-        }
-    }
-}
