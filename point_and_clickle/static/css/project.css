@@ -29,11 +29,6 @@
   display: none;
 }
 
-@font-face {
-  font-family: "Prociono";
-  src: url("../font/Prociono-Regular-webfont.ttf");
-}
-
 html {
   overflow-y: scroll;
 }
