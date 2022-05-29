@@ -3,28 +3,52 @@
 
 {% block content %}
 
-    <div id="cover" class="hide">
-        <h1></h1>
-        <img class="screenshot" src="{{ game.cover | resize }}" alt="Game cover">
+<div class="modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="{{ game.cover | resize }}" alt="Game cover">
+          <div class="card-body">
+            <h5 class="card-title"></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container-fluid d-flex justify-content-center p-2">
+        <img class="screenshot rounded mx-auto hide" id="img0" src="{{ game.screenshots.5 | resize }}"
+             alt="First screenshot">
+        <img class="screenshot rounded mx-auto hide" id="img1" src="{{ game.screenshots.4 | resize }}"
+             alt="Second screenshot">
+        <img class="screenshot rounded mx-auto hide" id="img2" src="{{ game.screenshots.3 | resize }}"
+             alt="Third screenshot">
+        <img class="screenshot rounded mx-auto hide" id="img3" src="{{ game.screenshots.2 | resize }}"
+             alt="Fourth screenshot">
+        <img class="screenshot rounded mx-auto hide" id="img4" src="{{ game.screenshots.1 | resize }}"
+             alt="Fifth screenshot">
+        <img class="screenshot rounded mx-auto hide" id="img5" src="{{ game.screenshots.0 | resize }}"
+             alt="Sixth screenshot">
     </div>
 
-    <img class="screenshot hide" id="img0" src="{{ game.screenshots.5 | resize }}" alt="First screenshot">
-    <img class="screenshot hide" id="img1" src="{{ game.screenshots.4 | resize }}" alt="Second screenshot">
-    <img class="screenshot hide" id="img2" src="{{ game.screenshots.3 | resize }}" alt="Third screenshot">
-    <img class="screenshot hide" id="img3" src="{{ game.screenshots.2 | resize }}" alt="Fourth screenshot">
-    <img class="screenshot hide" id="img4" src="{{ game.screenshots.1 | resize }}" alt="Fifth screenshot">
-    <img class="screenshot hide" id="img5" src="{{ game.screenshots.0 | resize }}" alt="Sixth screenshot">
-
-    <div>
-        <button id="button0" class="guess hide">1</button>
-        <button id="button1" class="guess hide">2</button>
-        <button id="button2" class="guess hide">3</button>
-        <button id="button3" class="guess hide">4</button>
-        <button id="button4" class="guess hide">5</button>
-        <button id="button5" class="guess hide">6</button>
+    <div class="container-fluid d-flex justify-content-center p-2">
+        <div class="btn-group" role="group">
+            <button id="button0" type="button" class="btn btn-outline-primary guess">1</button>
+            <button id="button1" type="button" class="btn btn-outline-primary guess">2</button>
+            <button id="button2" type="button" class="btn btn-outline-primary guess">3</button>
+            <button id="button3" type="button" class="btn btn-outline-primary guess">4</button>
+            <button id="button4" type="button" class="btn btn-outline-primary guess">5</button>
+            <button id="button5" type="button" class="btn btn-outline-primary guess">6</button>
+        </div>
     </div>
 
-    <div>
+    <div class="container-fluid d-flex justify-content-center p-2">
         <button id="result0" type="button" class="btn btn-secondary hide"></button>
         <button id="result1" type="button" class="btn btn-secondary hide"></button>
         <button id="result2" type="button" class="btn btn-secondary hide"></button>
@@ -33,17 +57,22 @@
         <button id="result5" type="button" class="btn btn-secondary hide"></button>
     </div>
 
-    <div id="divguesses"><span id="remaining"></span> guesses remaining.</div>
-
-    <ul id="guesses-list"></ul>
-
-    <div>
-        <div id="remote" class="twitter-typeahead">
-            <input type="text" id="input" class="form-control input-lg typeahead tt-input" name="q" placeholder=""/>
-        </div>
-        <input type="submit" class="btn btn-primary btn-lg" id="submit" value="Submit">
+    <div class="container-fluid d-flex justify-content-center p-2 alert alert-info" id="divguesses">
+        <span id="remaining"></span>&nbsp;guesses remaining.
     </div>
 
+    <div id="remote" class="container-fluid d-flex justify-content-center p-2 twitter-typeahead">
+      <div class="col-sm-10">
+            <input type="text" class="form-control form-control-lg typeahead tt-input" id="input" placeholder="Guess the point & click game...">
+      </div>
+      <div class="col-sm-2">
+            <button type="submit" class="btn btn-primary mb-3" id="submit">Submit</button>
+      </div>
+    </div>
+
+    <div class="container-fluid d-flex justify-content-center p-2">
+        <ul id="guesses-list" class="list-group"></ul>
+    </div>
 {% endblock %}
 
 {% block inline_javascript %}
@@ -68,6 +97,11 @@
             titlesDisplay.initialize();
 
             $('#remote .typeahead').typeahead({
+                    classNames: {
+                        input: 'form-control',
+                        suggestion: 'list-group-item',
+                        hint: 'active'
+                    },
                     minLength: 1,
                     highlight: true,
                     hint: true

@@ -46,6 +46,9 @@ function load_game() {
     return guess_list;
 }
 
+function is_result_correct(guess, result) {
+    return guess === fromBinary(result);
+}
 
 // Checks the last played guess
 function play_guess(guess_list, result) {
@@ -61,14 +64,14 @@ function play_guess(guess_list, result) {
     // Update guess list
     if (guess_list && guess_list.length > 0) {
         // Print guess list
-        print_guess_list(guess_list);
+        print_guess_list(guess_list, result);
 
         // Get current guess
         let guess = guess_list[guess_list.length - 1];
         console.log("Playing " + guess + " ...")
 
         // Check if the result is correct
-        if (guess === fromBinary(result)) {
+        if (is_result_correct(guess, result)) {
             show_game_data(true, result);
         } else {
             if (guess_list.length < MAX_GUESS) {
@@ -84,16 +87,16 @@ function play_guess(guess_list, result) {
 // Shows the game
 function show_game_data(is_winner, result) {
     // Show title
-    $("#cover h1").text(fromBinary(result));
+    $(".card-title").text(fromBinary(result));
 
     // Show cover
-    $("#cover").show();
+    $(".modal").show();
 
-    // Hide image
-    show_image(-1);
+    // Show all images
+    show_image(0);
 
-    // Hide buttons
-    update_guess_button(-1);
+    // Show all buttons
+    update_guess_button(MAX_GUESS);
 
     // Hide remaining guesses
     $("#remaining").hide();
@@ -117,12 +120,13 @@ function show_win_bar(result) {
         button.removeClass("hide");
         let guess_list = get_guess_list();
         let guess = guess_list.length - 1;
-        if (i < guess) {
+        if (i <= guess) {
             button.addClass("btn-danger");
             button.removeClass("btn-secondary");
-        } else if (i === guess && guess_list[i] === fromBinary(result)) {
+        }
+        if (i === guess && is_result_correct(guess_list[i], result)) {
             button.addClass("btn-success");
-            button.removeClass("btn-secondary");
+            button.removeClass("btn-danger");
         }
     }
 }
@@ -167,11 +171,17 @@ function set_guess_list(list) {
     }
 }
 
-function print_guess_list(guess_list) {
+function print_guess_list(guess_list, result) {
     let ul_guesses = $("#guesses-list");
     ul_guesses.empty();
+    let icon;
     for (let i = 0; i < guess_list.length; i++) {
-        ul_guesses.append("<li>" + guess_list[i] + "</li>");
+        if (is_result_correct(guess_list[i], result)) {
+            icon = "<i class=\"bi bi-check\"></i>";
+        } else {
+            icon = "<i class=\"bi bi-x\"></i>";
+        }
+        ul_guesses.append("<li class=\"list-group-item\">" + icon + guess_list[i] + "</li>");
     }
 }
 
