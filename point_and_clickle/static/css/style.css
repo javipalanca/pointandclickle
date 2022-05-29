@@ -10,7 +10,7 @@
 --------------------------------------------------------------*/
 body {
   font-family: "Open Sans", sans-serif;
-  color: #777;
+  /*color: #777;*/
 }
 
 a {
@@ -399,17 +399,20 @@ section {
   font-size: 16px;
   letter-spacing: 1px;
   display: inline-block;
-  padding: 8px 28px 10px 28px;
+  /*padding: 8px 28px 10px 28px;*/
   border-radius: 50px;
   transition: 0.5s;
-  border: 1px solid #fff;
-  color: #fff;
+  border: 1px solid;
+  /*border-color: #fff;
+  color: #fff;*/
+  background: rgba(255, 255, 255, 1);
 }
+/*
 #hero .btn-get-started:hover {
   background: #fff;
   color: #70b9b0;
   border: 1px solid #70b9b0;
-}
+}*/
 @media (min-width: 1024px) {
   #hero {
     background-attachment: fixed;

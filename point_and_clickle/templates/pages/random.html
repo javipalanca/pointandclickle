@@ -1,87 +1,95 @@
 {% extends "base_amoeba.html" %}
 {% load resize %}
 
+{% block modal %}
+    <div class="modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img class="card-img-top" src="{{ game.cover | resize }}" alt="Game cover">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
 
-<div class="modal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="{{ game.cover | resize }}" alt="Game cover">
-          <div class="card-body">
-            <h5 class="card-title"></h5>
-          </div>
+    <div class="container">
+        <div class="row" id="searchbox">
+            <div class="col-md-12 twitter-typeahead" id="remote">
+                <div class="row">
+                    <div class="col-md-11">
+                        <input type="text" class="typeahead tt-input" id="input"
+                               placeholder="Guess the point & click game...">
+                    </div>
+                    <div class="col-md-1">
+                        <div class="btn-group" role="group">
+                            <button type="submit" class="btn btn-submit btn-outline-darkgreen" id="submit">Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-md-12 twitter-typeahead" id="remote">
-      <div class="form-group">
-            <input type="text" class="form-control form-control-lg typeahead tt-input" id="input"
-                   placeholder="Guess the point & click game...">
-      </div>
-      <div class="text-center">
-            <button type="submit" class="btn-get-started" id="submit">Submit</button>
-      </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="container-fluid d-flex justify-content-center p-2">
-        <img class="screenshot rounded mx-auto hide" id="img0" src="{{ game.screenshots.5 | resize }}"
-             alt="First screenshot">
-        <img class="screenshot rounded mx-auto hide" id="img1" src="{{ game.screenshots.4 | resize }}"
-             alt="Second screenshot">
-        <img class="screenshot rounded mx-auto hide" id="img2" src="{{ game.screenshots.3 | resize }}"
-             alt="Third screenshot">
-        <img class="screenshot rounded mx-auto hide" id="img3" src="{{ game.screenshots.2 | resize }}"
-             alt="Fourth screenshot">
-        <img class="screenshot rounded mx-auto hide" id="img4" src="{{ game.screenshots.1 | resize }}"
-             alt="Fifth screenshot">
-        <img class="screenshot rounded mx-auto hide" id="img5" src="{{ game.screenshots.0 | resize }}"
-             alt="Sixth screenshot">
-    </div>
-</div>
-<div class="row">
-    <div class="container-fluid d-flex justify-content-center p-2">
-        <div class="btn-group" role="group">
-            <button id="button0" type="button" class="btn btn-outline-darkgreen guess">1</button>
-            <button id="button1" type="button" class="btn btn-outline-darkgreen guess">2</button>
-            <button id="button2" type="button" class="btn btn-outline-darkgreen guess">3</button>
-            <button id="button3" type="button" class="btn btn-outline-darkgreen guess">4</button>
-            <button id="button4" type="button" class="btn btn-outline-darkgreen guess">5</button>
-            <button id="button5" type="button" class="btn btn-outline-darkgreen guess">6</button>
+        <div class="row">
+            <div class="container-fluid d-flex justify-content-center p-2">
+                <img class="screenshot rounded mx-auto hide" id="img0" src="{{ game.screenshots.5 | resize }}"
+                     alt="First screenshot">
+                <img class="screenshot rounded mx-auto hide" id="img1" src="{{ game.screenshots.4 | resize }}"
+                     alt="Second screenshot">
+                <img class="screenshot rounded mx-auto hide" id="img2" src="{{ game.screenshots.3 | resize }}"
+                     alt="Third screenshot">
+                <img class="screenshot rounded mx-auto hide" id="img3" src="{{ game.screenshots.2 | resize }}"
+                     alt="Fourth screenshot">
+                <img class="screenshot rounded mx-auto hide" id="img4" src="{{ game.screenshots.1 | resize }}"
+                     alt="Fifth screenshot">
+                <img class="screenshot rounded mx-auto hide" id="img5" src="{{ game.screenshots.0 | resize }}"
+                     alt="Sixth screenshot">
+            </div>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="container-fluid d-flex justify-content-center p-2">
-        <button id="result0" type="button" class="btn btn-secondary hide"></button>
-        <button id="result1" type="button" class="btn btn-secondary hide"></button>
-        <button id="result2" type="button" class="btn btn-secondary hide"></button>
-        <button id="result3" type="button" class="btn btn-secondary hide"></button>
-        <button id="result4" type="button" class="btn btn-secondary hide"></button>
-        <button id="result5" type="button" class="btn btn-secondary hide"></button>
-    </div>
-</div>
-<div class="row">
-    <div class="container-fluid d-flex justify-content-center p-2 alert alert-info" id="divguesses">
-        <span id="remaining"></span>&nbsp;guesses remaining.
-    </div>
-</div>
+        <div class="row">
+            <div class="container-fluid d-flex justify-content-center p-2">
+                <div class="btn-group" role="group">
+                    <button id="button0" type="button" class="btn btn-outline-darkgreen guess">1</button>
+                    <button id="button1" type="button" class="btn btn-outline-darkgreen guess">2</button>
+                    <button id="button2" type="button" class="btn btn-outline-darkgreen guess">3</button>
+                    <button id="button3" type="button" class="btn btn-outline-darkgreen guess">4</button>
+                    <button id="button4" type="button" class="btn btn-outline-darkgreen guess">5</button>
+                    <button id="button5" type="button" class="btn btn-outline-darkgreen guess">6</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid d-flex justify-content-center p-2">
+                <div class="btn-group" role="group">
+                    <i id="result0" class="bi bi-hand-index color-grey hide"></i>
+                    <i id="result1" class="bi bi-hand-index color-grey hide"></i>
+                    <i id="result2" class="bi bi-hand-index color-grey hide"></i>
+                    <i id="result3" class="bi bi-hand-index color-grey hide"></i>
+                    <i id="result4" class="bi bi-hand-index color-grey hide"></i>
+                    <i id="result5" class="bi bi-hand-index color-grey hide"></i>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid d-flex justify-content-center p-2 alert alert-info" id="divguesses">
+                <span id="remaining"></span>&nbsp;guesses remaining.
+            </div>
+        </div>
 
-<div class="row">
-    <div class="container-fluid d-flex justify-content-center p-2">
-        <ul id="guesses-list" class="list-group"></ul>
+        <div class="row">
+            <div class="container-fluid d-flex justify-content-center p-2">
+                <ul id="guesses-list" class="list-group"></ul>
+            </div>
+        </div>
+
     </div>
-</div>
 {% endblock %}
 
 {% block inline_javascript %}
@@ -109,7 +117,7 @@
                     classNames: {
                         input: 'form-control',
                         suggestion: 'list-group-item',
-                        hint: 'active'
+                        hint: 'form-control'
                     },
                     minLength: 1,
                     highlight: true,

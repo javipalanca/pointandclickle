@@ -8,15 +8,13 @@ function init_wordle(result) {
 
     // User submit guess action
     $("#submit").click(function () {
-        // update the guess list
-        let user_title = $("#input").val();
-        $("#input").val("");
-        if (user_title && guess_list.length < MAX_GUESS) {
-            guess_list.push(user_title);
-            set_guess_list(guess_list);
-        }
-        // Check de result
-        play_guess(guess_list, result);
+        submit_title(guess_list, result);
+    });
+
+    $("#input").on("keydown", function (e) {
+        let keycode = e.which || e.keyCode;
+        if (keycode === 13) // enter key code
+            submit_title(guess_list, result);
     });
 
     // Change image button action
@@ -67,12 +65,12 @@ function play_guess(guess_list, result) {
     $("#remaining").text(MAX_GUESS - guess_list.length);
 
     // Update guess list
+    let guess = guess_list[guess_list.length - 1];
     if (guess_list && guess_list.length > 0) {
         // Print guess list
         print_guess_list(guess_list, result);
 
         // Get current guess
-        let guess = guess_list[guess_list.length - 1];
         console.log("Playing " + guess + " ...")
 
         // Check if the result is correct
@@ -86,13 +84,26 @@ function play_guess(guess_list, result) {
             }
         }
     }
+    show_win_bar(is_result_correct(guess, result));
+}
+
+function submit_title(guess_list, result) {
+    // update the guess list
+    let user_title = $("#input").val();
+    $("#input").val("");
+    if (user_title && guess_list.length < MAX_GUESS) {
+        guess_list.push(user_title);
+        set_guess_list(guess_list);
+    }
+    // Check de result
+    play_guess(guess_list, result);
 }
 
 
 // Shows the game
 function show_game_data(is_winner, result) {
     // Show title
-    $(".card-title").text(fromBinary(result));
+    $(".modal-title").text(fromBinary(result));
 
     // Show cover
     $(".modal").show();
@@ -107,8 +118,8 @@ function show_game_data(is_winner, result) {
     $("#remaining").hide();
 
     // Hide submit button
-    $("#submit").hide();
-    $("#input").hide();
+    //$("#submit").hide();
+    $("#searchbox").hide();
 
     // Show result
     if (is_winner) {
@@ -116,22 +127,26 @@ function show_game_data(is_winner, result) {
     } else {
         $("#divguesses").text("Try again tomorrow!");
     }
-    show_win_bar(result);
 }
 
-function show_win_bar(result) {
-    for (let i = 0; i < 6; i++) {
+function show_win_bar(is_winner) {
+    let guess_list = get_guess_list();
+    let length = guess_list.length;
+    if(is_winner) {
+        length = MAX_GUESS;
+    }
+    for (let i = 0; i <= length; i++) {
+
         let button = $("#result" + i);
         button.removeClass("hide");
-        let guess_list = get_guess_list();
         let guess = guess_list.length - 1;
         if (i <= guess) {
-            button.addClass("btn-danger");
-            button.removeClass("btn-secondary");
+            button.addClass("color-red");
+            button.removeClass("color-grey");
         }
-        if (i === guess && is_result_correct(guess_list[i], result)) {
-            button.addClass("btn-success");
-            button.removeClass("btn-danger");
+        if (i === guess && is_winner) {
+            button.addClass("color-green");
+            button.removeClass("color-red");
         }
     }
 }
