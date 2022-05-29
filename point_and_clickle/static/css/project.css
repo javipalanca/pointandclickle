@@ -53,7 +53,7 @@ html {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   margin-top: 12px;
   padding: 8px 0;
-  width: 422px;
+  /*width: 422px;*/
 }
 
 .tt-suggestion {

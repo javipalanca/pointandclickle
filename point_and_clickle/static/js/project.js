@@ -24,6 +24,11 @@ function init_wordle(result) {
         let id = parseInt($(this).attr("id").replace("button", ""));
         show_image(id);
     });
+
+    // Close modal window
+    $(".btn-close").click(function () {
+        $(".modal").hide();
+    });
 }
 
 // Loads the save state from localStorage. Returns the current guess list
