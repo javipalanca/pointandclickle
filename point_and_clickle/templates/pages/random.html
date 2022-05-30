@@ -23,11 +23,11 @@
         <div class="row" id="searchbox">
             <div class="col-md-12 twitter-typeahead" id="remote">
                 <div class="row">
-                    <div class="col-md-11">
+                    <div class="col-md-9 col-9">
                         <input type="text" class="typeahead tt-input" id="input"
                                placeholder="Guess the point & click game...">
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 col-1">
                         <div class="btn-group" role="group">
                             <button type="submit" class="btn btn-submit btn-outline-darkgreen" id="submit">Submit
                             </button>
@@ -38,7 +38,7 @@
         </div>
 
         <div class="row">
-            <div class="container-fluid d-flex justify-content-center p-2">
+            <div class="container-fluid d-flex justify-content-center p-2 col-xs-12 col-md-12 col-lg-10 col-xl-6">
                 <img class="screenshot rounded mx-auto hide" id="img0" src="{{ game.screenshots.5 | resize }}"
                      alt="First screenshot">
                 <img class="screenshot rounded mx-auto hide" id="img1" src="{{ game.screenshots.4 | resize }}"
