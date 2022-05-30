@@ -79,7 +79,7 @@ html {
   background-color: #0097cf;
 }
 
-.twitter-typeahead {
+span.twitter-typeahead {
   width: 100%;
 }
 
@@ -101,4 +101,8 @@ html {
 .color-grey {
   color: #cff4fc;
   font-size: 2em;
+}
+
+#searchbox {
+  margin: auto;
 }

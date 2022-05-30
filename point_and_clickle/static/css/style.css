@@ -356,11 +356,13 @@ section {
   background-size: cover;*/
   margin-bottom: -80px;
   position: relative;
+  /*background: rgba(112, 185, 176, 0);*/
+  background: "#fff";
 }
 #hero:before {
   content: "";
-  background: rgba(112, 185, 176, 0.85);
   position: absolute;
+  background: rgba(112, 185, 176, 0.5);
   bottom: 0;
   top: 0;
   left: 0;
@@ -373,7 +375,7 @@ section {
   left: 0;
   right: 0;
   display: flex;
-  padding-top: 80px;
+  /*padding-top: 80px;*/
   justify-content: center;
   align-items: center;
   flex-direction: column;

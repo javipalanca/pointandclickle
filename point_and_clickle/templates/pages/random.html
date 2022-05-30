@@ -20,22 +20,24 @@
 {% block content %}
 
     <div class="container">
+        <div class="row">
+            <h1>You have 6 tries to guess today's Point&Click game...</h1>
+        </div>
+
         <div class="row" id="searchbox">
-            <div class="col-md-12 twitter-typeahead" id="remote">
-                <div class="row">
-                    <div class="col-md-9 col-9">
-                        <input type="text" class="typeahead tt-input" id="input"
-                               placeholder="Guess the point & click game...">
-                    </div>
-                    <div class="col-md-1 col-1">
-                        <div class="btn-group" role="group">
-                            <button type="submit" class="btn btn-submit btn-outline-darkgreen" id="submit">Submit
-                            </button>
-                        </div>
+
+                <div class="offset-lg-3 col-md-10 col-9 col-lg-5  twitter-typeahead" id="remote">
+                    <input type="text" class="typeahead tt-input" id="input"
+                           placeholder="Guess the point & click game...">
+                </div>
+                <div class="col-md-1 col-1">
+                    <div class="btn-group" role="group">
+                        <button type="submit" class="btn btn-submit btn-outline-darkgreen" id="submit">Submit
+                        </button>
                     </div>
                 </div>
-            </div>
         </div>
+
 
         <div class="row">
             <div class="container-fluid d-flex justify-content-center p-2 col-xs-12 col-md-12 col-lg-10 col-xl-6">
