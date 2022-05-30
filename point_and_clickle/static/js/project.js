@@ -131,7 +131,7 @@ function show_game_data(is_winner, result) {
 
     // Show result
     if (is_winner) {
-        $("#divguesses").text("You won!");
+        $("#divguesses").html("You won! (<a href='#' onclick='$(\".modal\").show();'>View solution)</a>");
     } else {
         $("#divguesses").text("Try again tomorrow!");
     }
