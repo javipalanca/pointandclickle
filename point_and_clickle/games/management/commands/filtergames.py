@@ -10,7 +10,7 @@ class Command(BaseCommand):
         for game in tqdm.tqdm(Game.objects.all()):
             if len(game.screenshots) < 6:
                 game.is_valid = False
-            if game.control == "Point-and-click":
+            if "Point-and-click" in game.control:
                 game.is_pointandclick = True
 
             game.save()

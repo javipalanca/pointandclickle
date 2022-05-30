@@ -4,7 +4,8 @@ from point_and_clickle.games.models import Game, DailyGame
 
 
 class GameAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ['title']
+    list_filter = ('is_pointandclick', 'is_valid')
 
 admin.site.register(Game, GameAdmin)
 

@@ -39,7 +39,6 @@ class RandomView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         game = Game.objects.filter(is_valid=True, is_pointandclick=True).order_by('?').first()
-        #game = Game.objects.filter(title__icontains="Episode 5 - 8-Bit is Enough").order_by('?').first()
         context['game'] = game
         context['result'] = base64.b64encode(game.title.encode('utf-8')).decode('utf-8')
         return context
@@ -47,7 +46,7 @@ class RandomView(TemplateView):
 
 class TitleAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Game.objects.filter(is_pointandclick=True)
+        qs = Game.objects.all()
 
         if self.q:
             qs = qs.filter(title__icontains=self.q)
