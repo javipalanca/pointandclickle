@@ -87,9 +87,17 @@ function play_guess(guess_list, result) {
     show_win_bar(is_result_correct(guess, result));
 }
 
+function escapeHTML( string )
+{
+    var pre = document.createElement('pre');
+    var text = document.createTextNode( string );
+    pre.appendChild(text);
+    return pre.innerHTML;
+}
+
 function submit_title(guess_list, result) {
     // update the guess list
-    let user_title = $("#input").val();
+    let user_title = escapeHTML($("#input").val());
     $("#input").val("");
     if (user_title && guess_list.length < MAX_GUESS) {
         guess_list.push(user_title);
