@@ -279,7 +279,7 @@ section {
   }
 
   .navbar ul {
-    display: none;
+    /*display: none;*/
   }
 }
 .navbar-mobile {
