@@ -13,6 +13,40 @@ Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings
 
 ## Basic Commands
 
+### Setting up the project
+
+Assuming you are using Docker and docker-compose, you only need to build the containers using the local 
+configuration for development.
+
+To build the containers, run:
+
+      $ docker-compose -f local.yml build
+
+Next, you can run the containers using:
+
+      $ docker-compose -f local.yml up -d
+
+Finally, you need to initialize some date by running the following commands:
+- Initialize the database
+- Create the superuser
+- Import the games database
+- Filter the imported games
+
+These commands are explained next.
+
+### Initializing database
+
+To initialize the database, run:
+
+      $ python manage.py migrate
+
+.. note::
+
+    If you are using Docker you must run the command above within the django container.:
+
+      $ docker-compose -f local.yml run django python manage.py migrate
+    
+
 ### Setting Up Your Users
 
 - To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "
@@ -23,6 +57,12 @@ Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings
 
       $ python manage.py createsuperuser
 
+.. note::
+
+    If you are using Docker you must run the command above within the django container.:
+
+      $ docker-compose -f local.yml run django python manage.py createsuperuser
+
 ### Importing GamesDB
 
 - To import the games database you need the **gamesdb.json** result of running the scrapper.
@@ -31,9 +71,21 @@ Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings
 
       $ python manage.py importdb gamesdb.json
 
+.. note::
+
+    If you are using Docker you must run the command above within the django container.:
+
+      $ docker-compose -f local.yml run django python manage.py import gamesdb.json
+
 - Finally you need to filter the database, use this command:
 
       $ python manage.py filtergames
+
+.. note::
+
+    If you are using Docker you must run the command above within the django container.:
+
+      $ docker-compose -f local.yml run django python manage.py filtergames
 
 ### Type checks
 
