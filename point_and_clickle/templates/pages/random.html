@@ -10,7 +10,17 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <img class="card-img-top" src="{{ game.cover | resize }}" alt="Game cover">
+                    <img class="card-img-top mx-auto d-block" src="" alt="Game cover">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" id="card-developer"></li>
+                            <li class="list-group-item" id="card-platform"></li>
+                            <li class="list-group-item" id="card-genre"></li>
+                        </ul>
+                        <a href="#" class="btn btn-primary" id="result-link" target="_blank">Link to Adventure
+                            Gamers</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -26,16 +36,16 @@
 
         <div class="row" id="searchbox">
 
-                <div class="offset-lg-3 col-md-10 col-9 col-lg-5  twitter-typeahead" id="remote">
-                    <input type="text" class="typeahead tt-input" id="input"
-                           placeholder="Guess the point & click game...">
+            <div class="offset-lg-3 col-md-10 col-9 col-lg-5  twitter-typeahead" id="remote">
+                <input type="text" class="typeahead tt-input" id="input"
+                       placeholder="Guess the point & click game...">
+            </div>
+            <div class="col-md-1 col-1">
+                <div class="btn-group" role="group">
+                    <button type="submit" class="btn btn-submit btn-outline-darkgreen" id="submit">Submit
+                    </button>
                 </div>
-                <div class="col-md-1 col-1">
-                    <div class="btn-group" role="group">
-                        <button type="submit" class="btn btn-submit btn-outline-darkgreen" id="submit">Submit
-                        </button>
-                    </div>
-                </div>
+            </div>
         </div>
 
 
@@ -132,7 +142,7 @@
                     //displayKey: 'value'
                 });
 
-            let result = "{{ result }}";
+            let result = {"code": "{{ result }}", "id": "{{ game.id }}"};
             init_wordle(result);
         });
 

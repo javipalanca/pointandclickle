@@ -1,4 +1,5 @@
 const MAX_GUESS = 6; // Define the maximum number of guesses
+const GAMES_API = '/api/v1/game/';
 
 function init_wordle(result) {
 
@@ -50,7 +51,7 @@ function load_game() {
 }
 
 function is_result_correct(guess, result) {
-    return guess === fromBinary(result);
+    return guess === fromBinary(result['code']);
 }
 
 // Checks the last played guess
@@ -87,10 +88,9 @@ function play_guess(guess_list, result) {
     show_win_bar(is_result_correct(guess, result));
 }
 
-function escapeHTML( string )
-{
-    var pre = document.createElement('pre');
-    var text = document.createTextNode( string );
+function escapeHTML(string) {
+    let pre = document.createElement('pre');
+    let text = document.createTextNode(string);
     pre.appendChild(text);
     return pre.innerHTML;
 }
@@ -111,10 +111,21 @@ function submit_title(guess_list, result) {
 // Shows the game
 function show_game_data(is_winner, result) {
     // Show title
-    $(".modal-title").text(fromBinary(result));
+    $(".modal-title").text(fromBinary(result['code']));
 
-    // Show cover
-    $(".modal").show();
+    $.getJSON(GAMES_API + result['id'])
+        .done(function (data) {
+            // Show game data
+            $(".card-img-top").attr("src", data['cover']);
+            $(".card-title").text(data['title']);
+            $("#result-link").attr("href", data['url']);
+            $("#card-developer").html("<strong>Developer:</strong> " + data['developer']);
+            $("#card-platform").html("<strong>Platform:</strong> " + data['platform']);
+            $("#card-genre").html("<strong>Genre:</strong> " + data['genre']);
+
+            $(".modal").show();
+        });
+
 
     // Show all images
     show_image(0);
@@ -125,22 +136,21 @@ function show_game_data(is_winner, result) {
     // Hide remaining guesses
     $("#remaining").hide();
 
-    // Hide submit button
-    //$("#submit").hide();
+    // Hide searchbox
     $("#searchbox").hide();
 
     // Show result
     if (is_winner) {
         $("#divguesses").html("You won! (<a href='#' onclick='$(\".modal\").show();'>View solution)</a>");
     } else {
-        $("#divguesses").text("Try again tomorrow!");
+        $("#divguesses").html("Try again tomorrow! (<a href='#' onclick='$(\".modal\").show();'>View solution)</a>");
     }
 }
 
 function show_win_bar(is_winner) {
     let guess_list = get_guess_list();
     let length = guess_list.length;
-    if(is_winner) {
+    if (is_winner) {
         length = MAX_GUESS;
     }
     for (let i = 0; i <= length; i++) {

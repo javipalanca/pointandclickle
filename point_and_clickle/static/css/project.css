@@ -106,3 +106,7 @@ span.twitter-typeahead {
 #searchbox {
   margin: auto;
 }
+
+.card-img-top {
+  width: 18rem;
+}
