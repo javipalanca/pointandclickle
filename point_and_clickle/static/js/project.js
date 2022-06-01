@@ -1,7 +1,9 @@
 const MAX_GUESS = 6; // Define the maximum number of guesses
 const GAMES_API = '/api/v1/game/';
 
-function init_wordle(result) {
+function init_wordle(result, csrf_token) {
+
+    window.csrftoken = csrf_token;
 
     // Load save states
     let guess_list = load_game();
@@ -105,6 +107,14 @@ function submit_title(guess_list, result) {
     }
     // Check de result
     play_guess(guess_list, result);
+    // Check if the result is correct
+    if (is_result_correct(user_title, result)) {
+        send_hit(result, guess_list.length);
+    } else {
+        if (guess_list.length >= MAX_GUESS) {
+            send_hit(result, 0);
+        }
+    }
 }
 
 
@@ -145,6 +155,25 @@ function show_game_data(is_winner, result) {
     } else {
         $("#divguesses").html("Try again tomorrow! (<a href='#' onclick='$(\".modal\").show();'>View solution)</a>");
     }
+}
+
+function send_hit(result, hit) {
+    $.ajax({
+        url: GAMES_API + result['id'] + "/hit/",
+        type: "POST",
+        beforeSend: function (xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", window.csrftoken);
+        },
+        data: {
+            "hit": hit
+        },
+        success: function (data) {
+            console.log("Hit " + hit + " sent!");
+        },
+        error: function (data) {
+            console.log("Error sending hit!");
+        }
+    });
 }
 
 function show_win_bar(is_winner) {
