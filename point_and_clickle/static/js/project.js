@@ -127,25 +127,25 @@ function show_stats(result) {
     $.getJSON(GAMES_API + result['id'] + "/stats/", function (stats) {
         let col;
         $("#stats-1").text(stats['1']);
-        col = stats['1'] > 0 ? "col-" + stats['1'] / 10 : "w-1";
+        col = parseInt(stats['1']) > 0 ? "col-" + stats['1'] / 10 : "w-1";
         $("#progress-1").addClass(col);
         $("#stats-2").text(stats['2']);
-        col = stats['2'] > 0 ? "col-" + stats['2'] / 10 : "w-1";
+        col = parseInt(stats['2']) > 0 ? "col-" + stats['2'] / 10 : "w-1";
         $("#progress-2").addClass(col);
         $("#stats-3").text(stats['3']);
-        col = stats['3'] > 0 ? "col-" + stats['3'] / 10 : "w-1";
+        col = parseInt(stats['3']) > 0 ? "col-" + stats['3'] / 10 : "w-1";
         $("#progress-3").addClass(col);
         $("#stats-4").text(stats['4']);
-        col = stats['4'] > 0 ? "col-" + stats['4'] / 10 : "w-1";
+        col = parseInt(stats['4']) > 0 ? "col-" + stats['4'] / 10 : "w-1";
         $("#progress-4").addClass(col);
         $("#stats-5").text(stats['5']);
-        col = stats['5'] > 0 ? "col-" + stats['5'] / 10 : "w-1";
+        col = parseInt(stats['5']) > 0 ? "col-" + stats['5'] / 10 : "w-1";
         $("#progress-5").addClass(col);
         $("#stats-6").text(stats['6']);
-        col = stats['6'] > 0 ? "col-" + stats['6'] / 10 : "w-1";
+        col = parseInt(stats['6']) > 0 ? "col-" + stats['6'] / 10 : "w-1";
         $("#progress-6").addClass(col);
         $("#stats-0").text(stats['0']);
-        col = stats['0'] > 0 ? "col-" + stats['0'] / 10 : "w-1";
+        col = parseInt(stats['0']) > 0 ? "col-" + stats['0'] / 10 : "w-1";
         $("#progress-0").addClass(col);
 
         $("#modal-stats").show();
