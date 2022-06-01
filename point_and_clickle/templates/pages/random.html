@@ -2,17 +2,17 @@
 {% load resize %}
 
 {% block modal %}
-    <div class="modal" tabindex="-1">
+    <div class="modal" id="result-modal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"></h5>
+                    <h5 class="modal-title" id="result-modal-title"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <img class="card-img-top mx-auto d-block" src="" alt="Game cover">
+                    <img class="card-img-top mx-auto d-block" src="" id="result-card-img-top" alt="Game cover">
                     <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
+                        <h5 class="card-title" id="result-card-title">Card title</h5>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item" id="card-developer"></li>
                             <li class="list-group-item" id="card-platform"></li>
@@ -20,6 +20,53 @@
                         </ul>
                         <a href="#" class="btn btn-primary" id="result-link" target="_blank">Link to Adventure
                             Gamers</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-stats" tabindex="-2">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-bar-chart-fill"></i> Stats</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <h5 class="card-title">Guess distribution</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><span class="col-1">1:</span>
+                                <span id="progress-1" class="placeholder"></span>
+                                <span id="stats-1" class="col-1"></span> %
+                            </li>
+                            <li class="list-group-item"><span class="col-1">2:</span>
+                                <span id="progress-2" class="placeholder"></span>
+                                <span id="stats-2" class="col-1"></span> %
+                            </li>
+                            <li class="list-group-item"><span class="col-1">3:</span>
+                                <span id="progress-3" class="placeholder"></span>
+                                <span id="stats-3" class="col-1"></span> %
+                            </li>
+                            <li class="list-group-item"><span class="col-1">4:</span>
+                                <span id="progress-4" class="placeholder"></span>
+                                <span id="stats-4" class="col-1"></span> %
+                            </li>
+                            <li class="list-group-item"><span class="col-1">5:</span>
+                                <span id="progress-5" class="placeholder"></span>
+                                <span id="stats-5" class="col-1"></span> %
+                            </li>
+                            <li class="list-group-item"><span class="col-1">6:</span>
+                                <span id="progress-6" class="placeholder"></span>
+                                <span id="stats-6" class="col-1"></span> %
+                            </li>
+                            <li class="list-group-item"><span class="col-1">X:</span>
+                                <span id="progress-0" class="placeholder"></span>
+                                <span id="stats-0" class="col-1"></span> %
+                            </li>
+
+                        </ul>
                     </div>
                 </div>
             </div>

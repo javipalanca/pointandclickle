@@ -36,6 +36,35 @@ class Game(TimeStampedModel):
     hits_at_6 = models.IntegerField(default=0)
     hits_failed = models.IntegerField(default=0)
 
+    def add_hit(self, guess):
+        if guess == "1":
+            self.hits_at_1 += 1
+        elif guess == "2":
+            self.hits_at_2 += 1
+        elif guess == "3":
+            self.hits_at_3 += 1
+        elif guess == "4":
+            self.hits_at_4 += 1
+        elif guess == "5":
+            self.hits_at_5 += 1
+        elif guess == "6":
+            self.hits_at_6 += 1
+        elif guess == "0":
+            self.hits_failed += 1
+        self.save()
+
+    def stats(self):
+        total = self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6 + self.hits_failed
+        return {
+            '1': self.hits_at_1 * 100 / total,
+            '2': self.hits_at_2 * 100 / total,
+            '3': self.hits_at_3 * 100 / total,
+            '4': self.hits_at_4 * 100 / total,
+            '5': self.hits_at_5 * 100 / total,
+            '6': self.hits_at_6 * 100 / total,
+            '0': self.hits_failed * 100 / total
+        }
+
     def __str__(self):
         return self.title
 

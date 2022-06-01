@@ -110,3 +110,7 @@ span.twitter-typeahead {
 .card-img-top {
   width: 18rem;
 }
+
+.w-1 {
+  width: 5px;
+}

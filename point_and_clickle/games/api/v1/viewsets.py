@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import RetrieveModelMixin
@@ -18,19 +19,10 @@ class GameViewSet(RetrieveModelMixin, GenericViewSet):
     def hit(self, request, id):
         game = Game.objects.get(id=id)
         guess = request.data.get('hit')
-        if guess == "1":
-            game.hits_at_1 += 1
-        elif guess == "2":
-            game.hits_at_2 += 1
-        elif guess == "3":
-            game.hits_at_3 += 1
-        elif guess == "4":
-            game.hits_at_4 += 1
-        elif guess == "5":
-            game.hits_at_5 += 1
-        elif guess == "6":
-            game.hits_at_6 += 1
-        elif guess == "0":
-            game.hits_failed += 1
-        game.save()
+        game.add_hit(guess)
         return Response(status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def stats(self, request, id):
+        game = Game.objects.get(id=id)
+        return JsonResponse(game.stats())

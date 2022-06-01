@@ -26,6 +26,11 @@ function init_wordle(result, csrf_token) {
         show_image(id);
     });
 
+    // Show stats
+    $("#menu-stats").click(function () {
+        show_stats(result);
+    });
+
     // Close modal window
     $(".btn-close").click(function () {
         $(".modal").hide();
@@ -117,23 +122,53 @@ function submit_title(guess_list, result) {
     }
 }
 
+function show_stats(result) {
+    //Get stats from API
+    $.getJSON(GAMES_API + result['id'] + "/stats/", function (stats) {
+        let col;
+        $("#stats-1").text(stats['1']);
+        col = stats['1'] > 0 ? "col-" + stats['1'] / 10 : "w-1";
+        $("#progress-1").addClass(col);
+        $("#stats-2").text(stats['2']);
+        col = stats['2'] > 0 ? "col-" + stats['2'] / 10 : "w-1";
+        $("#progress-2").addClass(col);
+        $("#stats-3").text(stats['3']);
+        col = stats['3'] > 0 ? "col-" + stats['3'] / 10 : "w-1";
+        $("#progress-3").addClass(col);
+        $("#stats-4").text(stats['4']);
+        col = stats['4'] > 0 ? "col-" + stats['4'] / 10 : "w-1";
+        $("#progress-4").addClass(col);
+        $("#stats-5").text(stats['5']);
+        col = stats['5'] > 0 ? "col-" + stats['5'] / 10 : "w-1";
+        $("#progress-5").addClass(col);
+        $("#stats-6").text(stats['6']);
+        col = stats['6'] > 0 ? "col-" + stats['6'] / 10 : "w-1";
+        $("#progress-6").addClass(col);
+        $("#stats-0").text(stats['0']);
+        col = stats['0'] > 0 ? "col-" + stats['0'] / 10 : "w-1";
+        $("#progress-0").addClass(col);
+
+        $("#modal-stats").show();
+    });
+}
+
 
 // Shows the game
 function show_game_data(is_winner, result) {
     // Show title
-    $(".modal-title").text(fromBinary(result['code']));
+    $("#result-modal-title").text(fromBinary(result['code']));
 
     $.getJSON(GAMES_API + result['id'])
         .done(function (data) {
             // Show game data
-            $(".card-img-top").attr("src", data['cover']);
-            $(".card-title").text(data['title']);
+            $("#result-card-img-top").attr("src", data['cover']);
+            $("#result-card-title").text(data['title']);
             $("#result-link").attr("href", data['url']);
             $("#card-developer").html("<strong>Developer:</strong> " + data['developer']);
             $("#card-platform").html("<strong>Platform:</strong> " + data['platform']);
             $("#card-genre").html("<strong>Genre:</strong> " + data['genre']);
 
-            $(".modal").show();
+            $("#result-modal").show();
         });
 
 
@@ -151,9 +186,9 @@ function show_game_data(is_winner, result) {
 
     // Show result
     if (is_winner) {
-        $("#divguesses").html("You won! (<a href='#' onclick='$(\".modal\").show();'>View solution)</a>");
+        $("#divguesses").html("You won! (<a href='#' onclick='$(\"#result-modal\").show();'>View solution)</a>");
     } else {
-        $("#divguesses").html("Try again tomorrow! (<a href='#' onclick='$(\".modal\").show();'>View solution)</a>");
+        $("#divguesses").html("Try again tomorrow! (<a href='#' onclick='$(\"#result-modal\").show();'>View solution)</a>");
     }
 }
 
