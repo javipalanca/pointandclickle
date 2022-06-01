@@ -4,6 +4,7 @@ from datetime import date
 from dal import autocomplete
 from django import http
 from django.db import IntegrityError
+from django.db.models import Q
 
 from django.views.generic import TemplateView
 
@@ -49,7 +50,10 @@ class TitleAutocomplete(autocomplete.Select2QuerySetView):
         qs = Game.objects.all()
 
         if self.q:
-            qs = qs.filter(title__icontains=self.q)
+            query = Q()
+            for word in self.q.split(" "):
+                query &= Q(title__icontains=word.strip())
+            qs = qs.filter(query)
 
         return qs
 
