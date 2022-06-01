@@ -79,7 +79,8 @@
             <h1><a href="{% url 'games:home' %}">Point & Clickle</a></h1>
             <!-- Uncomment below if you prefer to use an image logo -->
             {% endcomment %}
-            <a href="{% url 'games:home' %}"><img src="{% static 'images/logo_pnc_blanco.png' %}" alt="" class="img-fluid"></a>
+            <a href="{% url 'games:home' %}"><img src="{% static 'images/logo_pnc_blanco.png' %}" alt=""
+                                                  class="img-fluid"></a>
         </div>
 
         <nav id="navbar" class="navbar">
@@ -109,8 +110,6 @@
         {% endblock content %}
     </div>
 </section><!-- #hero -->
-
-<main id="main"></main>
 
 {% comment %}
 <main id="main">
@@ -647,10 +646,11 @@
 </main><!-- End #main -->
 {% endcomment %}
 
+<main id="main">
+</main>
 <!-- ======= Footer ======= -->
 <footer id="footer">
     <div class="container">
-
         <div class="copyright">
             <form action="https://www.paypal.com/donate" method="post" target="_top">
                 <input type="hidden" name="business" value="KSL2Y5KA36A8Q"/>
@@ -662,6 +662,10 @@
                        alt="Donate with PayPal button" style="width:100px;height:25px;"/>
                 <img alt="" border="0" src="https://www.paypal.com/en_ES/i/scr/pixel.gif" width="1" height="1"/>
             </form>
+        </div>
+        <div class="social-links copyright">
+            <a href="https://twitter.com/pointandclickle" target="_blank" class="twitter"><i class="bi bi-twitter"></i></a>
+            <a href="https://www.instagram.com/pointandclickle/" target="_blank" class="instagram"><i class="bi bi-instagram"></i></a>
         </div>
 
         <div class="copyright">
