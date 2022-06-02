@@ -122,30 +122,34 @@ function submit_title(guess_list, result) {
     }
 }
 
+function roundup(number) {
+    return parseInt(Math.ceil(number / 10.0));
+}
+
 function show_stats(result) {
     //Get stats from API
     $.getJSON(GAMES_API + result['id'] + "/stats/", function (stats) {
         let col;
         $("#stats-1").text(stats['1']);
-        col = parseInt(stats['1']) > 0 ? "col-" + stats['1'] / 10 : "w-1";
+        col = parseInt(stats['1']) > 0 ? "col-" + roundup(stats['1']) : "w-1";
         $("#progress-1").addClass(col);
         $("#stats-2").text(stats['2']);
-        col = parseInt(stats['2']) > 0 ? "col-" + stats['2'] / 10 : "w-1";
+        col = parseInt(stats['2']) > 0 ? "col-" + roundup(stats['2']) : "w-1";
         $("#progress-2").addClass(col);
         $("#stats-3").text(stats['3']);
-        col = parseInt(stats['3']) > 0 ? "col-" + stats['3'] / 10 : "w-1";
+        col = parseInt(stats['3']) > 0 ? "col-" + roundup(stats['3']) : "w-1";
         $("#progress-3").addClass(col);
         $("#stats-4").text(stats['4']);
-        col = parseInt(stats['4']) > 0 ? "col-" + stats['4'] / 10 : "w-1";
+        col = parseInt(stats['4']) > 0 ? "col-" + roundup(stats['4']) : "w-1";
         $("#progress-4").addClass(col);
         $("#stats-5").text(stats['5']);
-        col = parseInt(stats['5']) > 0 ? "col-" + stats['5'] / 10 : "w-1";
+        col = parseInt(stats['5']) > 0 ? "col-" + roundup(stats['5']) : "w-1";
         $("#progress-5").addClass(col);
         $("#stats-6").text(stats['6']);
-        col = parseInt(stats['6']) > 0 ? "col-" + stats['6'] / 10 : "w-1";
+        col = parseInt(stats['6']) > 0 ? "col-" + roundup(stats['6']) : "w-1";
         $("#progress-6").addClass(col);
         $("#stats-0").text(stats['0']);
-        col = parseInt(stats['0']) > 0 ? "col-" + stats['0'] / 10 : "w-1";
+        col = parseInt(stats['0']) > 0 ? "col-" + roundup(stats['0']) : "w-1";
         $("#progress-0").addClass(col);
 
         $("#modal-stats").show();
