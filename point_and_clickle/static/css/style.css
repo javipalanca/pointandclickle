@@ -8,8 +8,17 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+@font-face {
+  font-family: onesr;
+  src: url('../fonts/onesize.ttf');
+}
+@font-face {
+  font-family: onesrborder;
+  src: url('../fonts/onesr.ttf');
+}
+
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "onesr", "Open Sans", sans-serif;
   /*color: #777;*/
 }
 
@@ -24,7 +33,7 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6, .font-primary {
-  font-family: "Lato", sans-serif;
+  font-family: "onesr", "Lato", sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -192,7 +201,7 @@ section {
   align-items: center;
   justify-content: space-between;
   padding: 10px 0 10px 30px;
-  font-family: "Open Sans", sans-serif;
+  font-family: "onesr", "Open Sans", sans-serif;
   font-size: 14px;
   color: #d2ece9;
   white-space: nowrap;
@@ -395,7 +404,7 @@ section {
   font-weight: 300;
 }
 #hero .btn-get-started {
-  font-family: "Lato", sans-serif;
+  font-family: "onesr", "Lato", sans-serif;
   font-weight: 400;
   font-size: 16px;
   letter-spacing: 1px;
@@ -505,7 +514,7 @@ section {
   color: #fff;
 }
 .call-to-action .cta-btn {
-  font-family: "Lato", sans-serif;
+  font-family: "onesr", "Lato", sans-serif;
   font-weight: 400;
   font-size: 16px;
   letter-spacing: 1px;
@@ -672,7 +681,7 @@ section {
 .faq .faq-list .question {
   display: block;
   position: relative;
-  font-family: "Lato", sans-serif;
+  font-family: "onesr", "Lato", sans-serif;
   font-size: 18px;
   line-height: 24px;
   font-weight: 400;
@@ -769,7 +778,7 @@ section {
 .contact .contact-about p {
   font-size: 14px;
   line-height: 24px;
-  font-family: "Lato", sans-serif;
+  font-family: "onesr", "Lato", sans-serif;
   color: #888;
 }
 .contact .social-links {

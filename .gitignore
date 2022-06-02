@@ -330,3 +330,4 @@ point_and_clickle/media/
 .env
 .envs/*
 !.envs/.local/
+/gamesdb.json
