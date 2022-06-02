@@ -30,6 +30,10 @@ function init_wordle(result, csrf_token) {
     $("#menu-stats").click(function () {
         show_stats(result);
     });
+    // Show info
+    $("#menu-info").click(function () {
+        $("#info-modal").show();
+    });
 
     // Close modal window
     $(".btn-close").click(function () {

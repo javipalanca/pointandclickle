@@ -85,8 +85,10 @@
 
         <nav id="navbar" class="navbar">
             <ul>
-                <li><a class="nav-link scrollto active" href="#stats" id="menu-stats"><i class="bi bi-bar-chart-fill"></i></a></li>
-                <li><a class="nav-link scrollto active" href="#info" id="menu-info"><i class="bi bi-info-circle-fill"></i></a></li>
+                <li><a class="nav-link scrollto active" href="#stats" id="menu-stats"><i
+                        class="bi bi-bar-chart-fill"></i></a></li>
+                <li><a class="nav-link scrollto active" href="#info" id="menu-info"><i
+                        class="bi bi-info-circle-fill"></i></a></li>
             </ul>
         </nav><!-- .navbar -->
 
@@ -665,7 +667,8 @@
         </div>
         <div class="social-links copyright">
             <a href="https://twitter.com/pointandclickle" target="_blank" class="twitter"><i class="bi bi-twitter"></i></a>
-            <a href="https://www.instagram.com/pointandclickle/" target="_blank" class="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="https://www.instagram.com/pointandclickle/" target="_blank" class="instagram"><i
+                    class="bi bi-instagram"></i></a>
         </div>
 
         <div class="copyright">
@@ -686,7 +689,35 @@
 </footer><!-- End #footer -->
 
 {% block modal %}{% endblock modal %}
-
+<div class="modal" id="info-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">About</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <p class="card-text">
+                        Point & Clickle is a game for adventure game lovers. It is inspired by
+                        <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a> and other variants
+                        such as <a href="https://framed.wtf">Framed</a> or
+                        <a href="https://www.highscoreday.com/index.php">
+                            High Score Day</a>.
+                    </p>
+                    <p class="card-text">
+                        Every day a point and click game is randomly selected, and you have
+                        6 attempts to find the game. At each attempt a new frame from the game will be shown.
+                    </p>
+                    <p class="card-text">
+                        All images and games have been obtained from <a href="https://www.adventuregamers.com/">Adventure
+                        Gamers</a>. All rights go to their respective owners.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% block inline_javascript %}
     {% comment %}
     Script tags with only code, no src (defer by default). To run
