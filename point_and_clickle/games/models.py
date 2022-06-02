@@ -56,13 +56,13 @@ class Game(TimeStampedModel):
     def stats(self):
         total = self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6 + self.hits_failed
         return {
-            '1': self.hits_at_1 * 100 / total if total > 0 else 0,
-            '2': self.hits_at_2 * 100 / total if total > 0 else 0,
-            '3': self.hits_at_3 * 100 / total if total > 0 else 0,
-            '4': self.hits_at_4 * 100 / total if total > 0 else 0,
-            '5': self.hits_at_5 * 100 / total if total > 0 else 0,
-            '6': self.hits_at_6 * 100 / total if total > 0 else 0,
-            '0': self.hits_failed * 100 / total if total > 0 else 0
+            '1': "{:.0f}".format(round(self.hits_at_1 * 100 / total if total > 0 else 0, 0)),
+            '2': "{:.0f}".format(round(self.hits_at_2 * 100 / total if total > 0 else 0, 0)),
+            '3': "{:.0f}".format(round(self.hits_at_3 * 100 / total if total > 0 else 0, 0)),
+            '4': "{:.0f}".format(round(self.hits_at_4 * 100 / total if total > 0 else 0, 0)),
+            '5': "{:.0f}".format(round(self.hits_at_5 * 100 / total if total > 0 else 0, 0)),
+            '6': "{:.0f}".format(round(self.hits_at_6 * 100 / total if total > 0 else 0, 0)),
+            '0': "{:.0f}".format(round(self.hits_failed * 100 / total if total > 0 else 0, 0)),
         }
 
     def __str__(self):
