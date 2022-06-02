@@ -22,7 +22,7 @@ class GameViewSet(RetrieveModelMixin, GenericViewSet):
         game = Game.objects.get(id=id)
         guess = request.data.get('hit')
         todays_game = DailyGame.objects.get(date=date.today())
-        if todays_game.id == game.id:
+        if todays_game.game.id == game.id:
             game.add_hit(guess)
         return Response(status=status.HTTP_200_OK)
 
