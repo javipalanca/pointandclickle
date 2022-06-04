@@ -20,6 +20,14 @@ class Game(TimeStampedModel):
     red_flags = models.CharField(max_length=255)
     media = models.CharField(max_length=255)
 
+    steam_id = models.CharField(max_length=20)
+    steam_num_reviews = models.IntegerField(default=0)
+    steam_positive_reviews = models.IntegerField(default=0)
+    steam_negative_reviews = models.IntegerField(default=0)
+    steam_total_reviews = models.FloatField(default=0)
+    steam_review_score = models.FloatField(default=0)
+
+
     screenshots = models.JSONField()
 
     is_valid = models.BooleanField(default=True)

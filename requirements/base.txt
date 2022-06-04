@@ -27,3 +27,4 @@ requests==2.27.1
 pytest==7.1.2
 
 tqdm==4.47.0
+beautifulsoup4==4.11.1
