@@ -127,7 +127,7 @@ function submit_title(guess_list, result) {
 }
 
 function roundup(number) {
-    return parseInt(Math.ceil(number / 10.0));
+    return parseInt(Math.ceil(number / 10.0)) - 1;
 }
 
 function removeWidthClasses(element) {
