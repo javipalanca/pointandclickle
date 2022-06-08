@@ -1,5 +1,5 @@
 import base64
-from datetime import date
+from datetime import datetime
 
 from dal import autocomplete
 from django import http
@@ -18,17 +18,17 @@ class RootView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         try:
-            daily = DailyGame.objects.get(date=date.today())
+            daily = DailyGame.objects.get(date=datetime.utcnow().date())
         except DailyGame.DoesNotExist:
             game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True).order_by('?').first()
             try:
-                daily = DailyGame.objects.create(date=date.today(), game=game)
+                daily = DailyGame.objects.create(date=datetime.utcnow().date(), game=game)
                 daily.save()
                 game.shown = True
-                game.date_shown = date.today()
+                game.date_shown = datetime.utcnow().date()
                 game.save()
             except IntegrityError:
-                daily = DailyGame.objects.get(date=date.today())
+                daily = DailyGame.objects.get(date=datetime.utcnow().date())
 
         context['game'] = daily.game
         context['result'] = base64.b64encode(daily.game.title.encode('utf-8')).decode('utf-8')
