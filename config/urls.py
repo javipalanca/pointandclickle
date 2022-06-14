@@ -1,12 +1,14 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.contrib.sitemaps.views import sitemap
+from django.urls import include, path, re_path
 from django.views import defaults as default_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
-from point_and_clickle.games.views import RootView
+from point_and_clickle.games.sitemap import SITEMAPS
+
 
 urlpatterns = [
     path("", include("point_and_clickle.games.urls")),
@@ -26,6 +28,9 @@ urlpatterns += [
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
     ),
+    # sitemap and robots.txt
+    re_path(r'^sitemap\.xml', sitemap, {'sitemaps': SITEMAPS}, name='django.contrib.sitemaps.views.sitemap'),
+    re_path(r'^robots\.txt', include('robots.urls')),
 ]
 
 if settings.DEBUG:

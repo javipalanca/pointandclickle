@@ -1,15 +1,34 @@
 {% load static i18n %}<!DOCTYPE html>
-{% get_current_language as LANGUAGE_CODE %}
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="en" prefix="og: http://ogp.me/ns#" itemscope itemtype="http://schema.org/Article">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
 
 <head>
     <meta charset="utf-8">
+    <meta name='robots' content='noodp'/>
+    <meta name='msnbot' content='noodp'/>
+    <meta name='GoogleBot' content='noodp'/>
+
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
     <title>{% block title %}Point and Clickle{% endblock title %}</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+    <meta content="Point & Clickle. The Graphic Adventure Wordle." name="description">
+    <meta content="wordle, point and click, point&click, graphic adventure, games, videogames, puzzle, daily, daily puzzle" name="keywords">
+    <meta property="og:locale" content="es_ES"/>
+    <meta property="og:site_name" content="Point & Clickle"/>
+    <meta property="fb:admins" content="jpalanca"/>
+
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Point & Clickle"/>
+    <meta property="og:description" content="Point & Clickle. The Graphic Adventure Wordle."/>
+    <meta property="og:url" content="www.pointandclickle.com"/>
+    <meta name="twitter:description" content="Point & Clickle. The Graphic Adventure Wordle."/>
+    <meta name="twitter:title" content="Point & Clickle"/>
+
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:site" content="@pointandclickle"/>
+    <meta name="twitter:creator" content="@pointandclickle"/>
 
     <!-- Favicons -->
     <!--link href="assets/img/favicon.png" rel="icon">
@@ -79,7 +98,7 @@
             <h1><a href="{% url 'games:home' %}">Point & Clickle</a></h1>
             <!-- Uncomment below if you prefer to use an image logo -->
             {% endcomment %}
-            <a href="{% url 'games:home' %}"><img src="{% static 'images/logo_pnc_blanco.png' %}" alt=""
+            <a href="{% url 'games:home' %}"><img src="{% static 'images/logo_pnc_blanco.png' %}" alt="Point & Clickle logo"
                                                   class="img-fluid"></a>
         </div>
 
