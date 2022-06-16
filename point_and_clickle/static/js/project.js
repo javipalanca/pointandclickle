@@ -57,8 +57,31 @@ function load_game() {
         console.log("Loading saved game...");
         guess_list = get_guess_list();
     }
+    if (get_stats_dict() === null) {
+        localStorage.setItem("stats", JSON.stringify({"Played": 0, "Won": 0, "Current Streak": 0, "Longest Streak": 0}));
+    }
 
     return guess_list;
+}
+
+function set_stats_win(win) {
+    let stats = get_stats_dict();
+    stats['Played'] += 1;
+    if (win) {
+        stats['Won'] += 1;
+        stats['Current Streak'] += 1;
+        if (stats['Current Streak'] > stats['Longest Streak']) {
+            stats['Longest Streak'] = stats['Current Streak'];
+        }
+    }
+    else {
+        stats['Current Streak'] = 0;
+    }
+    localStorage.setItem("stats", JSON.stringify(stats));
+}
+
+function get_stats_dict() {
+    return JSON.parse(localStorage.getItem("stats"));
 }
 
 function is_result_correct(guess, result) {
@@ -88,11 +111,13 @@ function play_guess(guess_list, result) {
         // Check if the result is correct
         if (is_result_correct(guess, result)) {
             show_game_data(true, result);
+            set_stats_win(true);
         } else {
             if (guess_list.length < MAX_GUESS) {
                 console.log("Try again...");
             } else {
                 show_game_data(false, result);
+                set_stats_win(false);
             }
         }
     }
@@ -143,34 +168,23 @@ function show_stats(result) {
     //Get stats from API
     $.getJSON(GAMES_API + result['id'] + "/stats/", function (stats) {
         let col;
-        $("#stats-1").text(stats['1']);
-        col = parseInt(stats['1']) > 0 ? "col-" + roundup(stats['1']) : "w-1";
-        removeWidthClasses($("#progress-1"));
-        $("#progress-1").addClass(col);
-        $("#stats-2").text(stats['2']);
-        col = parseInt(stats['2']) > 0 ? "col-" + roundup(stats['2']) : "w-1";
-        removeWidthClasses($("#progress-2"));
-        $("#progress-2").addClass(col);
-        $("#stats-3").text(stats['3']);
-        col = parseInt(stats['3']) > 0 ? "col-" + roundup(stats['3']) : "w-1";
-        removeWidthClasses($("#progress-3"));
-        $("#progress-3").addClass(col);
-        $("#stats-4").text(stats['4']);
-        col = parseInt(stats['4']) > 0 ? "col-" + roundup(stats['4']) : "w-1";
-        removeWidthClasses($("#progress-4"));
-        $("#progress-4").addClass(col);
-        $("#stats-5").text(stats['5']);
-        col = parseInt(stats['5']) > 0 ? "col-" + roundup(stats['5']) : "w-1";
-        removeWidthClasses($("#progress-5"));
-        $("#progress-5").addClass(col);
-        $("#stats-6").text(stats['6']);
-        col = parseInt(stats['6']) > 0 ? "col-" + roundup(stats['6']) : "w-1";
-        removeWidthClasses($("#progress-6"));
-        $("#progress-6").addClass(col);
-        $("#stats-0").text(stats['0']);
-        col = parseInt(stats['0']) > 0 ? "col-" + roundup(stats['0']) : "w-1";
-        removeWidthClasses($("#progress-0"));
-        $("#progress-0").addClass(col);
+        for (let i=0; i<=MAX_GUESS; i++) {
+            let n = i.toString();
+            $("#stats-"+n).text(stats[n]);
+            col = parseInt(stats[n]) > 0 ? "col-" + roundup(stats[n]) : "w-1";
+            removeWidthClasses($("#progress-"+n));
+            $("#progress-"+n).addClass(col);
+        }
+
+
+        stats = get_stats_dict();
+        $("#stats-played").text(stats['Played']);
+        $("#stats-won").text(stats['Won']);
+        $("#stats-current").text(stats['Current Streak']);
+        $("#stats-max").text(stats['Longest Streak']);
+        console.log(stats);
+        let percent = stats['Played']!==0?parseInt(stats['Won'])*100/parseInt(stats['Played']):0;
+        $("#stats-winpercent").text(percent.toFixed(0)  + "%");
 
         $("#modal-stats").show();
     });

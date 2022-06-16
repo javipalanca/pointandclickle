@@ -116,6 +116,10 @@ span.twitter-typeahead {
     width: 5px;
 }
 
+.col-0 {
+    width: 10px;
+}
+
 
 html,a,button,span {
     cursor: url('../images/cursormm.png') 20 20, auto !important;
