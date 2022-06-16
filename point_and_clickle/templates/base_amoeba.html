@@ -14,7 +14,8 @@
 
     <title>{% block title %}Point and Clickle{% endblock title %}</title>
     <meta content="Point & Clickle. The Graphic Adventure Wordle." name="description">
-    <meta content="wordle, point and click, point&click, graphic adventure, games, videogames, puzzle, daily, daily puzzle" name="keywords">
+    <meta content="wordle, point and click, point&click, graphic adventure, games, videogames, puzzle, daily, daily puzzle"
+          name="keywords">
     <meta property="og:locale" content="es_ES"/>
     <meta property="og:site_name" content="Point & Clickle"/>
     <meta property="fb:admins" content="jpalanca"/>
@@ -63,6 +64,11 @@
         <!-- Your stuff: Third-party javascript libraries go here -->
 
         <!-- place project specific Javascript in this file -->
+        <script src="//code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"
+                integrity="sha512-lteuRD+aUENrZPTXWFRPTBcDDxIGWe5uu0apPEn+3ZKYDwDaEErIK9rvR0QzUGmUQ55KFE2RqGTVoZsKctGMVw=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script defer src="{% static 'js/project.js' %}"></script>
 
     {% endblock javascript %}
@@ -98,7 +104,8 @@
             <h1><a href="{% url 'games:home' %}">Point & Clickle</a></h1>
             <!-- Uncomment below if you prefer to use an image logo -->
             {% endcomment %}
-            <a href="{% url 'games:home' %}"><img src="{% static 'images/logo_pnc_blanco.png' %}" alt="Point & Clickle logo"
+            <a href="{% url 'games:home' %}"><img src="{% static 'images/logo_pnc_blanco.png' %}"
+                                                  alt="Point & Clickle logo"
                                                   class="img-fluid"></a>
         </div>
 
@@ -132,51 +139,38 @@
     </div>
 </section><!-- #hero -->
 
-{% comment %}
 <main id="main">
 
     <!-- ======= About Us Section ======= -->
-    <section id="about" class="about">
+
+    <!--section id="services" class="services section-bg"-->
+    <section class="call-to-action">
         <div class="container">
 
-            <div class="section-title">
-                <h2>About Us</h2>
+            <div class="row">
+                    <div class="rounded bg-gradient-3 text-white shadow offset-md-3 col-md-6 col-xs-12 p-5 text-center mb-5">
+                        <p class="mb-0 font-weight-bold">Next game in:</p>
+                    <div id="clock" class="countdown pt-4"></div>
+                </div>
             </div>
 
             <div class="row">
-                <div class="col-lg-6 order-1 order-lg-2">
-                    <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
-                </div>
-                <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
-                    <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
-                    <p class="fst-italic">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore
-                        magna aliqua.
-                    </p>
-                    <ul>
-                        <li><i class="bi bi-check2-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </li>
-                        <li><i class="bi bi-check2-circle"></i> Duis aute irure dolor in reprehenderit in voluptate
-                            velit.
-                        </li>
-                        <li><i class="bi bi-check2-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu
-                            fugiat nulla pariatur.
-                        </li>
-                    </ul>
-                    <p>
-                        Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                        in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum
-                    </p>
+                <div class="offset-3 col-6">
+                    <div class="member text-center">
+                        <h3>About Point&Clickle</h3>
+                        <p> Point&Clickle is a daily game in which you must guess a point and click
+                            adventure game every day.
+                            You will have 6 chances to get it right by discovering screenshots. If you fail, a new
+                            screenshot will be shown.
+                            Point&Clickle is the Wordle of adventure games!
+                        </p>
+                    </div>
                 </div>
             </div>
 
         </div>
     </section><!-- End About Us Section -->
+    {% comment %}
 
     <!-- ======= Services Section ======= -->
     <section id="services" class="services section-bg">
@@ -664,88 +658,91 @@
                 frameborder="0" style="border:0;" allowfullscreen=""></iframe>
     </section><!-- End Map Section -->
 
-</main><!-- End #main -->
 {% endcomment %}
+</main><!-- End #main -->
 
-<main id="main">
-</main>
-<!-- ======= Footer ======= -->
-<footer id="footer">
-    <div class="container">
-        <div class="copyright">
-            <form action="https://www.paypal.com/donate" method="post" target="_top">
-                <input type="hidden" name="business" value="KSL2Y5KA36A8Q"/>
-                <input type="hidden" name="no_recurring" value="0"/>
-                <input type="hidden" name="currency_code" value="EUR"/>
-                <input type="image"
-                       src="https://pics.paypal.com/00/s/ZGYxN2I3NzAtNDU1ZS00OTllLTkzYzYtNzJjZWU2OTNkNDhl/file.PNG"
-                       border="0" name="submit" title="PayPal - The safer, easier way to pay online!"
-                       alt="Donate with PayPal button" style="width:100px;height:25px;"/>
-                <img alt="" border="0" src="https://www.paypal.com/en_ES/i/scr/pixel.gif" width="1" height="1"/>
-            </form>
-        </div>
-        <div class="social-links copyright">
-            <a href="https://twitter.com/pointandclickle" target="_blank" class="twitter"><i class="bi bi-twitter"></i></a>
-            <a href="https://www.instagram.com/pointandclickle/" target="_blank" class="instagram"><i
-                    class="bi bi-instagram"></i></a>
-        </div>
 
-        <div class="copyright">
-            &copy; Copyright <strong><span><a href="https://twitter.com/palancadr">Dr. Palanca</a></span></strong>. All
-            Rights Reserved
-        </div>
-        <div class="credits">
-            Game database by <a href="https://adventuregamers.com/">The Adventure Games - Point and Click Database</a>
-        </div>
-        <div class="credits">
-            Special thanks to <a href="https://www.twitch.tv/drpalanca/about">Dr. Palanca's Twitch community</a> for the
-            support and the inspiration.
-        </div>
-        <div class="credits">
-            Theme by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
-    </div>
-</footer><!-- End #footer -->
-
-{% block modal %}{% endblock modal %}
-<div class="modal" id="info-modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-info-circle-fill"></i> About</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                <form action="https://www.paypal.com/donate" method="post" target="_top">
+                    <input type="hidden" name="business" value="KSL2Y5KA36A8Q"/>
+                    <input type="hidden" name="no_recurring" value="0"/>
+                    <input type="hidden" name="currency_code" value="EUR"/>
+                    <input type="image"
+                           src="https://pics.paypal.com/00/s/ZGYxN2I3NzAtNDU1ZS00OTllLTkzYzYtNzJjZWU2OTNkNDhl/file.PNG"
+                           border="0" name="submit" title="PayPal - The safer, easier way to pay online!"
+                           alt="Donate with PayPal button" style="width:100px;height:25px;"/>
+                    <img alt="" border="0" src="https://www.paypal.com/en_ES/i/scr/pixel.gif" width="1" height="1"/>
+                </form>
             </div>
-            <div class="modal-body">
-                <div class="card-body">
-                    <p class="card-text">
-                        Point & Clickle is a game for adventure game lovers. It is inspired by
-                        <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a> and other variants
-                        such as <a href="https://framed.wtf">Framed</a> or
-                        <a href="https://www.highscoreday.com/index.php">
-                            High Score Day</a>.
-                    </p>
-                    <p class="card-text">
-                        Every day a point and click game is randomly selected, and you have
-                        6 attempts to find the game. At each attempt a new frame from the game will be shown.
-                    </p>
-                    <p class="card-text">
-                        All images and games have been obtained from <a href="https://www.adventuregamers.com/">Adventure
-                        Gamers</a>. All rights go to their respective owners.
-                    </p>
+            <div class="social-links copyright">
+                <a href="https://twitter.com/pointandclickle" target="_blank" class="twitter"><i
+                        class="bi bi-twitter"></i></a>
+                <a href="https://www.instagram.com/pointandclickle/" target="_blank" class="instagram"><i
+                        class="bi bi-instagram"></i></a>
+            </div>
+
+            <div class="copyright">
+                &copy; Copyright <strong><span><a href="https://twitter.com/palancadr">Dr. Palanca</a></span></strong>.
+                All
+                Rights Reserved
+            </div>
+            <div class="credits">
+                Game database by <a href="https://adventuregamers.com/">The Adventure Games - Point and Click
+                Database</a>
+            </div>
+            <div class="credits">
+                Special thanks to <a href="https://www.twitch.tv/drpalanca/about">Dr. Palanca's Twitch community</a> for
+                the
+                support and the inspiration.
+            </div>
+            <div class="credits">
+                Theme by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+        </div>
+    </footer><!-- End #footer -->
+
+    {% block modal %}{% endblock modal %}
+    <div class="modal" id="info-modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-info-circle-fill"></i> About</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <p class="card-text">
+                            Point & Clickle is a game for adventure game lovers. It is inspired by
+                            <a href="https://www.nytimes.com/games/wordle/index.html">Wordle</a> and other variants
+                            such as <a href="https://framed.wtf">Framed</a> or
+                            <a href="https://www.highscoreday.com/index.php">
+                                High Score Day</a>.
+                        </p>
+                        <p class="card-text">
+                            Every day a point and click game is randomly selected, and you have
+                            6 attempts to find the game. At each attempt a new frame from the game will be shown.
+                        </p>
+                        <p class="card-text">
+                            All images and games have been obtained from <a href="https://www.adventuregamers.com/">Adventure
+                            Gamers</a>. All rights go to their respective owners.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% block inline_javascript %}
-    {% comment %}
+    {% block inline_javascript %}
+        {% comment %}
     Script tags with only code, no src (defer by default). To run
     with a "defer" so that you run inline code:
     <script>
       window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
     </script>
     {% endcomment %}
-{% endblock inline_javascript %}
+    {% endblock inline_javascript %}
 
 </body>
 

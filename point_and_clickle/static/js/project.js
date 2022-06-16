@@ -39,11 +39,22 @@ function init_wordle(result, csrf_token) {
     $(".btn-close").click(function () {
         $(".modal").hide();
     });
+
+    // Set countdown timer
+    let tomorrow = new Date();
+    tomorrow.setUTCHours(0,0,0,0);
+    tomorrow.setDate(tomorrow.getDate()+1);
+    $('#clock').countdown(tomorrow).on('update.countdown', function(event) {
+      $(this).html(event.strftime(''
+        + '<span class="h1 font-weight-bold">%H</span> Hr'
+        + '<span class="h1 font-weight-bold">%M</span> Min'
+        + '<span class="h1 font-weight-bold">%S</span> Sec'));
+    });
 }
 
 // Loads the save state from localStorage. Returns the current guess list
 function load_game() {
-    let today = new Date().setHours(0, 0, 0, 0); // Today timestap
+    let today = new Date().setHours(0, 0, 0, 0); // Today timestamp
 
     let guess_list = [];
 
