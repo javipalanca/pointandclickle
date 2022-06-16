@@ -111,13 +111,11 @@ function play_guess(guess_list, result) {
         // Check if the result is correct
         if (is_result_correct(guess, result)) {
             show_game_data(true, result);
-            set_stats_win(true);
         } else {
             if (guess_list.length < MAX_GUESS) {
                 console.log("Try again...");
             } else {
                 show_game_data(false, result);
-                set_stats_win(false);
             }
         }
     }
@@ -144,9 +142,11 @@ function submit_title(guess_list, result) {
     // Check if the result is correct
     if (is_result_correct(user_title, result)) {
         send_hit(result, guess_list.length);
+        set_stats_win(true);
     } else {
         if (guess_list.length >= MAX_GUESS) {
             send_hit(result, 0);
+            set_stats_win(false);
         }
     }
 }
