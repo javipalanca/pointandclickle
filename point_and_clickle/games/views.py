@@ -5,6 +5,7 @@ from dal import autocomplete
 from django import http
 from django.db import IntegrityError
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 from django.views.generic import TemplateView
 
@@ -42,6 +43,17 @@ class RandomView(TemplateView):
         game = Game.objects.filter(is_valid=True, is_pointandclick=True).order_by('?').first()
         context['game'] = game
         context['result'] = base64.b64encode(game.title.encode('utf-8')).decode('utf-8')
+        return context
+
+class DateView(TemplateView):
+    template_name = "pages/random.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        date = datetime(year=context['year'], month=context['month'], day=context['day'])
+        daily = get_object_or_404(DailyGame, date=date)
+        context['game'] = daily.game
+        context['result'] = base64.b64encode(daily.game.title.encode('utf-8')).decode('utf-8')
         return context
 
 
