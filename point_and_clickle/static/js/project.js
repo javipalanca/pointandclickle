@@ -324,7 +324,7 @@ function share_twitter() {
     date = date.toDateString();
 
     let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
-    window.open("https://twitter.com/intent/tweet?text="+text);
+    window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(text));
 }
 
 // Shows an image guess
