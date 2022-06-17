@@ -1,9 +1,13 @@
 const MAX_GUESS = 6; // Define the maximum number of guesses
 const GAMES_API = '/api/v1/game/';
 
-function init_wordle(result, csrf_token) {
+function init_wordle(result, csrf_token, handred, handgreen, handgrey) {
 
     window.csrftoken = csrf_token;
+    window.handred = handred;
+    window.handgreen = handgreen;
+    window.handgrey = handgrey;
+    window.result_bar = "";
 
     // Load save states
     let guess_list = load_game();
@@ -42,13 +46,18 @@ function init_wordle(result, csrf_token) {
 
     // Set countdown timer
     let tomorrow = new Date();
-    tomorrow.setUTCHours(0,0,0,0);
-    tomorrow.setDate(tomorrow.getDate()+1);
-    $('#clock').countdown(tomorrow).on('update.countdown', function(event) {
-      $(this).html(event.strftime(''
-        + '<span class="h1 font-weight-bold">%H</span> Hr'
-        + '<span class="h1 font-weight-bold">%M</span> Min'
-        + '<span class="h1 font-weight-bold">%S</span> Sec'));
+    tomorrow.setUTCHours(0, 0, 0, 0);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    $('#clock').countdown(tomorrow).on('update.countdown', function (event) {
+        $(this).html(event.strftime(''
+            + '<span class="h1 font-weight-bold">%H</span> Hr'
+            + '<span class="h1 font-weight-bold">%M</span> Min'
+            + '<span class="h1 font-weight-bold">%S</span> Sec'));
+    });
+
+    // Share on Twitter
+    $(".btn-twitter").click(function () {
+        share_twitter();
     });
 }
 
@@ -69,7 +78,12 @@ function load_game() {
         guess_list = get_guess_list();
     }
     if (get_stats_dict() === null) {
-        localStorage.setItem("stats", JSON.stringify({"Played": 0, "Won": 0, "Current Streak": 0, "Longest Streak": 0}));
+        localStorage.setItem("stats", JSON.stringify({
+            "Played": 0,
+            "Won": 0,
+            "Current Streak": 0,
+            "Longest Streak": 0
+        }));
     }
 
     return guess_list;
@@ -84,8 +98,7 @@ function set_stats_win(win) {
         if (stats['Current Streak'] > stats['Longest Streak']) {
             stats['Longest Streak'] = stats['Current Streak'];
         }
-    }
-    else {
+    } else {
         stats['Current Streak'] = 0;
     }
     localStorage.setItem("stats", JSON.stringify(stats));
@@ -179,12 +192,12 @@ function show_stats(result) {
     //Get stats from API
     $.getJSON(GAMES_API + result['id'] + "/stats/", function (stats) {
         let col;
-        for (let i=0; i<=MAX_GUESS; i++) {
+        for (let i = 0; i <= MAX_GUESS; i++) {
             let n = i.toString();
-            $("#stats-"+n).text(stats[n]);
+            $("#stats-" + n).text(stats[n]);
             col = parseInt(stats[n]) > 0 ? "col-" + roundup(stats[n]) : "w-1";
-            removeWidthClasses($("#progress-"+n));
-            $("#progress-"+n).addClass(col);
+            removeWidthClasses($("#progress-" + n));
+            $("#progress-" + n).addClass(col);
         }
 
 
@@ -194,8 +207,8 @@ function show_stats(result) {
         $("#stats-current").text(stats['Current Streak']);
         $("#stats-max").text(stats['Longest Streak']);
         console.log(stats);
-        let percent = stats['Played']!==0?parseInt(stats['Won'])*100/parseInt(stats['Played']):0;
-        $("#stats-winpercent").text(percent.toFixed(0)  + "%");
+        let percent = stats['Played'] !== 0 ? parseInt(stats['Won']) * 100 / parseInt(stats['Played']) : 0;
+        $("#stats-winpercent").text(percent.toFixed(0) + "%");
 
         $("#modal-stats").show();
     });
@@ -266,20 +279,53 @@ function show_win_bar(is_winner) {
     if (is_winner) {
         length = MAX_GUESS;
     }
-    for (let i = 0; i <= length; i++) {
-
+    let guess = guess_list.length - 1;
+    for (let i = 0; i < length; i++) {
         let button = $("#result" + i);
         button.removeClass("hide");
-        let guess = guess_list.length - 1;
         if (i <= guess) {
             button.addClass("color-red");
             button.removeClass("color-grey");
         }
         if (i === guess && is_winner) {
-            button.addClass("color-green");
-            button.removeClass("color-red");
+                button.addClass("color-green");
+                button.removeClass("color-red");
         }
     }
+    window.result_bar = "";
+    let $last = $("#br-twitter");
+    for (let i=0; i<guess; i++) {
+        let $element = window.handred.clone();
+        $last.after($element);
+        $last = $element;
+        window.result_bar += "🟥";
+    }
+    let right = guess;
+    if (is_winner) {
+        let $element = window.handgreen.clone();
+        $last.after($element);
+        $last = $element;
+        right = guess + 1;
+        window.result_bar += "🟩";
+    }
+    for (let i=right; i<length; i++) {
+        let $element = window.handgrey.clone();
+        $last.after($element);
+        $last = $element;
+        window.result_bar += "⬜";
+    }
+}
+
+// Share with Twitter
+function share_twitter() {
+    let url = "🔗 https://www.pointandclickle.com";
+    let date = new Date();
+    date.setHours(0,0,0,0);
+    date = date.toDateString();
+
+    let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n";
+    window.open('http://twitter.com/share?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(text),
+        '', 'left=0,top=0,width=550,height=450,personalbar=0,toolbar=0,scrollbars=0,resizable=0');
 }
 
 // Shows an image guess
