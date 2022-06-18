@@ -300,8 +300,8 @@ function show_win_bar(is_winner) {
             button.removeClass("color-grey");
         }
         if (i === guess && is_winner) {
-                button.addClass("color-green");
-                button.removeClass("color-red");
+            button.addClass("color-green");
+            button.removeClass("color-red");
         }
     }
 }
@@ -345,39 +345,48 @@ function show_mini_bar(is_winner) {
 function share_twitter() {
     let url = "🔗 https://www.pointandclickle.com";
     let date = new Date();
-    date.setHours(0,0,0,0);
+    date.setHours(0, 0, 0, 0);
     date = date.toDateString();
 
     let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
-    window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(text));
+    window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
 }
+
+function is_mobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 // Share with Whatsapp
 function share_whatsapp() {
     let url = "🔗 https://www.pointandclickle.com";
     let date = new Date();
-    date.setHours(0,0,0,0);
+    date.setHours(0, 0, 0, 0);
     date = date.toDateString();
 
     let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
-    window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(text));
+    if (is_mobile()) {
+        window.open("whatsapp://send?text=" + encodeURIComponent(text));
+    } else {
+        window.open("https://web.whatsapp.com/send?text=" + encodeURIComponent(text));
+    }
 }
 
 // Share with Telegram
 function share_telegram() {
     let url = "🔗 https://www.pointandclickle.com";
     let date = new Date();
-    date.setHours(0,0,0,0);
+    date.setHours(0, 0, 0, 0);
     date = date.toDateString();
 
     let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
-    window.open("https://telegram.me/share/url?url="+encodeURIComponent(url)+"&text="+encodeURIComponent(text));
+    window.open("https://telegram.me/share/url?url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text));
 }
 
 // Share with clipboard
 function copy_to_clipboard() {
     let url = "🔗 https://www.pointandclickle.com";
     let date = new Date();
-    date.setHours(0,0,0,0);
+    date.setHours(0, 0, 0, 0);
     date = date.toDateString();
 
     let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
