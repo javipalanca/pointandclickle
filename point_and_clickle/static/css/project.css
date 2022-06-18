@@ -198,6 +198,33 @@ a.btn-social,
     background-color: #83c3f3;
 }
 
+.btn-whatsapp {
+    background-color: #25d366;
+}
+
+.btn-whatsapp:hover
+{
+    background-color: #6bd079;
+}
+
+.btn-telegram {
+    background-color: #0088cc;
+    font-size: 22px;
+}
+
+.btn-telegram:hover {
+    background-color: #00a0d2;
+    font-size: 22px;
+}
+
+.btn-clipboard {
+    background-color: #00bcd4;
+}
+
+.btn-clipboard:hover {
+    background-color: #00d5e2;
+}
+
 .hand-grey {
     background-image: url('../images/handgrey.svg');
     background-size: 1em 1em;

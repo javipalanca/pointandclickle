@@ -2,9 +2,9 @@
 {% load resize static %}
 
 {% block twitter %}
-<meta name="twitter:image" content="{{ game.screenshots.5 | resize }}">
-<meta property="og:image" content="{{ game.screenshots.5 | resize }}">
-<meta itemprop="image" content="{{ game.screenshots.5 | resize }}">
+    <meta name="twitter:image" content="{{ game.screenshots.5 | resize }}">
+    <meta property="og:image" content="{{ game.screenshots.5 | resize }}">
+    <meta itemprop="image" content="{{ game.screenshots.5 | resize }}">
 {% endblock %}
 
 {% block modal %}
@@ -35,17 +35,29 @@
                 <div class="modal-footer">
                     <div class="row" id="share-with-twitter">
                         <div class="col-6 ms-auto">
-                            <img class="offset-2 col-8 screenshot rounded mx-auto" id="img-twitter" src="{{ game.screenshots.5 | resize }}" alt="Image for twitter">
+                            <img class="offset-2 col-8 screenshot rounded mx-auto" id="img-twitter"
+                                 src="{{ game.screenshots.5 | resize }}" alt="Image for twitter">
                             <div class="offset-2 col-8">
                                 <br id="br-twitter">
                             </div>
                         </div>
                         <div class="col-6 ms-auto">
-                            <h5 class="card-title">Share:</h5>
+                            <h5 class="card-title">Share with:</h5>
                             <span class="btn-social btn-twitter"><i class="bi bi-twitter"></i></span>
+                            <span class="btn-social btn-whatsapp"><i class="bi bi-whatsapp"></i></span>
+                            <span class="btn-social btn-telegram"><i class="bi bi-telegram"></i></span>
+                            <span class="btn-social btn-clipboard"><i class="bi bi-clipboard2-plus-fill"></i></span>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                Result copied to clipborard.
             </div>
         </div>
     </div>

@@ -56,6 +56,19 @@ function init_wordle(result, csrf_token) {
     $(".btn-twitter").click(function () {
         share_twitter();
     });
+    // Share on WhatsApp
+    $(".btn-whatsapp").click(function () {
+        share_whatsapp();
+    });
+    // Share on Telegram
+    $(".btn-telegram").click(function () {
+        share_telegram();
+    });
+
+    // Copy to clipboard
+    $(".btn-clipboard").click(function () {
+        copy_to_clipboard();
+    });
 }
 
 // Loads the save state from localStorage. Returns the current guess list
@@ -337,6 +350,40 @@ function share_twitter() {
 
     let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
     window.open("https://twitter.com/intent/tweet?text="+encodeURIComponent(text));
+}
+// Share with Whatsapp
+function share_whatsapp() {
+    let url = "🔗 https://www.pointandclickle.com";
+    let date = new Date();
+    date.setHours(0,0,0,0);
+    date = date.toDateString();
+
+    let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
+    window.open("https://web.whatsapp.com/send?text="+encodeURIComponent(text));
+}
+
+// Share with Telegram
+function share_telegram() {
+    let url = "🔗 https://www.pointandclickle.com";
+    let date = new Date();
+    date.setHours(0,0,0,0);
+    date = date.toDateString();
+
+    let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
+    window.open("https://telegram.me/share/url?url="+encodeURIComponent(url)+"&text="+encodeURIComponent(text));
+}
+
+// Share with clipboard
+function copy_to_clipboard() {
+    let url = "🔗 https://www.pointandclickle.com";
+    let date = new Date();
+    date.setHours(0,0,0,0);
+    date = date.toDateString();
+
+    let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
+    navigator.clipboard.writeText(text);
+    const toast = new bootstrap.Toast($("#liveToast"));
+    toast.show();
 }
 
 // Shows an image guess
