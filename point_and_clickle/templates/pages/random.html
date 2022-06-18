@@ -257,10 +257,7 @@
 
             let result = {"code": "{{ result }}", "id": "{{ game.id }}"};
             let csrf_token = $('{% csrf_token %}');
-            let handred = $("<span style=\"background-image: url('{% static 'images/handred.svg' %}'); background-size: 1em 1em; background-position: center center; background-repeat: no-repeat; -webkit-text-fill-color: transparent;\">👆</span>")
-            let handgreen = $("<span style=\"background-image: url('{% static 'images/handgreen.svg' %}'); background-size: 1em 1em; background-position: center center; background-repeat: no-repeat; -webkit-text-fill-color: transparent;\">👆</span>")
-            let handgrey = $("<span style=\"background-image: url('{% static 'images/handgrey.svg' %}'); background-size: 1em 1em; background-position: center center; background-repeat: no-repeat; -webkit-text-fill-color: transparent;\">👆</span>")
-            init_wordle(result, csrf_token.attr("value"), handred, handgreen, handgrey);
+            init_wordle(result, csrf_token.attr("value"));
         });
 
     </script>

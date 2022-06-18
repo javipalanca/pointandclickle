@@ -1,12 +1,9 @@
 const MAX_GUESS = 6; // Define the maximum number of guesses
 const GAMES_API = '/api/v1/game/';
 
-function init_wordle(result, csrf_token, handred, handgreen, handgrey) {
+function init_wordle(result, csrf_token) {
 
     window.csrftoken = csrf_token;
-    window.handred = handred;
-    window.handgreen = handgreen;
-    window.handgrey = handgrey;
     window.result_bar = "";
 
     // Load save states
@@ -233,6 +230,8 @@ function show_game_data(is_winner, result) {
             $("#result-modal").show();
         });
 
+    // show mini bar
+    show_mini_bar(is_winner);
 
     // Show all images
     show_image(0);
@@ -292,30 +291,42 @@ function show_win_bar(is_winner) {
                 button.removeClass("color-red");
         }
     }
-    if(window.result_bar === "") {
-        let $last = $("#br-twitter");
-        for (let i = 0; i < guess; i++) {
-            let $element = window.handred.clone();
-            $last.after($element);
-            $last = $element;
-            window.result_bar += "🟥";
-        }
-        let right = guess;
-        if (is_winner) {
-            let $element = window.handgreen.clone();
-            $last.after($element);
-            $last = $element;
-            right = guess + 1;
-            window.result_bar += "🟩";
-        }
-        for (let i = right; i < length; i++) {
-            let $element = window.handgrey.clone();
-            $last.after($element);
-            $last = $element;
-            window.result_bar += "⬜";
-        }
+}
+
+function show_mini_bar(is_winner) {
+    let guess_list = get_guess_list();
+    let guess = guess_list.length - 1;
+
+    console.log(guess_list);
+    console.log(guess);
+    console.log(is_winner);
+    let $hand_grey = $("<span class='hand-grey'>👆</span>");
+    let $hand_red = $("<span class='hand-red'>👆</span>");
+    let $hand_green = $("<span class='hand-green'>👆</span>");
+    let $last = $("#br-twitter");
+    window.result_bar = "";
+    for (let i = 0; i < guess; i++) {
+        let $element = $hand_red.clone();
+        $last.after($element);
+        $last = $element;
+        window.result_bar += "🟥";
+    }
+    let right = guess;
+    if (is_winner) {
+        let $element = $hand_green.clone();
+        $last.after($element);
+        $last = $element;
+        right = guess + 1;
+        window.result_bar += "🟩";
+    }
+    for (let i = right; i < MAX_GUESS; i++) {
+        let $element = $hand_grey.clone();
+        $last.after($element);
+        $last = $element;
+        window.result_bar += "⬜";
     }
 }
+
 
 // Share with Twitter
 function share_twitter() {
