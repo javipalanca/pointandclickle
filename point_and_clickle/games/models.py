@@ -20,7 +20,7 @@ class Game(TimeStampedModel):
     red_flags = models.CharField(max_length=255)
     media = models.CharField(max_length=255)
 
-    steam_id = models.CharField(max_length=20)
+    steam_id = models.CharField(max_length=20, blank=True, null=True)
     steam_num_reviews = models.IntegerField(default=0)
     steam_positive_reviews = models.IntegerField(default=0)
     steam_negative_reviews = models.IntegerField(default=0)

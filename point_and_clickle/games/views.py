@@ -1,5 +1,5 @@
 import base64
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dal import autocomplete
 from django import http
@@ -21,7 +21,16 @@ class RootView(TemplateView):
         try:
             daily = DailyGame.objects.get(date=datetime.utcnow().date())
         except DailyGame.DoesNotExist:
-            game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True).order_by('?').first()
+
+            yesterday = datetime.utcnow().date() - timedelta(days=1)
+            daily = DailyGame.objects.get(date=yesterday)
+            success = daily.game.hits_at_1 + daily.game.hits_at_2 + daily.game.hits_at_3 + daily.game.hits_at_4 + daily.game.hits_at_5 + daily.game.hits_at_6
+            fails = daily.game.hits_failed
+
+            if fails > success:
+                game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True, featured=True).order_by('?').first()
+            else:
+                game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True).order_by('?').first()
             try:
                 daily = DailyGame.objects.create(date=datetime.utcnow().date(), game=game)
                 daily.save()
@@ -35,6 +44,7 @@ class RootView(TemplateView):
         context['result'] = base64.b64encode(daily.game.title.encode('utf-8')).decode('utf-8')
         return context
 
+
 class RandomView(TemplateView):
     template_name = "pages/random.html"
 
@@ -44,6 +54,7 @@ class RandomView(TemplateView):
         context['game'] = game
         context['result'] = base64.b64encode(game.title.encode('utf-8')).decode('utf-8')
         return context
+
 
 class DateView(TemplateView):
     template_name = "pages/random.html"
