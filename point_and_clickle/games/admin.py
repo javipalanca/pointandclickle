@@ -4,12 +4,11 @@ from point_and_clickle.games.models import Game, DailyGame
 
 
 class GameAdmin(admin.ModelAdmin):
-    search_fields = ['title']
-    ordering = ('title',)
-    list_filter = ('is_pointandclick', 'is_valid')
+    search_fields = ['title', 'year']
+    ordering = ('year', 'title',)
+    list_filter = ('is_pointandclick', 'is_valid', 'featured')
     list_display = (
-        'title', 'control', 'steam_num_reviews', 'steam_total_reviews', 'steam_positive_reviews', 'steam_negative_reviews',
-        'steam_review_score', 'is_pointandclick', 'is_valid')
+        'title', 'control', 'year', 'is_pointandclick', 'is_valid')
 
 
 admin.site.register(Game, GameAdmin)

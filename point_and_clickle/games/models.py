@@ -44,6 +44,9 @@ class Game(TimeStampedModel):
     hits_at_6 = models.IntegerField(default=0)
     hits_failed = models.IntegerField(default=0)
 
+    featured = models.BooleanField(default=False)
+    year = models.IntegerField(blank=True, null=True)
+
     def add_hit(self, guess):
         if guess == "1":
             self.hits_at_1 += 1
