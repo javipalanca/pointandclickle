@@ -292,27 +292,28 @@ function show_win_bar(is_winner) {
                 button.removeClass("color-red");
         }
     }
-    window.result_bar = "";
-    let $last = $("#br-twitter");
-    for (let i=0; i<guess; i++) {
-        let $element = window.handred.clone();
-        $last.after($element);
-        $last = $element;
-        window.result_bar += "🟥";
-    }
-    let right = guess;
-    if (is_winner) {
-        let $element = window.handgreen.clone();
-        $last.after($element);
-        $last = $element;
-        right = guess + 1;
-        window.result_bar += "🟩";
-    }
-    for (let i=right; i<length; i++) {
-        let $element = window.handgrey.clone();
-        $last.after($element);
-        $last = $element;
-        window.result_bar += "⬜";
+    if(window.result_bar === "") {
+        let $last = $("#br-twitter");
+        for (let i = 0; i < guess; i++) {
+            let $element = window.handred.clone();
+            $last.after($element);
+            $last = $element;
+            window.result_bar += "🟥";
+        }
+        let right = guess;
+        if (is_winner) {
+            let $element = window.handgreen.clone();
+            $last.after($element);
+            $last = $element;
+            right = guess + 1;
+            window.result_bar += "🟩";
+        }
+        for (let i = right; i < length; i++) {
+            let $element = window.handgrey.clone();
+            $last.after($element);
+            $last = $element;
+            window.result_bar += "⬜";
+        }
     }
 }
 
