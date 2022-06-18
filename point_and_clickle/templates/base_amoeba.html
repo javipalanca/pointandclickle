@@ -66,6 +66,7 @@
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"
                 integrity="sha512-OvBgP9A2JBgiRad/mM36mkzXSXaJE9BEIENnVEmeZdITvwT09xnxLtT4twkCa8m/loMbPHsvPl0T8lRGVBwjlQ=="
                 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
         <!-- Your stuff: Third-party javascript libraries go here -->
 
         <!-- place project specific Javascript in this file -->
@@ -116,10 +117,18 @@
 
         <nav id="navbar" class="navbar">
             <ul>
-                <li><a class="nav-link scrollto active" href="#stats" id="menu-stats"><i
-                        class="bi bi-bar-chart-fill"></i></a></li>
-                <li><a class="nav-link scrollto active" href="#info" id="menu-info"><i
-                        class="bi bi-info-circle-fill"></i></a></li>
+                <li><a class="nav-link scrollto active" href="#stats" id="menu-stats"
+                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Statistics">
+                    <i class="bi bi-bar-chart-fill"></i></a></li>
+                <li><a class="nav-link scrollto active" href="#info" id="menu-info"
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="About Point & Clickle">
+                    <i class="bi bi-info-circle-fill"></i></a></li>
+                <li><a class="nav-link scrollto active" href="http://www.twitter.com/pointandclickle" id="menu-twitter"
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="Twitter" target="_blank">
+                    <i class="bi bi-twitter"></i></a></li>
+                <li><a class="nav-link scrollto active" href="http://www.instagram.com/pointandclickle" id="menu-instagram"
+                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="Instagram" target="_blank">
+                    <i class="bi bi-instagram"></i></a></li>
             </ul>
         </nav><!-- .navbar -->
 

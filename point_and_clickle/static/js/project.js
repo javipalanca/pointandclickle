@@ -5,6 +5,8 @@ function init_wordle(result, csrf_token) {
 
     window.csrftoken = csrf_token;
     window.result_bar = "";
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
     // Load save states
     let guess_list = load_game();
@@ -216,7 +218,6 @@ function show_stats(result) {
         $("#stats-won").text(stats['Won']);
         $("#stats-current").text(stats['Current Streak']);
         $("#stats-max").text(stats['Longest Streak']);
-        console.log(stats);
         let percent = stats['Played'] !== 0 ? parseInt(stats['Won']) * 100 / parseInt(stats['Played']) : 0;
         $("#stats-winpercent").text(percent.toFixed(0) + "%");
 
@@ -260,9 +261,9 @@ function show_game_data(is_winner, result) {
 
     // Show result
     if (is_winner) {
-        $("#divguesses").html("You won! (<a href='#' onclick='$(\"#result-modal\").show();'>View solution)</a>");
+        $("#divguesses").html("You won! (<a href='#' onclick='$(\"#result-modal\").show();'>View solution</a>)");
     } else {
-        $("#divguesses").html("Try again tomorrow! (<a href='#' onclick='$(\"#result-modal\").show();'>View solution)</a>");
+        $("#divguesses").html("Try again tomorrow! (<a href='#' onclick='$(\"#result-modal\").show();'>View solution</a>)");
     }
 }
 
@@ -310,9 +311,6 @@ function show_mini_bar(is_winner) {
     let guess_list = get_guess_list();
     let guess = guess_list.length - 1;
 
-    console.log(guess_list);
-    console.log(guess);
-    console.log(is_winner);
     let $hand_grey = $("<span class='hand-grey'>👆</span>");
     let $hand_red = $("<span class='hand-red'>👆</span>");
     let $hand_green = $("<span class='hand-green'>👆</span>");
