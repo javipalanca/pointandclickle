@@ -47,6 +47,10 @@ class Game(TimeStampedModel):
     featured = models.BooleanField(default=False)
     year = models.IntegerField(blank=True, null=True)
 
+    total_played = property(lambda self: self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6 + self.hits_failed)
+    total_hits = property(lambda self: self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6)
+    total_hits_failed = property(lambda self: self.hits_failed)
+
     def add_hit(self, guess):
         if guess == "1":
             self.hits_at_1 += 1
@@ -83,6 +87,10 @@ class Game(TimeStampedModel):
 class DailyGame(TimeStampedModel):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     date = models.DateField(unique=True)
+
+    total_played = property(lambda self: self.game.total_played)
+    total_hits = property(lambda self: self.game.total_hits)
+    total_hits_failed = property(lambda self: self.game.total_hits_failed)
 
     def __str__(self):
         return self.game.title + ' ' + str(self.date)
