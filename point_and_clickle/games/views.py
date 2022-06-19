@@ -31,6 +31,8 @@ class RootView(TemplateView):
                 game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True, featured=True).order_by('?').first()
             else:
                 game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True).order_by('?').first()
+            if game is None:
+                game = Game.objects.filter(is_valid=True, is_pointandclick=True).order_by('?').first()
             try:
                 daily = DailyGame.objects.create(date=datetime.utcnow().date(), game=game)
                 daily.save()
