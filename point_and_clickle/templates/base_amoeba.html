@@ -60,6 +60,19 @@
     {% endblock %}
     <!-- Le javascript
     ================================================== -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-53DQCDDVNJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-53DQCDDVNJ');
+    </script>
     {# Placed at the top of the document so pages load faster with defer #}
     {% block javascript %}
         <!-- Bootstrap JS -->
@@ -78,19 +91,6 @@
         <script defer src="{% static 'js/project.js' %}"></script>
 
     {% endblock javascript %}
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-53DQCDDVNJ"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-
-        gtag('config', 'G-53DQCDDVNJ');
-    </script>
     <!-- =======================================================
     * Template Name: Amoeba - v4.7.0
     * Template URL: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/

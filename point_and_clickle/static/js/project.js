@@ -179,10 +179,13 @@ function submit_title(guess_list, result) {
     if (is_result_correct(user_title, result)) {
         send_hit(result, guess_list.length);
         set_stats_win(true);
+        gtag('send', 'event', 'guess', 'win', eventValue=guess_list.length);
     } else {
+        gtag('send', 'event', 'guess', 'failed', eventValue=guess_list.length);
         if (guess_list.length >= MAX_GUESS) {
             send_hit(result, 0);
             set_stats_win(false);
+            gtag('send', 'event', 'guess', 'lost');
         }
     }
 }
@@ -350,8 +353,10 @@ function share_twitter() {
     date.setHours(0, 0, 0, 0);
     date = date.toDateString();
 
-    let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
+    let text = "#pointandclickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
     window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
+
+    gtag('send', 'event', 'share', 'twitter');
 }
 
 function is_mobile() {
@@ -371,6 +376,7 @@ function share_whatsapp() {
     } else {
         window.open("https://web.whatsapp.com/send?text=" + encodeURIComponent(text));
     }
+    gtag('send', 'event', 'share', 'whatsapp');
 }
 
 // Share with Telegram
@@ -382,6 +388,8 @@ function share_telegram() {
 
     let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
     window.open("https://telegram.me/share/url?url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text));
+
+    gtag('send', 'event', 'share', 'telegram');
 }
 
 // Share with clipboard
@@ -395,6 +403,8 @@ function copy_to_clipboard() {
     navigator.clipboard.writeText(text);
     const toast = new bootstrap.Toast($("#liveToast"));
     toast.show();
+
+    gtag('send', 'event', 'share', 'clipboard');
 }
 
 // Shows an image guess
