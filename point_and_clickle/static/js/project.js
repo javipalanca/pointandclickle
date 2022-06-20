@@ -322,15 +322,19 @@ function show_mini_bar(is_winner) {
         $last = $element;
         window.result_bar += "🟥";
     }
-    let right = guess;
     if (is_winner) {
         let $element = $hand_green.clone();
         $last.after($element);
         $last = $element;
-        right = guess + 1;
         window.result_bar += "🟩";
     }
-    for (let i = right; i < MAX_GUESS; i++) {
+    else {
+        let $element = $hand_red.clone();
+        $last.after($element);
+        $last = $element;
+        window.result_bar += "🟥";
+    }
+    for (let i = guess + 1; i < MAX_GUESS; i++) {
         let $element = $hand_grey.clone();
         $last.after($element);
         $last = $element;
