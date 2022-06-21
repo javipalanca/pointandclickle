@@ -8,5 +8,5 @@ urlpatterns = [
     path("random/", view=RandomView.as_view(), name="random"),
     path("<int:year>/<int:month>/<int:day>/", view=DateView.as_view(), name="date"),
     path('game-autocomplete/', TitleAutocomplete.as_view(), name='game-autocomplete'),
-    path("image/<int:year>/<int:month>/<int:day>/", view=ImageFileView.as_view(), name="image"),
+    path("image/<int:year>/<int:month>/<int:day>/card.png", view=ImageFileView.as_view(), name="image"),
 ]
