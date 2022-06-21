@@ -179,13 +179,13 @@ function submit_title(guess_list, result) {
     if (is_result_correct(user_title, result)) {
         send_hit(result, guess_list.length);
         set_stats_win(true);
-        gtag('send', 'event', 'guess', 'win', eventValue=guess_list.length);
+        gtag('event', 'guess', {'result': 'win', 'when': guess_list.length});
     } else {
-        gtag('send', 'event', 'guess', 'failed', eventValue=guess_list.length);
+        gtag('event', 'guess', {'result': 'failed', 'when': guess_list.length});
         if (guess_list.length >= MAX_GUESS) {
             send_hit(result, 0);
             set_stats_win(false);
-            gtag('send', 'event', 'guess', 'lost');
+            gtag('event', 'guess', {'result': 'lost'});
         }
     }
 }
@@ -356,7 +356,7 @@ function share_twitter() {
     let text = "#pointandclickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
     window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
 
-    gtag('send', 'event', 'share', 'twitter');
+    gtag('event', 'share', {'method': 'twitter'});
 }
 
 function is_mobile() {
@@ -376,7 +376,7 @@ function share_whatsapp() {
     } else {
         window.open("https://web.whatsapp.com/send?text=" + encodeURIComponent(text));
     }
-    gtag('send', 'event', 'share', 'whatsapp');
+    gtag('event', 'share', {'method': 'whatsapp'});
 }
 
 // Share with Telegram
@@ -389,7 +389,7 @@ function share_telegram() {
     let text = "Point & Clickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
     window.open("https://telegram.me/share/url?url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text));
 
-    gtag('send', 'event', 'share', 'telegram');
+    gtag('event', 'share', {'method': 'telegram'});
 }
 
 // Share with clipboard
@@ -404,7 +404,7 @@ function copy_to_clipboard() {
     const toast = new bootstrap.Toast($("#liveToast"));
     toast.show();
 
-    gtag('send', 'event', 'share', 'clipboard');
+    gtag('event', 'share', {'method': 'clipboard'});
 }
 
 // Shows an image guess
