@@ -1,11 +1,12 @@
 import base64
-from datetime import datetime, timedelta
+from datetime import datetime
 
+import requests
 from dal import autocomplete
 from django import http
-from django.db import IntegrityError
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.views import View
 
 from django.views.generic import TemplateView
 
@@ -18,29 +19,7 @@ class RootView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        try:
-            daily = DailyGame.objects.get(date=datetime.utcnow().date())
-        except DailyGame.DoesNotExist:
-
-            yesterday = datetime.utcnow().date() - timedelta(days=1)
-            daily = DailyGame.objects.get(date=yesterday)
-            success = daily.game.hits_at_1 + daily.game.hits_at_2 + daily.game.hits_at_3 + daily.game.hits_at_4 + daily.game.hits_at_5 + daily.game.hits_at_6
-            fails = daily.game.hits_failed
-
-            if fails > success:
-                game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True, featured=True).order_by('?').first()
-            else:
-                game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True).order_by('?').first()
-            if game is None:
-                game = Game.objects.filter(is_valid=True, is_pointandclick=True).order_by('?').first()
-            try:
-                daily = DailyGame.objects.create(date=datetime.utcnow().date(), game=game)
-                daily.save()
-                game.shown = True
-                game.date_shown = datetime.utcnow().date()
-                game.save()
-            except IntegrityError:
-                daily = DailyGame.objects.get(date=datetime.utcnow().date())
+        daily = DailyGame.get_daily_game(create=True)
 
         context['game'] = daily.game
         context['result'] = base64.b64encode(daily.game.title.encode('utf-8')).decode('utf-8')
@@ -68,6 +47,15 @@ class DateView(TemplateView):
         context['game'] = daily.game
         context['result'] = base64.b64encode(daily.game.title.encode('utf-8')).decode('utf-8')
         return context
+
+
+class ImageFileView(View):
+    def get(self, request, year, month, day):
+        date = datetime(year=year, month=month, day=day)
+        daily = get_object_or_404(DailyGame, date=date)
+        url = daily.game.screenshots[5]
+        response = requests.get(url)
+        return http.HttpResponse(response, content_type='image/png')
 
 
 class TitleAutocomplete(autocomplete.Select2QuerySetView):

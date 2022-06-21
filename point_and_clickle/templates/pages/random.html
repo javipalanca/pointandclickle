@@ -2,9 +2,12 @@
 {% load resize static %}
 
 {% block twitter %}
-    <meta name="twitter:image" content="{{ game.screenshots.5 | resize }}">
-    <meta property="og:image" content="{{ game.screenshots.5 | resize }}">
-    <meta itemprop="image" content="{{ game.screenshots.5 | resize }}">
+    {% now "Y" as year %}
+    {% now "m" as month %}
+    {% now "d" as day %}
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% url 'games:image' year month day %}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% url 'games:image' year month day %}">
+    <meta itemprop="image" content="{{ request.scheme }}://{{ request.get_host }}{% url 'games:image' year month day %}">
 {% endblock %}
 
 {% block modal %}

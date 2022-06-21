@@ -1,5 +1,8 @@
+from datetime import datetime, timedelta
+
+from django.http import Http404
 from model_utils.models import TimeStampedModel
-from django.db import models
+from django.db import models, IntegrityError
 
 
 class Game(TimeStampedModel):
@@ -27,7 +30,6 @@ class Game(TimeStampedModel):
     steam_total_reviews = models.FloatField(default=0)
     steam_review_score = models.FloatField(default=0)
 
-
     screenshots = models.JSONField()
 
     is_valid = models.BooleanField(default=True)
@@ -47,8 +49,10 @@ class Game(TimeStampedModel):
     featured = models.BooleanField(default=False)
     year = models.IntegerField(blank=True, null=True)
 
-    total_played = property(lambda self: self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6 + self.hits_failed)
-    total_hits = property(lambda self: self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6)
+    total_played = property(lambda
+                                self: self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6 + self.hits_failed)
+    total_hits = property(
+        lambda self: self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6)
     total_hits_failed = property(lambda self: self.hits_failed)
 
     def add_hit(self, guess):
@@ -91,6 +95,41 @@ class DailyGame(TimeStampedModel):
     total_played = property(lambda self: self.game.total_played)
     total_hits = property(lambda self: self.game.total_hits)
     total_hits_failed = property(lambda self: self.game.total_hits_failed)
+
+    @classmethod
+    def get_daily_game(cls, date=None, create=False):
+        date = date if date else datetime.utcnow().date()
+
+        daily = DailyGame.objects.filter(date=date)
+        if len(daily) > 0:
+            return daily[0]
+
+        if create:
+            yesterday = date - timedelta(days=1)
+            daily = DailyGame.objects.filter(date=yesterday)
+            if len(daily) > 0:
+                daily = daily[0]
+                success = daily.game.hits_at_1 + daily.game.hits_at_2 + daily.game.hits_at_3 + daily.game.hits_at_4 + daily.game.hits_at_5 + daily.game.hits_at_6
+                fails = daily.game.hits_failed
+                if fails > success:
+                    game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True, featured=True).order_by('?').first()
+                else:
+                    game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True).order_by('?').first()
+            else:
+                game = None
+            if game is None:
+                game = Game.objects.filter(is_valid=True, is_pointandclick=True).order_by('?').first()
+            try:
+                daily = DailyGame.objects.create(date=datetime.utcnow().date(), game=game)
+                daily.save()
+                game.shown = True
+                game.date_shown = datetime.utcnow().date()
+                game.save()
+            except IntegrityError:
+                daily = DailyGame.objects.get(date=datetime.utcnow().date())
+            return daily
+        else:
+            raise Http404()
 
     def __str__(self):
         return self.game.title + ' ' + str(self.date)
