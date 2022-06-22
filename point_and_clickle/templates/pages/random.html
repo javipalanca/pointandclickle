@@ -1,6 +1,7 @@
 {% extends "base_amoeba.html" %}
 {% load resize static %}
 
+
 {% block twitter %}
     {% now "Y" as year %}
     {% now "m" as month %}
@@ -34,6 +35,7 @@
                         </div>
                     </div>
                 </div>
+                {% if playable %}
                 <div class="modal-footer">
                     <div class="row" id="share-with-twitter">
                         <div class="col-6 ms-auto">
@@ -52,6 +54,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -163,6 +166,7 @@
             <h1>You have 6 tries to guess today's Point&Click game...</h1>
         </div>
 
+        {% if playable %}
         <div class="row" id="searchbox">
 
             <div class="offset-lg-3 col-md-10 col-9 col-lg-5  twitter-typeahead" id="remote">
@@ -176,6 +180,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
 
         <div class="row">
@@ -206,6 +211,7 @@
                 </div>
             </div>
         </div>
+        {% if playable %}
         <div class="row">
             <div class="container-fluid d-flex justify-content-center p-2">
                 <div class="btn-group" role="group">
@@ -218,17 +224,25 @@
                 </div>
             </div>
         </div>
+        {% endif %}
+        {% if playable %}
         <div class="row">
             <div class="container-fluid d-flex justify-content-center p-2 alert alert-info" id="divguesses">
                 <span id="remaining"></span>&nbsp;guesses remaining.
             </div>
         </div>
-
+        {% else %}
+            <div class="container-fluid d-flex justify-content-center p-2 alert alert-info" id="divguesses">
+                <a href='#' onclick='show_game_data(undefined, window.result);'>View solution</a>
+            </div>
+        {% endif %}
+        {% if playable %}
         <div class="row">
             <div class="container-fluid d-flex justify-content-center p-2">
                 <ul id="guesses-list" class="list-group"></ul>
             </div>
         </div>
+        {% endif %}
 
     </div>
 {% endblock %}

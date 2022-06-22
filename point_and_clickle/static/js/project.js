@@ -5,6 +5,7 @@ function init_wordle(result, csrf_token) {
 
     window.csrftoken = csrf_token;
     window.result_bar = "";
+    window.result = result;
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
@@ -265,7 +266,7 @@ function show_game_data(is_winner, result) {
     // Show result
     if (is_winner) {
         $("#divguesses").html("You won! (<a href='#' onclick='$(\"#result-modal\").show();'>View solution</a>)");
-    } else {
+    } else if (is_winner === false) {
         $("#divguesses").html("Try again tomorrow! (<a href='#' onclick='$(\"#result-modal\").show();'>View solution</a>)");
     }
 }
@@ -348,9 +349,9 @@ function show_mini_bar(is_winner) {
 
 // Share with Twitter
 function share_twitter() {
-    let url = "🔗 https://www.pointandclickle.com";
     let date = new Date();
     date.setHours(0, 0, 0, 0);
+    let url = "🔗 https://pointandclickle.com/"; // + date.getUTCFullYear() + "/" + (date.getUTCMonth()+1) + "/" + date.getUTCDate() + "/";
     date = date.toDateString();
 
     let text = "#pointandclickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
@@ -365,7 +366,7 @@ function is_mobile() {
 
 // Share with Whatsapp
 function share_whatsapp() {
-    let url = "🔗 https://www.pointandclickle.com";
+    let url = "🔗 https://pointandclickle.com";
     let date = new Date();
     date.setHours(0, 0, 0, 0);
     date = date.toDateString();
@@ -381,7 +382,7 @@ function share_whatsapp() {
 
 // Share with Telegram
 function share_telegram() {
-    let url = "🔗 https://www.pointandclickle.com";
+    let url = "🔗 https://pointandclickle.com";
     let date = new Date();
     date.setHours(0, 0, 0, 0);
     date = date.toDateString();
@@ -394,7 +395,7 @@ function share_telegram() {
 
 // Share with clipboard
 function copy_to_clipboard() {
-    let url = "🔗 https://www.pointandclickle.com";
+    let url = "🔗 https://pointandclickle.com";
     let date = new Date();
     date.setHours(0, 0, 0, 0);
     date = date.toDateString();

@@ -23,6 +23,7 @@ class RootView(TemplateView):
 
         context['game'] = daily.game
         context['result'] = base64.b64encode(daily.game.title.encode('utf-8')).decode('utf-8')
+        context['playable'] = True
         return context
 
 
@@ -34,6 +35,7 @@ class RandomView(TemplateView):
         game = Game.objects.filter(is_valid=True, is_pointandclick=True).order_by('?').first()
         context['game'] = game
         context['result'] = base64.b64encode(game.title.encode('utf-8')).decode('utf-8')
+        context['playable'] = False
         return context
 
 
@@ -42,10 +44,12 @@ class DateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        now = datetime.now()
         date = datetime(year=context['year'], month=context['month'], day=context['day'])
         daily = get_object_or_404(DailyGame, date=date)
         context['game'] = daily.game
         context['result'] = base64.b64encode(daily.game.title.encode('utf-8')).decode('utf-8')
+        context['playable'] = now.year == context['year'] and now.month == context['month'] and now.day == context['day']
         return context
 
 
