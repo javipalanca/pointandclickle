@@ -21,6 +21,7 @@ django-cors-headers==3.11.0 # https://github.com/adamchainz/django-cors-headers
 # DRF-spectacular for api documentation
 drf-spectacular==0.22.1  # https://github.com/tfranzel/drf-spectacular
 django-autocomplete-light==3.9.4  #  http://django-autocomplete-light.rtfd.org
+django-mass-edit==3.4.1
 
 django-debug-toolbar==3.4.0
 requests==2.27.1

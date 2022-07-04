@@ -77,6 +77,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_spectacular",
     "robots",
+    "massadmin",
 ]
 
 LOCAL_APPS = [
