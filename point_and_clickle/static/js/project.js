@@ -122,7 +122,7 @@ function get_stats_dict() {
 }
 
 function is_result_correct(guess, result) {
-    return guess === fromBinary(result['code']);
+    return guess === escapeHTML(fromBinary(result['code']));
 }
 
 // Checks the last played guess
