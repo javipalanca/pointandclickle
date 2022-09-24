@@ -33,17 +33,18 @@ def scrap_game(url):
     return game_info
 
 
-with open("games.json", "r") as f:
-    games_list = json.load(f)
+if __name__ == "__main__":
+    with open("games.json", "r") as f:
+        games_list = json.load(f)
 
-    for game_url in games_list.values():
-        game_info = scrap_game(game_url)
+        for game_url in games_list.values():
+            game_info = scrap_game(game_url)
 
-        if game_info is not None:
-            with open(f"gamesdb.json", "r") as f:
-                gamesdb = json.load(f)
-            if game_info["title"] not in gamesdb:
-                with open(f"gamesdb.json", "w") as f:
-                    gamesdb[game_info["title"]] = game_info
-                    json.dump(gamesdb, f, indent=4, ensure_ascii=False)
-                # print(json.dumps(game_info, indent=4))
+            if game_info is not None:
+                with open(f"gamesdb.json", "r") as f:
+                    gamesdb = json.load(f)
+                if game_info["title"] not in gamesdb:
+                    with open(f"gamesdb.json", "w") as f:
+                        gamesdb[game_info["title"]] = game_info
+                        json.dump(gamesdb, f, indent=4, ensure_ascii=False)
+                    # print(json.dumps(game_info, indent=4))
