@@ -21,7 +21,8 @@ def scrap_game(url):
             if "Developer:" in p.text:
                 game_info["developer"] = p.text.replace("Developer:", "").strip()
                 break
-        game_info["cover"] = soup.find("div", {"class": "feat_image"}).find("img")["data-src"]
+        #game_info["cover"] = soup.find("div", {"class": "feat_image"}).find("img")["data-src"]
+        game_info["cover"] = soup.find("img", {"id": "gamebox_new"})["data-src"]
         screenshots = [img["data-src"] for img in soup.find_all("img", {"itemprop": "screenshot"})]
         game_info["screenshots"] = screenshots
         table = soup.find("table", {"class": "game_info_table"})
