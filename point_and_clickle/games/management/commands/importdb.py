@@ -5,6 +5,28 @@ from django.core.management.base import BaseCommand, CommandError
 from point_and_clickle.games.models import Game
 
 
+def insert_game_in_db(game):
+    if not Game.objects.filter(title=game['title']).exists():
+        game_register = Game.objects.create(title=game['title'],
+                                            description=game['description'],
+                                            url=game['url'],
+                                            cover=game['cover'],
+                                            developer=game['developer'],
+                                            platform=game['Platform'],
+                                            perspective=game['Perspective'],
+                                            control=game['Control'],
+                                            gameplay=game['Gameplay'],
+                                            genre=game['Genre'],
+                                            theme=game['Theme'],
+                                            graphic_style=game['Graphic Style'],
+                                            presentation=game['Presentation'],
+                                            action=game['Action (Compulsory)'],
+                                            red_flags=game['Red Flags'],
+                                            media=game['Media'],
+                                            screenshots=game['screenshots'])
+        game_register.save()
+
+
 class Command(BaseCommand):
     help = "Import games from a JSON file"
 
@@ -20,24 +42,6 @@ class Command(BaseCommand):
             raise CommandError('File not found')
 
         for game in tqdm.tqdm(gamesdb.values()):
-            if not Game.objects.filter(title=game['title']).exists():
-                game_register = Game.objects.create(title=game['title'],
-                                                    description=game['description'],
-                                                    url=game['url'],
-                                                    cover=game['cover'],
-                                                    developer=game['developer'],
-                                                    platform=game['Platform'],
-                                                    perspective=game['Perspective'],
-                                                    control=game['Control'],
-                                                    gameplay=game['Gameplay'],
-                                                    genre=game['Genre'],
-                                                    theme=game['Theme'],
-                                                    graphic_style=game['Graphic Style'],
-                                                    presentation=game['Presentation'],
-                                                    action=game['Action (Compulsory)'],
-                                                    red_flags=game['Red Flags'],
-                                                    media=game['Media'],
-                                                    screenshots=game['screenshots'])
-                game_register.save()
+            insert_game_in_db(game)
 
         self.stdout.write(self.style.SUCCESS('Games imported'))

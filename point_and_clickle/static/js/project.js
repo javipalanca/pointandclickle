@@ -331,8 +331,7 @@ function show_mini_bar(is_winner) {
         $last.after($element);
         $last = $element;
         window.result_bar += "🟩";
-    }
-    else {
+    } else {
         let $element = $hand_red.clone();
         $last.after($element);
         $last = $element;
@@ -351,7 +350,8 @@ function show_mini_bar(is_winner) {
 function share_twitter() {
     let date = new Date();
     date.setHours(0, 0, 0, 0);
-    let url = "🔗 https://pointandclickle.com/"; // + date.getUTCFullYear() + "/" + (date.getUTCMonth()+1) + "/" + date.getUTCDate() + "/";
+    let rndstr = Math.round((Math.pow(36, 6) - Math.random() * Math.pow(36, 5))).toString(36).slice(1);
+    let url = "🔗 https://pointandclickle.com/?" + rndstr; // + date.getUTCFullYear() + "/" + (date.getUTCMonth()+1) + "/" + date.getUTCDate() + "/";
     date = date.toDateString();
 
     let text = "#pointandclickle - " + date + "\n👆 " + window.result_bar + "\n " + url;
