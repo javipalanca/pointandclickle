@@ -238,7 +238,7 @@ function show_game_data(is_winner, result) {
     $.getJSON(GAMES_API + result['id'])
         .done(function (data) {
             // Show game data
-            $("#result-card-img-top").attr("src", data['cover']);
+            $("#result-card-img-top").attr("src", data['cover'].replace("cdn.nivoli.com/adventuregamers", "adventuregamers.com"));
             $("#result-card-title").text(data['title']);
             $("#result-link").attr("href", data['url']);
             $("#card-developer").html("<strong>Developer:</strong> " + data['developer']);
