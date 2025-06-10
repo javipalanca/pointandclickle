@@ -11,4 +11,7 @@ def resize(value):
 @register.filter(name='uncdn')
 def uncdn(value):
     """Removes all references to CDN"""
-    return value.replace("cdn.nivoli.com/adventuregamers", 'adventuregamers.com')
+    url = value.replace("cdn.nivoli.com/adventuregamers", 'adventuregamers.com')
+    if "wp-content" not in url:
+        url = url.replace("adventuregamers.com/", 'adventuregamers.com/wp-content/uploads/')
+    return url
