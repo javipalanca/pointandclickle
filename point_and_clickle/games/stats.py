@@ -11,7 +11,9 @@ import re
 from collections import Counter
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.cache import cache
 from django.db import IntegrityError, transaction
 from django.db.models import F, Sum
 from django.http import HttpResponse, HttpResponseNotAllowed
@@ -99,6 +101,16 @@ def collect(request):
         if pairs:
             add(today(), Counter(pairs))
     return HttpResponse(status=204)
+
+
+def visitor_count() -> int:
+    """For the retro counter: HIT_COUNTER_START plus every page view counted so far (cached for a minute)."""
+
+    def count():
+        views = DailyStat.objects.filter(metric="view").aggregate(n=Sum("count"))["n"]
+        return settings.HIT_COUNTER_START + (views or 0)
+
+    return cache.get_or_set("hit_counter", count, 60)
 
 
 def summary(days=30):

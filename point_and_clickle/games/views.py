@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 import requests
 from dal import autocomplete
 from django import http
+from django.conf import settings
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
@@ -13,6 +14,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 
 from point_and_clickle.games.models import DailyGame, Game
+from point_and_clickle.games.stats import visitor_count
 
 
 def today():
@@ -63,6 +65,12 @@ class RootView(GameView):
         context = super().get_context_data(**kwargs)
         daily = DailyGame.get_daily_game(create=True)
         context.update(self.game_context(daily.game, "daily", daily.date))
+        visitor = visitor_count() + 1  # this visit is counted when the page has loaded
+        context["visitor"] = visitor
+        context["visitor_digits"] = list(f"{visitor:07d}")
+        context["counter_since"] = datetime.strptime(
+            settings.HIT_COUNTER_SINCE, "%Y-%m-%d"
+        ).date()
         return context
 
 

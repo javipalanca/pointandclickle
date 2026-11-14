@@ -84,3 +84,46 @@ def test_dashboard_is_staff_only(client, admin_client):
     assert r.status_code == 200
     assert r.context["totals"][0] == 1 and r.context["totals"][1] == 1
     assert ("direct", 1) in dict(r.context["breakdowns"])["Where visitors come from"]
+
+
+def test_home_hit_counter(client, settings):
+    from django.core.cache import cache
+
+    from point_and_clickle.games.models import DailyGame, Game
+
+    blank = {
+        f: ""
+        for f in (
+            "description",
+            "cover",
+            "developer",
+            "platform",
+            "perspective",
+            "control",
+            "gameplay",
+            "genre",
+            "theme",
+            "graphic_style",
+            "presentation",
+            "action",
+            "red_flags",
+            "media",
+        )
+    }
+    game = Game.objects.create(
+        title="Loom",
+        url="https://adventuregamers.com/",
+        screenshots=["x"] * 6,
+        is_valid=True,
+        is_pointandclick=True,
+        **blank
+    )
+    DailyGame.objects.create(date=today(), game=game)
+    settings.HIT_COUNTER_START = 11022
+    cache.clear()
+    post(client, [["view", "daily"], ["view", "archive"], ["view", "daily"]])
+    cache.clear()
+    r = client.get("/")
+    assert r.context["visitor"] == 11022 + 3 + 1
+    assert r.context["visitor_digits"] == list("0011026")
+    assert 'aria-label="11026"' in r.content.decode()
