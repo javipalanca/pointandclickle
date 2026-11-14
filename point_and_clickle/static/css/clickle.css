@@ -251,3 +251,51 @@ main { padding-block: 28px 8px; }
 .page h1 { font-size: 18px; color: var(--amber); margin-bottom: 16px; }
 .btn-primary { background: var(--amber); border: 0; border-radius: 0; color: var(--ink); font-family: var(--display); font-size: 10px; padding: 10px 14px; }
 .btn-primary:hover { background: #f4c766; color: var(--ink); }
+
+/* ---------- Practice mode, breadcrumbs, day navigation ---------- */
+.crumbs { font-family: var(--display); font-size: 8px; color: var(--dim); margin-bottom: 14px; }
+.crumbs a { color: var(--teal); }
+.practice-note { display: inline-flex; gap: 8px; align-items: center; margin-top: 12px; padding: 6px 12px; background: var(--well); border-left: 4px solid var(--teal); color: var(--dim); font-size: 20px; }
+.day-nav { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; max-width: 640px; margin: 18px auto 0; }
+
+/* ---------- Text sections (how to play, FAQ, tips) ---------- */
+.seo-block { max-width: 760px; margin: 40px auto 0; }
+.seo-block h2 { font-size: 13px; color: var(--amber); margin-bottom: 14px; text-shadow: 2px 2px 0 var(--shade); }
+.seo-block p { color: var(--dim); margin-top: 10px; max-width: 70ch; }
+.seo-block b { color: var(--paper); font-weight: 400; }
+.seo-block .actions { margin-top: 16px; }
+.howto { margin: 0; padding-left: 1.4em; display: grid; gap: 8px; color: var(--dim); }
+.howto b { color: var(--paper); font-weight: 400; }
+.howto li::marker { color: var(--amber); font-family: var(--display); font-size: 12px; }
+.tips { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--dim); }
+.tips li::marker { content: "▸ "; color: var(--rose); }
+.faq { display: grid; gap: 8px; }
+.faq details { background: var(--panel); border-left: 4px solid var(--panel2); }
+.faq details[open] { border-left-color: var(--amber); }
+.faq summary { cursor: pointer; padding: 10px 14px; font-family: var(--display); font-size: 10px; line-height: 1.7; color: var(--paper); list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before { content: "+ "; color: var(--amber); }
+.faq details[open] summary::before { content: "− "; }
+.faq details p { margin: 0; padding: 0 14px 12px; color: var(--dim); }
+
+/* ---------- Archive ---------- */
+.archive-actions { margin-top: 14px; }
+.month { --c: var(--panel2); margin: 0 auto 14px; max-width: 980px; }
+.month summary { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 16px; cursor: pointer; list-style: none; }
+.month summary::-webkit-details-marker { display: none; }
+.month summary h2 { font-size: 11px; color: var(--amber); }
+.month summary span { font-family: var(--display); font-size: 8px; color: var(--dim); }
+.days { list-style: none; margin: 0; padding: 0 12px 14px; display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
+.days a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; background: var(--well); color: var(--paper); border-bottom: 3px solid transparent; }
+.days a b { font-family: var(--display); font-size: 9px; font-weight: 400; color: var(--amber); }
+.days a span { font-size: 18px; color: var(--dim); }
+.days a:hover, .days a:focus-visible { background: var(--panel2); }
+.days a.won { border-bottom-color: var(--verb); }
+.days a.lost { border-bottom-color: var(--rose); }
+
+/* ---------- Cookie banner (same as the museum's) ---------- */
+.pconsent { position: fixed; z-index: 2000; left: 16px; right: 16px; bottom: 16px; max-width: 520px; margin: 0 auto; padding: 14px 16px; --c: var(--amber); }
+.pconsent p { color: var(--paper); font-size: 20px; margin-bottom: 10px; }
+.pconsent .consent-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.linkish { background: none; border: 0; padding: 0; color: var(--teal); font: inherit; text-decoration: underline; }
+.linkish:hover { color: var(--amber); }

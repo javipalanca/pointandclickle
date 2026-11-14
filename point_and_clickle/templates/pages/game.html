@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% load resize static %}
+{# One template for today's game (mode "daily") and for practice games: a random game or a past day (mode "practice"). #}
+
+{% block page_id %}{% if mode == "daily" %}daily{% elif day %}archive-day{% else %}random{% endif %}{% endblock %}
+
+{% block title %}{% if mode == "daily" %}Point &amp; Clickle #{{ number }} · Guess Today's Point &amp; Click Adventure Game{% elif day %}Point &amp; Clickle #{{ number }} ({{ day|date:"j M Y" }}) · Past Adventure Game Puzzle{% else %}Random Adventure Game Puzzle · Point &amp; Clickle{% endif %}{% endblock %}
+
+{% block meta_description %}{% if mode == "daily" %}Name today's point &amp; click adventure game from six screenshots. Point &amp; Clickle #{{ number }}: a new graphic adventure daily, from LucasArts and Sierra classics to indies.{% elif day %}Play Point &amp; Clickle #{{ number }} from {{ day|date:"j F Y" }}: guess the point &amp; click adventure game from six screenshots. Practice mode, it does not change your daily streak.{% else %}Practice with a random point &amp; click adventure game: six screenshots, six tries. Does not change your daily statistics.{% endif %}{% endblock %}
+
+{% block canonical %}{% if mode == "daily" %}{{ SITE_URL }}/{% else %}{{ SITE_URL }}{{ request.path }}{% endif %}{% endblock %}
+{% block og_url %}{% if mode == "daily" %}{{ SITE_URL }}/{% else %}{{ SITE_URL }}{{ request.path }}{% endif %}{% endblock %}
+{% block og_title %}{% if number %}Point &amp; Clickle #{{ number }}{% else %}Point &amp; Clickle · Random game{% endif %} · Guess the adventure game{% endblock %}
+{% block og_description %}Six screenshots, six tries: which point &amp; click adventure is it?{% endblock %}
+
+{% block og_image %}
+    {% if day %}
+    <meta property="og:image" content="{{ SITE_URL }}{% url 'games:image' day.year day.month day.day %}">
+    <meta property="og:image:alt" content="A screenshot from the mystery adventure game of Point &amp; Clickle #{{ number }}">
+    {% else %}{{ block.super }}{% endif %}
+{% endblock %}
+
+{% block jsonld %}{% if mode == "daily" %},
+        {
+          "@type": "WebApplication",
+          "@id": "{{ SITE_URL }}/#game",
+          "name": "Point & Clickle",
+          "url": "{{ SITE_URL }}/",
+          "description": "A daily guessing game: name the point & click adventure game from six screenshots.",
+          "applicationCategory": "GameApplication",
+          "genre": ["Puzzle", "Trivia", "Adventure games"],
+          "operatingSystem": "Any (web browser)",
+          "isAccessibleForFree": true,
+          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+          "publisher": {"@id": "{{ SITE_URL }}/#org"}
+        }{% elif day %},
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Point & Clickle", "item": "{{ SITE_URL }}/"},
+            {"@type": "ListItem", "position": 2, "name": "Archive", "item": "{{ SITE_URL }}{% url 'games:archive' %}"},
+            {"@type": "ListItem", "position": 3, "name": "#{{ number }} · {{ day|date:'j M Y' }}"}
+          ]
+        }{% endif %}{% endblock %}
+
+{% block modal %}
+    <div class="modal" id="result-modal" tabindex="-1" aria-labelledby="result-modal-title">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="result-modal-title">Result</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <img src="" id="result-card-img-top" alt="Game cover">
+                        </div>
+                        <div class="col-md-7">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" id="card-developer"></li>
+                                <li class="list-group-item" id="card-platform"></li>
+                                <li class="list-group-item" id="card-genre"></li>
+                            </ul>
+                            <a href="#" class="pbtn" id="result-link" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> Adventure Gamers</a>
+                            <div class="museum-ribbon">
+                                <img class="pixel" src="{% static 'images/museum/icon-192.png' %}" alt="">
+                                <span>Discover the studios, engines and eras behind this game at the <a href="{{ MUSEUM_URL }}?utm_source=pointandclickle&amp;utm_medium=result" target="_blank" rel="noopener" data-museum="result">Point and Click Museum ▸</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {% if mode == "daily" %}
+                    <div class="row g-3 w-100 align-items-center" id="share-with-twitter">
+                        <div class="col-sm-6 share-card">
+                            <img class="screenshot" id="img-twitter" src="{{ game.screenshots.5 | resize | uncdn }}" alt="Today's first screenshot" loading="lazy">
+                            <div><br id="br-twitter"></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <h3 class="card-title">Share your result</h3>
+                            <div class="share">
+                                <span class="btn-social btn-twitter" role="button" tabindex="0" aria-label="Share on X"><i class="bi bi-twitter-x"></i></span>
+                                <span class="btn-social btn-whatsapp" role="button" tabindex="0" aria-label="Share on WhatsApp"><i class="bi bi-whatsapp"></i></span>
+                                <span class="btn-social btn-telegram" role="button" tabindex="0" aria-label="Share on Telegram"><i class="bi bi-telegram"></i></span>
+                                <span class="btn-social btn-clipboard" role="button" tabindex="0" aria-label="Copy to clipboard"><i class="bi bi-clipboard2-plus-fill"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="w-100 d-flex flex-wrap gap-2 justify-content-end">
+                        <a class="pbtn brass" href="{% url 'games:random' %}" rel="nofollow" data-ga="another_random"><i class="bi bi-shuffle"></i> Another random game</a>
+                        <a class="pbtn" href="{% url 'games:home' %}">Today's game</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="status" aria-live="polite" aria-atomic="true">
+            <div class="toast-body">Result copied to the clipboard.</div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-stats" tabindex="-1" aria-labelledby="stats-title">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="stats-title">Statistics</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="card-title">Your daily games</h3>
+                    <div class="row row-cols-3 g-2 mb-2 text-center">
+                        <div class="col"><div class="card p-2"><div class="pricing-card-title" id="stats-played"></div><div class="stats-label">Played</div></div></div>
+                        <div class="col"><div class="card p-2"><div class="pricing-card-title" id="stats-won"></div><div class="stats-label">Won</div></div></div>
+                        <div class="col"><div class="card p-2"><div class="pricing-card-title" id="stats-winpercent"></div><div class="stats-label">Win %</div></div></div>
+                    </div>
+                    <div class="row row-cols-2 g-2 mb-3 text-center">
+                        <div class="col"><div class="card p-2"><div class="pricing-card-title" id="stats-current"></div><div class="stats-label">Current streak</div></div></div>
+                        <div class="col"><div class="card p-2"><div class="pricing-card-title" id="stats-max"></div><div class="stats-label">Longest streak</div></div></div>
+                    </div>
+                    <h3 class="card-title">{% if mode == "daily" %}Today's{% else %}This game's{% endif %} guess distribution, all players</h3>
+                    <ul class="list-group list-group-flush">
+                        {% for n in "123456" %}
+                        <li class="list-group-item"><span>{{ n }}:</span> <span id="progress-{{ n }}" class="placeholder"></span> <span><span id="stats-{{ n }}"></span>%</span></li>
+                        {% endfor %}
+                        <li class="list-group-item"><span>X:</span> <span id="progress-0" class="placeholder"></span> <span><span id="stats-0"></span>%</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% if day and mode != "daily" %}
+    <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="{% url 'games:home' %}">Today</a> ▸ <a href="{% url 'games:archive' %}">Archive</a> ▸ <span aria-current="page">#{{ number }}</span>
+    </nav>
+    {% endif %}
+
+    <section class="exhibit-head" aria-labelledby="game-title">
+        {% if mode == "daily" %}
+            <p class="kicker">Today's exhibit · #{{ number }} · {{ day|date:"j M Y" }}</p>
+        {% elif day %}
+            <p class="kicker">From the archive · #{{ number }} · {{ day|date:"j M Y" }}</p>
+        {% else %}
+            <p class="kicker">Practice · random game</p>
+        {% endif %}
+        <h1 id="game-title">{% if mode != "daily" and day %}Point &amp; Clickle #{{ number }}: guess the adventure{% else %}Guess the point &amp; click adventure{% endif %}</h1>
+        <p class="lead">Six screenshots, six tries. Every miss reveals a new frame.</p>
+        {% if mode != "daily" %}
+        <p class="practice-note"><i class="bi bi-joystick"></i> Practice game: it does not change your daily statistics or streak.</p>
+        {% endif %}
+    </section>
+
+    <div id="searchbox">
+        <div id="remote">
+            <label class="vh" for="input">Game title</label>
+            <input type="text" class="typeahead" id="input" placeholder="Type a point & click game…" autocomplete="off" enterkeyhint="send">
+        </div>
+        <button type="submit" class="pbtn brass" id="submit">Guess</button>
+    </div>
+
+    <div class="cabinet px">
+        <div class="screen">
+            <img class="screenshot hide" id="img0" src="{{ game.screenshots.5 | resize | uncdn }}" alt="Screenshot 1 of the mystery adventure game" fetchpriority="high">
+            <img class="screenshot hide" id="img1" src="{{ game.screenshots.4 | resize | uncdn }}" alt="Screenshot 2 of the mystery adventure game" loading="lazy">
+            <img class="screenshot hide" id="img2" src="{{ game.screenshots.3 | resize | uncdn }}" alt="Screenshot 3 of the mystery adventure game" loading="lazy">
+            <img class="screenshot hide" id="img3" src="{{ game.screenshots.2 | resize | uncdn }}" alt="Screenshot 4 of the mystery adventure game" loading="lazy">
+            <img class="screenshot hide" id="img4" src="{{ game.screenshots.1 | resize | uncdn }}" alt="Screenshot 5 of the mystery adventure game" loading="lazy">
+            <img class="screenshot hide" id="img5" src="{{ game.screenshots.0 | resize | uncdn }}" alt="Screenshot 6 of the mystery adventure game" loading="lazy">
+        </div>
+        <div class="screen-label"><span>Frame <span id="frame-n">1</span> / 6</span><span class="led">● {% if mode == "daily" %}ON AIR{% else %}PRACTICE{% endif %}</span></div>
+    </div>
+
+    <div class="frames" role="group" aria-label="Screenshots">
+        {% for n in "012345" %}
+            <button id="button{{ n }}" type="button" class="pbtn guess">{{ forloop.counter }}</button>
+        {% endfor %}
+    </div>
+
+    <div class="hands" aria-hidden="true">
+        {% for n in "012345" %}<i id="result{{ n }}" class="bi bi-hand-index-fill color-grey hide"></i>{% endfor %}
+    </div>
+    <div class="status px" id="divguesses" aria-live="polite"><span id="remaining"></span> guesses remaining</div>
+    <ul id="guesses-list" class="guesses" aria-label="Your guesses"></ul>
+
+    {% if day and mode != "daily" %}
+    <nav class="day-nav" aria-label="Other days">
+        {% if previous_day %}<a class="pbtn small" href="{% url 'games:date' previous_day.year previous_day.month previous_day.day %}" rel="prev">◂ Previous day</a>{% else %}<span></span>{% endif %}
+        <a class="pbtn small" href="{% url 'games:archive' %}">All days</a>
+        {% if next_day %}<a class="pbtn small" href="{% url 'games:date' next_day.year next_day.month next_day.day %}" rel="next">Next day ▸</a>{% else %}<a class="pbtn small" href="{% url 'games:home' %}">Today ▸</a>{% endif %}
+    </nav>
+    {% endif %}
+
+    <div class="plaques">
+        <section class="plaque px" id="countdown" aria-labelledby="cd-title">
+            <h2 id="cd-title">Next daily game in</h2>
+            <div id="clock" class="countdown"></div>
+        </section>
+        <section class="plaque px" id="more-games" aria-labelledby="more-title">
+            <h2 id="more-title">Want more?</h2>
+            <p>Play {% if mode == "daily" %}a <a href="{% url 'games:random' %}" rel="nofollow">random game</a>{% else %}<a href="{% url 'games:random' %}" rel="nofollow">another random game</a>{% endif %} or any of the {% if mode == "daily" %}previous{% else %}past{% endif %} daily games in the <a href="{% url 'games:archive' %}">archive</a>. Practice games never touch your daily streak.</p>
+        </section>
+    </div>
+
+    {% if mode == "daily" %}
+    <section class="seo-block" id="how-to-play" aria-labelledby="htp-title">
+        <h2 id="htp-title">How to play Point &amp; Clickle</h2>
+        {% include "partials/howto.html" %}
+    </section>
+    {% endif %}
+
+    <a class="museum-plaque px" href="{{ MUSEUM_URL }}?utm_source=pointandclickle&amp;utm_medium=banner" target="_blank" rel="noopener" data-museum="banner" id="museum">
+        <img class="facade pixel" src="{% static 'images/museum/og-image.png' %}" width="1200" height="630" alt="Pixel-art façade of the Point and Click Museum" loading="lazy">
+        <div class="body">
+            <p class="kicker">New wing · Open now</p>
+            <h2>Visit the Point and Click Museum</h2>
+            <p>A pixel-art museum of graphic adventures you explore with the mouse: from Colossal Cave to today's indies.</p>
+            <ul>
+                <li>Timeline</li><li>Studios</li><li>Engines</li><li>Minigames</li><li>DOSBox room</li>
+            </ul>
+            <span class="pbtn brass"><img class="pixel" src="{% static 'images/museum/door.png' %}" width="20" height="20" alt="">Enter the museum</span>
+        </div>
+    </a>
+
+    {% if mode == "daily" %}
+    <section class="seo-block" id="faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Frequently asked questions</h2>
+        {% include "partials/faq.html" %}
+    </section>
+    {% endif %}
+{% endblock %}
+
+{% block inline_javascript %}
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{ game_config|json_script:"game-config" }}
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const titles = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                sufficient: 1,
+                limit: 100,
+                remote: {wildcard: '%QUERY', url: "{% url 'games:game-autocomplete' %}?q=%QUERY"}
+            });
+
+            $('#remote .typeahead').typeahead({minLength: 1, highlight: true, hint: true},
+                {name: 'games', limit: 20, source: titles});
+
+            const result = {"code": "{{ result }}", "id": "{{ game.id }}"};
+            const csrf_token = $('{% csrf_token %}');
+            init_wordle(result, csrf_token.attr("value"), JSON.parse(document.getElementById('game-config').textContent));
+        });
+    </script>
+{% endblock %}

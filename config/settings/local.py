@@ -62,3 +62,5 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+# Never send development traffic to the production Google Analytics property.
+GA_MEASUREMENT_ID = env("GA_MEASUREMENT_ID", default="")
