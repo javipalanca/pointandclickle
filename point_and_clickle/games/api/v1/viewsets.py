@@ -7,6 +7,7 @@ from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from point_and_clickle.games import museum as museum_pages
 from point_and_clickle.games.api.v1.serializers import GameSerializer
 from point_and_clickle.games.models import DailyGame, Game
 
@@ -28,4 +29,10 @@ class GameViewSet(RetrieveModelMixin, GenericViewSet):
     @action(detail=True, methods=["get"])
     def stats(self, request, id):
         game = Game.objects.get(id=id)
-        return JsonResponse(game.stats())
+        return JsonResponse(dict(game.stats(), played=game.total_played))
+
+    @action(detail=True, methods=["get"])
+    def museum(self, request, id):
+        """Pages of the Point and Click Museum about this game (its timeline record, the DOSBox room)."""
+        game = Game.objects.get(id=id)
+        return JsonResponse({"links": museum_pages.links_for(game.title, game.year)})

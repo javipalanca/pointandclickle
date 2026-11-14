@@ -23,7 +23,8 @@
      view_solution    the solution is shown                    game_mode, trigger (end|link|resume)
      modal_open       statistics / how to play / result       modal
      share            result shared                            method (x|whatsapp|telegram|clipboard), content_type, item_id
-     museum_click     a link to the Point and Click Museum      placement (header|banner|result|howto|footer|faq)
+     museum_click     a link to the Point and Click Museum      placement (header|banner|result|result_timeline|result_arcade|howto|footer|faq)
+     hint_view        a new hint is shown (3rd miss onwards)    hint_number (1-4), hint_type (year|developer|platform|genre)
      outbound_click   any link out of the site                 link_domain, link_url, link_text, region
      donate_click     the PayPal button                        region
      random_game      a random game is requested               from (page_type)
@@ -39,7 +40,7 @@
 
    Own statistics (metric · label): view · page type, device · mobile|tablet|desktop, referrer · domain or
    "direct", game_start · daily|random|archive, game_win / game_loss · same, daily_attempts · 1-6 or X,
-   share · method, museum_click · placement, random_game, archive_day, donate_click. */
+   share · method, museum_click · placement, hint · number, random_game, archive_day, donate_click. */
 "use strict";
 (function () {
   var GA = (document.body && document.body.dataset.ga) || "";
@@ -103,6 +104,7 @@
       if ((p.level_name || kind) === "daily") stat("daily_attempts", p.success ? p.attempts : "x");
     } else if (name === "share") stat("share", p.method);
     else if (name === "museum_click") stat("museum_click", p.placement);
+    else if (name === "hint_view") stat("hint", p.hint_number);
     else if (name === "random_game") stat("random_game", p.from || PAGE);
     else if (name === "archive_day") stat("archive_day", "");
     else if (name === "donate_click") stat("donate_click", "");

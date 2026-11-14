@@ -70,6 +70,7 @@ def test_home_is_the_daily_game(client, days):
         "mode": "daily",
         "number": 3,
         "date": today().isoformat(),
+        "autocompleteUrl": "/game-autocomplete/",
         "kind": "daily",
     }
     html = r.content.decode()
@@ -115,6 +116,7 @@ def test_past_day_is_practice_with_number_and_neighbours(client, days):
         "mode": "practice",
         "number": 2,
         "date": d.isoformat(),
+        "autocompleteUrl": "/game-autocomplete/",
         "kind": "archive",
     }
     assert r.context["previous_day"] == days["before"].date

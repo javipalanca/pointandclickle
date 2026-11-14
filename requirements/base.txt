@@ -10,9 +10,6 @@ hiredis==3.5.0  # https://github.com/redis/hiredis-py
 django==5.2.19  # LTS, supported until April 2028  https://www.djangoproject.com/
 django-environ==0.14.0  # https://github.com/joke2k/django-environ
 django-model-utils==5.0.0  # https://github.com/jazzband/django-model-utils
-django-allauth==65.21.1  # https://github.com/pennersr/django-allauth
-django-crispy-forms==2.7  # https://github.com/django-crispy-forms/django-crispy-forms
-crispy-bootstrap5==2026.9  # https://github.com/django-crispy-forms/crispy-bootstrap5
 django-redis==6.0.0  # https://github.com/jazzband/django-redis
 # Django REST Framework
 djangorestframework==3.16.1  # https://github.com/encode/django-rest-framework
