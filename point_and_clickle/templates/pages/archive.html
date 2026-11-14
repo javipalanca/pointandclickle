@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block page_id %}archive{% endblock %}
+{% block title %}Archive of Past Games · Point &amp; Clickle{% endblock %}
+{% block meta_description %}Every past Point &amp; Clickle puzzle, day by day: {{ total }} point &amp; click adventure games to guess from their screenshots. Play any of them as practice.{% endblock %}
+{% block og_title %}Point &amp; Clickle archive · {{ total }} past adventure game puzzles{% endblock %}
+
+{% block jsonld %},
+        {
+          "@type": "CollectionPage",
+          "name": "Point & Clickle archive",
+          "url": "{{ SITE_URL }}{% url 'games:archive' %}",
+          "isPartOf": {"@id": "{{ SITE_URL }}/#website"},
+          "numberOfItems": {{ total }}
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Point & Clickle", "item": "{{ SITE_URL }}/"},
+            {"@type": "ListItem", "position": 2, "name": "Archive"}
+          ]
+        }{% endblock %}
+
+{% block content %}
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{% url 'games:home' %}">Today</a> ▸ <span aria-current="page">Archive</span></nav>
+    <section class="exhibit-head" aria-labelledby="archive-title">
+        <p class="kicker">The archive · {{ total }} games</p>
+        <h1 id="archive-title">Every past Point &amp; Clickle</h1>
+        <p class="lead">Missed a day? Each one is still playable, as practice: it does not change your daily streak. No spoilers here, just dates.</p>
+        <p class="archive-actions"><a class="pbtn brass" href="{% url 'games:home' %}">Today's game</a> <a class="pbtn" href="{% url 'games:random' %}" rel="nofollow"><i class="bi bi-shuffle"></i> Random game</a></p>
+    </section>
+
+    {% for month, entries in months %}
+    <details class="month px" {% if forloop.counter <= 2 %}open{% endif %}>
+        <summary><h2>{{ month|date:"F Y" }}</h2><span>{{ entries|length }} games</span></summary>
+        <ol class="days">
+            {% for n, day in entries %}
+            <li><a href="{% url 'games:date' day.year day.month day.day %}" data-day="{{ day|date:'Y-m-d' }}"><b>#{{ n }}</b><span>{{ day|date:"D j" }}</span></a></li>
+            {% endfor %}
+        </ol>
+    </details>
+    {% empty %}
+    <p class="status px">No past games yet: come back tomorrow.</p>
+    {% endfor %}
+{% endblock %}
+
+{% block inline_javascript %}
+    <script>
+        /* mark the days already played in practice in this browser */
+        window.addEventListener('DOMContentLoaded', function () {
+            try {
+                const done = JSON.parse(localStorage.getItem('practice_days') || '{}');
+                document.querySelectorAll('.days a[data-day]').forEach(function (a) {
+                    const r = done[a.dataset.day];
+                    if (r) { a.classList.add(r === 'won' ? 'won' : 'lost'); a.title = r === 'won' ? 'Solved' : 'Not solved'; }
+                });
+            } catch (e) { /* no storage: nothing to mark */ }
+        });
+    </script>
+{% endblock %}

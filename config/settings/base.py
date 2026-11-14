@@ -27,6 +27,9 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 TIME_ZONE = "UTC"
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = "en-us"
+# The site is in English only: without this, LocaleMiddleware follows the browser and dates, <html lang>
+# and the archive come out in other languages.
+LANGUAGES = [("en", "English")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
@@ -132,6 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "point_and_clickle.games.middleware.CanonicalHostMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -313,3 +317,12 @@ ROBOTS_SITEMAP_VIEW_NAME = "cached-sitemap"
 # Point and Click Museum (sister site, linked from the header, the game page and the footer)
 # ------------------------------------------------------------------------------
 MUSEUM_URL = env("MUSEUM_URL", default="https://museum.pointandclickle.com/")
+
+# SEO and analytics
+# ------------------------------------------------------------------------------
+# Public origin used for canonical URLs, Open Graph and structured data.
+SITE_URL = env("SITE_URL", default="https://pointandclickle.com")
+# Redirect other host names (www.) to SITE_URL's host. On in production only.
+CANONICAL_HOST_REDIRECT = env.bool("CANONICAL_HOST_REDIRECT", default=False)
+# Google Analytics 4. Loaded only after the visitor accepts the cookie banner (Consent Mode).
+GA_MEASUREMENT_ID = env("GA_MEASUREMENT_ID", default="G-53DQCDDVNJ")

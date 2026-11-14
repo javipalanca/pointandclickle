@@ -67,6 +67,9 @@ CSRF_TRUSTED_ORIGINS = env.list(
     default=["https://pointandclickle.com", "https://www.pointandclickle.com"],
 )
 
+# Send www.pointandclickle.com (and any other subdomain served here) to SITE_URL with a 301.
+CANONICAL_HOST_REDIRECT = env.bool("CANONICAL_HOST_REDIRECT", default=True)
+
 # STORAGES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#storages

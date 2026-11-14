@@ -1,1 +1,73 @@
 {% extends "base.html" %}
+
+{% block page_id %}about{% endblock %}
+{% block title %}How to Play Point &amp; Clickle · Rules, Tips and FAQ{% endblock %}
+{% block meta_description %}How Point &amp; Clickle works: guess the point &amp; click adventure game from six screenshots, one new game a day at 00:00 UTC, plus a random mode and an archive of past games.{% endblock %}
+{% block og_title %}How to play Point &amp; Clickle{% endblock %}
+
+{% block jsonld %},
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {"@type": "Question", "name": "What is Point & Clickle?",
+             "acceptedAnswer": {"@type": "Answer", "text": "A free daily puzzle for adventure game fans, inspired by Wordle and Framed. Every day you have six tries to name a point & click adventure game from its screenshots."}},
+            {"@type": "Question", "name": "When does a new game come out?",
+             "acceptedAnswer": {"@type": "Answer", "text": "Every day at 00:00 UTC. The countdown on the game page shows how long is left."}},
+            {"@type": "Question", "name": "Which games can come up?",
+             "acceptedAnswer": {"@type": "Answer", "text": "Point & click adventures from the 1980s to today: Monkey Island, Day of the Tentacle, King's Quest, Broken Sword, Discworld, Gabriel Knight, Syberia, Deponia, Blackwell, Thimbleweed Park and thousands more, from the Adventure Gamers database."}},
+            {"@type": "Question", "name": "Can I play past games?",
+             "acceptedAnswer": {"@type": "Answer", "text": "Yes. The archive has every past daily game, and the random game button gives you a new one whenever you like. Those games are practice: they do not change your daily statistics or streak."}},
+            {"@type": "Question", "name": "Do I need an account?",
+             "acceptedAnswer": {"@type": "Answer", "text": "No. Your guesses, streak and statistics are saved in your browser only."}},
+            {"@type": "Question", "name": "Where can I learn more about adventure games?",
+             "acceptedAnswer": {"@type": "Answer", "text": "In our sister site, the Point and Click Museum: a pixel-art museum with the history of the genre, its studios and engines, minigames and classic DOS games you can play in the browser."}}
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Point & Clickle", "item": "{{ SITE_URL }}/"},
+            {"@type": "ListItem", "position": 2, "name": "How to play"}
+          ]
+        }{% endblock %}
+
+{% block content %}
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{% url 'games:home' %}">Today</a> ▸ <span aria-current="page">How to play</span></nav>
+    <section class="exhibit-head" aria-labelledby="about-title">
+        <p class="kicker">The rules</p>
+        <h1 id="about-title">How to play Point &amp; Clickle</h1>
+        <p class="lead">The Wordle of graphic adventures: one point &amp; click game a day, six screenshots to recognise it.</p>
+    </section>
+
+    <section class="seo-block" aria-labelledby="rules-title">
+        <h2 id="rules-title">Rules</h2>
+        {% include "partials/howto.html" %}
+        <p class="actions"><a class="pbtn brass" href="{% url 'games:home' %}">Play today's game</a> <a class="pbtn" href="{% url 'games:archive' %}">Archive</a></p>
+    </section>
+
+    <section class="seo-block" aria-labelledby="modes-title">
+        <h2 id="modes-title">Daily game and practice</h2>
+        <p><b>The daily game</b> is the same for everyone and counts in your statistics: games played, wins, current and longest streak. Share your result as a row of pointing hands, without spoilers.</p>
+        <p><b>Practice games</b> are the <a href="{% url 'games:random' %}" rel="nofollow">random game</a> and any day from the <a href="{% url 'games:archive' %}">archive</a>. Play as many as you like: they keep their own guesses and never change the daily ones.</p>
+    </section>
+
+    <section class="seo-block" aria-labelledby="tips-title">
+        <h2 id="tips-title">Tips</h2>
+        <ul class="tips">
+            <li>Look at the interface: a verb bar means SCUMM-era LucasArts, a text parser suggests early Sierra, an inventory ribbon a 90s adventure.</li>
+            <li>The resolution and palette give the decade away: 16-colour EGA, 256-colour VGA, high-resolution 2D or 3D.</li>
+            <li>The art style often points to the studio: Revolution's comic lines, Daedalic's painted backgrounds, Wadjet Eye's low-res pixel art.</li>
+            <li>Still unsure? Use a guess: the next screenshot is usually easier.</li>
+        </ul>
+    </section>
+
+    <section class="seo-block" id="faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Frequently asked questions</h2>
+        {% include "partials/faq.html" %}
+    </section>
+
+    <section class="seo-block" aria-labelledby="credits-title">
+        <h2 id="credits-title">Credits</h2>
+        <p>Point &amp; Clickle is made by <a href="https://twitter.com/palancadr" target="_blank" rel="noopener">Dr. Palanca</a>, inspired by <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener">Wordle</a>, <a href="https://framed.wtf" target="_blank" rel="noopener">Framed</a> and <a href="https://www.highscoreday.com/" target="_blank" rel="noopener">High Score Day</a>. Games, screenshots and covers come from <a href="https://www.adventuregamers.com/" target="_blank" rel="noopener">Adventure Gamers</a>; all rights belong to their respective owners.</p>
+    </section>
+{% endblock %}

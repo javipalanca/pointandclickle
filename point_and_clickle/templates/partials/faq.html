@@ -1,0 +1,27 @@
+{# The same questions feed the FAQPage structured data in pages/about.html: keep both in sync. #}
+<div class="faq">
+    <details>
+        <summary>What is Point &amp; Clickle?</summary>
+        <p>A free daily puzzle for adventure game fans, inspired by Wordle and Framed. Every day you have six tries to name a point &amp; click adventure game from its screenshots.</p>
+    </details>
+    <details>
+        <summary>When does a new game come out?</summary>
+        <p>Every day at 00:00 UTC. The countdown on the game page shows how long is left.</p>
+    </details>
+    <details>
+        <summary>Which games can come up?</summary>
+        <p>Point &amp; click adventures from the 1980s to today: Monkey Island, Day of the Tentacle, King's Quest, Broken Sword, Discworld, Gabriel Knight, Syberia, Deponia, Blackwell, Thimbleweed Park and thousands more, from the Adventure Gamers database.</p>
+    </details>
+    <details>
+        <summary>Can I play past games?</summary>
+        <p>Yes. The <a href="{% url 'games:archive' %}">archive</a> has every past daily game, and the <a href="{% url 'games:random' %}" rel="nofollow">random game</a> button gives you a new one whenever you like. Those games are practice: they do not change your daily statistics or streak.</p>
+    </details>
+    <details>
+        <summary>Do I need an account?</summary>
+        <p>No. Your guesses, streak and statistics are saved in your browser only.</p>
+    </details>
+    <details>
+        <summary>Where can I learn more about adventure games?</summary>
+        <p>In our sister site, the <a href="{{ MUSEUM_URL }}?utm_source=pointandclickle&amp;utm_medium=faq" target="_blank" rel="noopener" data-museum="faq">Point and Click Museum</a>: a pixel-art museum with the history of the genre, its studios and engines, minigames and classic DOS games you can play in the browser.</p>
+    </details>
+</div>
