@@ -15,7 +15,7 @@ Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings
 
 ### Setting up the project
 
-Assuming you are using Docker and docker-compose, you only need to build the containers using the local 
+Assuming you are using Docker and docker-compose, you only need to build the containers using the local
 configuration for development.
 
 To build the containers, run:
@@ -45,7 +45,7 @@ To initialize the database, run:
     If you are using Docker you must run the command above within the django container.:
 
       $ docker-compose -f local.yml run django python manage.py migrate
-    
+
 
 ### Setting Up Your Users
 

@@ -1,6 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
+
 from pathlib import Path
 
 import environ
@@ -30,8 +31,6 @@ LANGUAGE_CODE = "en-us"
 SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True
-# https://docs.djangoproject.com/en/dev/ref/settings/#use-l10n
-USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
@@ -83,8 +82,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "point_and_clickle.users",
     "point_and_clickle.games.apps.GamesConfig",
-    'dal',
-    'dal_select2',
+    "dal",
+    "dal_select2",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -99,7 +98,7 @@ MIGRATION_MODULES = {"sites": "point_and_clickle.contrib.sites.migrations"}
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    #"allauth.account.auth_backends.AuthenticationBackend",
+    # "allauth.account.auth_backends.AuthenticationBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
@@ -141,6 +140,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -189,6 +189,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "point_and_clickle.users.context_processors.allauth_settings",
+                "point_and_clickle.games.context_processors.museum",
             ],
         },
     }
@@ -212,8 +213,6 @@ FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
 SESSION_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
-# https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
-SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
 
@@ -264,10 +263,10 @@ LOGGING = {
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_REQUIRED = True
+# https://docs.allauth.org/en/latest/account/configuration.html
+ACCOUNT_LOGIN_METHODS = {"username"}
+# https://docs.allauth.org/en/latest/account/configuration.html
+ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -283,10 +282,10 @@ SOCIALACCOUNT_FORMS = {"signup": "point_and_clickle.users.forms.UserSocialSignup
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
-    #"DEFAULT_AUTHENTICATION_CLASSES": (
+    # "DEFAULT_AUTHENTICATION_CLASSES": (
     #    "rest_framework.authentication.SessionAuthentication",
     #    "rest_framework.authentication.TokenAuthentication",
-    #),
+    # ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
@@ -309,4 +308,8 @@ SPECTACULAR_SETTINGS = {
 # Your stuff...
 # ------------------------------------------------------------------------------
 ROBOTS_USE_SITEMAP = True
-ROBOTS_SITEMAP_VIEW_NAME = 'cached-sitemap'
+ROBOTS_SITEMAP_VIEW_NAME = "cached-sitemap"
+
+# Point and Click Museum (sister site, linked from the header, the game page and the footer)
+# ------------------------------------------------------------------------------
+MUSEUM_URL = env("MUSEUM_URL", default="https://museum.pointandclickle.com/")

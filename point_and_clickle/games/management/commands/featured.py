@@ -1,12 +1,14 @@
 import re
+
 import bs4
+import pandas as pd
 import requests
 from dateutil.parser import parse
-import pandas as pd
-from tabulate import tabulate
-from tqdm import tqdm
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.management.base import BaseCommand
+from tabulate import tabulate
+from tqdm import tqdm
+
 from point_and_clickle.games.models import Game
 
 
@@ -55,8 +57,13 @@ class Command(BaseCommand):
                     game.year = year
                     game.save()
                 except Game.DoesNotExist:
-                    alternative = Game.objects.annotate(similarity=TrigramSimilarity('title', game_title))\
-                        .filter(similarity__gt=0.5).order_by('-similarity')
+                    alternative = (
+                        Game.objects.annotate(
+                            similarity=TrigramSimilarity("title", game_title)
+                        )
+                        .filter(similarity__gt=0.5)
+                        .order_by("-similarity")
+                    )
                     if len(alternative) > 0:
                         game = alternative[0]
                         game.featured = True
@@ -64,5 +71,4 @@ class Command(BaseCommand):
                         game.save()
                     else:
                         pass
-                        #self.stdout.write(str(game) + "NOT FOUND")
-
+                        # self.stdout.write(str(game) + "NOT FOUND")

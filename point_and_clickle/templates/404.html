@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Page not found{% endblock %}
+{% block title %}Page not found · Point & Clickle{% endblock %}
 
 {% block content %}
-<h1>Page not found</h1>
-
-<p>{% if exception %}{{ exception }}{% else %}This is not the page you were looking for.{% endif %}</p>
+<div class="page px plaque">
+  <h1>I can't use that here.</h1>
+  <p>{% if exception %}{{ exception }}{% else %}This is not the page you were looking for.{% endif %}</p>
+  <p style="margin-top:12px"><a class="pbtn brass" href="{% url 'games:home' %}">Back to today's game</a></p>
+</div>
 {% endblock content %}

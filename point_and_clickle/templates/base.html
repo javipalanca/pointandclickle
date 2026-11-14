@@ -1,102 +1,152 @@
 {% load static i18n %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
-<html lang="{{ LANGUAGE_CODE }}">
-  <head>
+<html lang="{{ LANGUAGE_CODE|default:'en' }}" prefix="og: http://ogp.me/ns#">
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}Point and Clickle{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Guess a point and click adventure game every day">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>{% block title %}Point & Clickle · The Graphic Adventure Wordle{% endblock title %}</title>
+    <meta name="description" content="Guess a point and click adventure game every day from six screenshots. The Graphic Adventure Wordle.">
     <meta name="author" content="Javi Palanca">
+    <meta name="theme-color" content="#14211c">
+    <meta name="color-scheme" content="dark">
+    <meta name="keywords" content="wordle, point and click, graphic adventure, adventure games, daily puzzle, lucasarts, sierra, monkey island">
 
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Point & Clickle">
+    <meta property="og:title" content="Point & Clickle">
+    <meta property="og:description" content="Point & Clickle. The Graphic Adventure Wordle.">
+    <meta property="og:url" content="https://www.pointandclickle.com">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="523">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pointandclickle">
+    <meta name="twitter:creator" content="@pointandclickle">
+    <meta name="twitter:title" content="Point & Clickle">
+    <meta name="twitter:description" content="Point & Clickle. The Graphic Adventure Wordle.">
+    {% block twitter %}{% endblock %}
+
+    <link rel="icon" href="{% static 'images/favicons/favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/favicons/apple-touch-icon.png' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
 
     {% block css %}
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-
-
-    <!-- This file stores project-specific CSS -->
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="{% static 'css/clickle.css' %}">
     {% endblock %}
-    <!-- Le javascript
-    ================================================== -->
-    {# Placed at the top of the document so pages load faster with defer #}
-    {% block javascript %}
-      <!-- Bootstrap JS -->
-      <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha512-OvBgP9A2JBgiRad/mM36mkzXSXaJE9BEIENnVEmeZdITvwT09xnxLtT4twkCa8m/loMbPHsvPl0T8lRGVBwjlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-      <!-- Your stuff: Third-party javascript libraries go here -->
 
-      <!-- place project specific Javascript in this file -->
-      <script defer src="{% static 'js/project.js' %}"></script>
-
-    {% endblock javascript %}
-
-  </head>
-
-  <body>
-
-    <div class="mb-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div class="container-fluid">
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-
-          <div class="collapse navbar-collapse d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto me-auto">
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'games:home' %}">Point & Clickle</a>
-                </li>
-            </ul>
-            <ul class="nav col-lg-auto my-2 justify-content-right my-md-0 text-small">
-            <li class="nav-item">
-              <a href="#" class="nav-link text-secondary">
-                <i class="bi bi-bar-chart-fill"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link text-secondary">
-                <i class="bi bi-info-circle-fill"></i>
-              </a>
-            </li>
-
-          </ul>
-          </div>
-        </div>
-      </nav>
-
-    </div>
-
-    <div class="container">
-
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
-
-    </div> <!-- /container -->
-
-    {% block modal %}{% endblock modal %}
-
-    {% block inline_javascript %}
-    {% comment %}
-    Script tags with only code, no src (defer by default). To run
-    with a "defer" so that you run inline code:
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-53DQCDDVNJ"></script>
     <script>
-      window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-53DQCDDVNJ');
     </script>
-    {% endcomment %}
-    {% endblock inline_javascript %}
-  </body>
+
+    {% block javascript %}
+        <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script defer src="{% static 'js/project.js' %}"></script>
+    {% endblock javascript %}
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to the game</a>
+
+<header class="site-header">
+    <div class="wrap hd-bar">
+        <a class="brand" href="{% url 'games:home' %}" aria-label="Point & Clickle, today's game">
+            <img src="{% static 'images/museum/cursor.png' %}" width="36" height="36" alt="">
+            <span class="brand-name">The adventure wordle <b>Point &amp; Clickle</b></span>
+        </a>
+        <nav class="hd-tools" aria-label="Tools">
+            <a class="tool" href="#stats" id="menu-stats" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Statistics" aria-label="Statistics"><i class="bi bi-bar-chart-fill"></i></a>
+            <a class="tool" href="#info" id="menu-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="How to play" aria-label="How to play"><i class="bi bi-question-square-fill"></i></a>
+            <a class="tool social" href="https://x.com/pointandclickle" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="bottom" title="X / Twitter" aria-label="X / Twitter"><i class="bi bi-twitter-x"></i></a>
+            <a class="tool social" href="https://www.instagram.com/pointandclickle/" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Instagram" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a class="pbtn brass museum-door" href="{{ MUSEUM_URL }}?utm_source=pointandclickle&amp;utm_medium=header" target="_blank" rel="noopener" title="Visit the Point and Click Museum">
+                <img class="pixel" src="{% static 'images/museum/door.png' %}" width="20" height="20" alt=""><span>Museum</span>
+            </a>
+        </nav>
+    </div>
+</header>
+
+<main id="main" class="wrap">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock content %}
+</main>
+
+<footer class="site-footer">
+    <div class="wrap">
+        <div class="footer-grid">
+            <div>
+                <h2>Point &amp; Clickle</h2>
+                <ul>
+                    <li><a href="{% url 'games:home' %}">Today's game</a></li>
+                    <li><a href="{% url 'games:random' %}">Random game</a></li>
+                    <li><a href="https://x.com/pointandclickle" target="_blank" rel="noopener">X / Twitter</a></li>
+                    <li><a href="https://www.instagram.com/pointandclickle/" target="_blank" rel="noopener">Instagram</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>The museum</h2>
+                <p>Want more adventures? Walk through fifty years of point &amp; click history, play minigames and classic DOS games in the browser.</p>
+                <p style="margin-top:8px"><a href="{{ MUSEUM_URL }}?utm_source=pointandclickle&amp;utm_medium=footer" target="_blank" rel="noopener">Point and Click Museum ▸</a></p>
+            </div>
+            <div>
+                <h2>Credits</h2>
+                <ul>
+                    <li>Game database by <a href="https://adventuregamers.com/" target="_blank" rel="noopener">Adventure Gamers</a></li>
+                    <li>Thanks to <a href="https://www.twitch.tv/drpalanca/about" target="_blank" rel="noopener">Dr. Palanca's Twitch community</a></li>
+                </ul>
+                <form action="https://www.paypal.com/donate" method="post" target="_top">
+                    <input type="hidden" name="business" value="KSL2Y5KA36A8Q">
+                    <input type="hidden" name="no_recurring" value="0">
+                    <input type="hidden" name="currency_code" value="EUR">
+                    <button type="submit" class="pbtn small"><i class="bi bi-cup-hot-fill"></i> Donate</button>
+                </form>
+            </div>
+        </div>
+        <p class="fine">&copy; <a href="https://twitter.com/palancadr" target="_blank" rel="noopener">Dr. Palanca</a>. Screenshots and covers belong to their respective owners.</p>
+    </div>
+</footer>
+
+{% block modal %}{% endblock modal %}
+
+<div class="modal" id="info-modal" tabindex="-1" aria-labelledby="info-title">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="info-title">How to play</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Every day a point &amp; click adventure is picked at random. You have <b>6 tries</b> to name it: each wrong guess reveals a new screenshot.</p>
+                <p>Point &amp; Clickle is inspired by <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener">Wordle</a>, <a href="https://framed.wtf" target="_blank" rel="noopener">Framed</a> and <a href="https://www.highscoreday.com/" target="_blank" rel="noopener">High Score Day</a>.</p>
+                <p>All images and games come from <a href="https://www.adventuregamers.com/" target="_blank" rel="noopener">Adventure Gamers</a>. All rights go to their respective owners.</p>
+                <div class="museum-ribbon">
+                    <img class="pixel" src="{% static 'images/museum/icon-192.png' %}" alt="">
+                    <span>Learn the history behind the games at the <a href="{{ MUSEUM_URL }}?utm_source=pointandclickle&amp;utm_medium=howto" target="_blank" rel="noopener">Point and Click Museum ▸</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block inline_javascript %}{% endblock inline_javascript %}
+</body>
 </html>

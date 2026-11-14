@@ -61,9 +61,21 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
     "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True
 )
 
-# STATIC
-# ------------------------
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# https://docs.djangoproject.com/en/dev/ref/settings/#csrf-trusted-origins
+CSRF_TRUSTED_ORIGINS = env.list(
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    default=["https://pointandclickle.com", "https://www.pointandclickle.com"],
+)
+
+# STORAGES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#storages
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    },
+}
 # MEDIA
 # ------------------------------------------------------------------------------
 

@@ -50,9 +50,9 @@ function init_wordle(result, csrf_token) {
     tomorrow.setDate(tomorrow.getDate() + 1);
     $('#clock').countdown(tomorrow).on('update.countdown', function (event) {
         $(this).html(event.strftime(''
-            + '<span class="h1 font-weight-bold">%H</span> Hr'
-            + '<span class="h1 font-weight-bold">%M</span> Min'
-            + '<span class="h1 font-weight-bold">%S</span> Sec'));
+            + '<span class="cd"><b>%H</b><small>HRS</small></span>'
+            + '<span class="cd"><b>%M</b><small>MIN</small></span>'
+            + '<span class="cd"><b>%S</b><small>SEC</small></span>'));
     });
 
     // Share on Twitter
@@ -410,13 +410,12 @@ function copy_to_clipboard() {
 
 // Shows an image guess
 function show_image(num_guess) {
+    num_guess = Math.min(num_guess, MAX_GUESS - 1);
     for (let i = 0; i < MAX_GUESS; i++) {
-        if (i === num_guess) {
-            $("#img" + i).removeClass("hide");
-        } else {
-            $("#img" + i).addClass("hide");
-        }
+        $("#img" + i).toggleClass("hide", i !== num_guess);
+        $("#button" + i).toggleClass("current", i === num_guess).attr("aria-pressed", i === num_guess);
     }
+    $("#frame-n").text(num_guess + 1);
 }
 
 // Shows the button number...
@@ -468,4 +467,3 @@ function fromBinary(str) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
 }
-
