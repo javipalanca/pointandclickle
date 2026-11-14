@@ -299,3 +299,12 @@ main { padding-block: 28px 8px; }
 .pconsent .consent-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .linkish { background: none; border: 0; padding: 0; color: var(--teal); font: inherit; text-decoration: underline; }
 .linkish:hover { color: var(--amber); }
+
+/* ---------- Own statistics (staff) ---------- */
+.stats-wrap { overflow-x: auto; padding: 8px; --c: var(--panel2); }
+.stats-table { width: 100%; border-collapse: collapse; font-size: 19px; }
+.stats-table th, .stats-table td { padding: 4px 10px; border-bottom: 1px solid var(--panel2); text-align: right; white-space: nowrap; }
+.stats-table th:first-child { text-align: left; color: var(--dim); font-weight: 400; }
+.stats-table thead th { font-family: var(--display); font-size: 8px; color: var(--amber); font-weight: 400; }
+.stats-table .total td, .stats-table .total th { color: var(--amber); }
+.stats-table.small { font-size: 18px; }

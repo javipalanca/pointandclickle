@@ -1,8 +1,13 @@
-/* Point & Clickle · Google Analytics 4, in the style of the Point and Click Museum.
-   - Loaded only after the visitor accepts the cookie banner (Consent Mode starts "denied"); the choice is kept in
-     localStorage and can be changed from the footer ("Cookies"). Browsers that send Global Privacy Control or
-     Do Not Track get no banner and no Google.
-   - Other scripts call CLK.track(name, params); it never throws and does nothing without consent.
+/* Point & Clickle · usage statistics, in the style of the Point and Click Museum. Two destinations:
+   - Own statistics (/api/stats/, games/stats.py): daily counters of views, games, wins, shares, referrers and
+     devices. No cookies, nothing stored in the browser, no identifiers, no IPs kept, nothing sent to third
+     parties, so no consent is needed and every visit counts. Batched with navigator.sendBeacon. Staff see them
+     at /stats/. Off when the browser asks not to be tracked (GPC / DNT), like the museum's.
+   - Google Analytics 4 with Consent Mode v2 "advanced": gtag always loads with analytics_storage "denied", so
+     visitors who have not accepted send cookieless pings (no _ga cookie, no client id) that GA uses to model
+     them in its reports; accepting the cookie banner grants storage. The choice is kept in localStorage and can
+     be changed from the footer ("Cookies"). With GPC / DNT: no Google at all and no banner.
+   - Other scripts call CLK.track(name, params); it never throws.
    - Add ?ga_debug=1 to any URL to see the events in GA's DebugView for the rest of the session.
 
    Measurement plan (GA4 recommended events where one fits; nothing typed by the player is sent except the
@@ -29,7 +34,12 @@
      web_vitals       LCP, CLS, INP, FCP, TTFB on leaving      metric_name, metric_value, metric_rating
      exception        JavaScript errors (5 per page at most)   description, fatal
      consent          the banner is answered                   granted (only sent when granted)
-   User properties: visitor_type, device_class, daily_streak (band), daily_played (band), consent_version. */
+   User properties (only with consent): visitor_type, device_class, daily_streak (band), daily_played (band),
+   consent_version.
+
+   Own statistics (metric · label): view · page type, device · mobile|tablet|desktop, referrer · domain or
+   "direct", game_start · daily|random|archive, game_win / game_loss · same, daily_attempts · 1-6 or X,
+   share · method, museum_click · placement, random_game, archive_day, donate_click. */
 "use strict";
 (function () {
   var GA = (document.body && document.body.dataset.ga) || "";
@@ -38,7 +48,6 @@
   var web = /^https?:$/.test(location.protocol);
   var optOut = navigator.globalPrivacyControl === true || navigator.doNotTrack === "1" || window.doNotTrack === "1";
   var ga = false;
-  var pending = [];
 
   var store = {
     get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -65,12 +74,54 @@
     window.gtag("event", name, Object.assign({ page_type: PAGE }, c.mode ? { game_mode: c.kind || c.mode } : {},
       debug ? { debug_mode: true } : {}, params || {}));
   }
-  /* public: CLK.track(name, params). Events before consent are dropped, except the ones of this page view,
-     which are sent if consent is given on this same page. */
+  /* ---------- own statistics: anonymous daily counters, no cookies ---------- */
+  var STATS_URL = (document.body && document.body.dataset.stats) || "";
+  var own = web && !!STATS_URL && !optOut;
+  var queue = [], timer = null;
+  function flush() {
+    if (!own || !queue.length) return;
+    var body = JSON.stringify({ e: queue.splice(0, 20) });
+    try {
+      if (!(navigator.sendBeacon && navigator.sendBeacon(STATS_URL, new Blob([body], { type: "text/plain" }))))
+        fetch(STATS_URL, { method: "POST", body: body, keepalive: true, headers: { "Content-Type": "text/plain" } }).catch(function () {});
+    } catch (e) { /* statistics never break the game */ }
+    if (queue.length) flush();
+  }
+  function stat(metric, label) {
+    if (!own) return;
+    queue.push([metric, String(label == null ? "" : label).toLowerCase().slice(0, 64)]);
+    if (queue.length >= 20) flush();
+    else if (!timer) timer = setTimeout(function () { timer = null; flush(); }, 4000);
+  }
+  /* the game's GA events, counted in the own statistics as well */
+  function toStats(name, p) {
+    p = p || {};
+    var kind = cfg().kind || "";
+    if (name === "level_start") stat("game_start", p.level_name || kind);
+    else if (name === "level_end") {
+      stat(p.success ? "game_win" : "game_loss", p.level_name || kind);
+      if ((p.level_name || kind) === "daily") stat("daily_attempts", p.success ? p.attempts : "x");
+    } else if (name === "share") stat("share", p.method);
+    else if (name === "museum_click") stat("museum_click", p.placement);
+    else if (name === "random_game") stat("random_game", p.from || PAGE);
+    else if (name === "archive_day") stat("archive_day", "");
+    else if (name === "donate_click") stat("donate_click", "");
+  }
+  (function () {
+    stat("view", PAGE);
+    stat("device", viewport());
+    var ref = "direct";
+    try { if (document.referrer) { var r = new URL(document.referrer); ref = r.host === location.host ? "" : r.hostname.replace(/^www\./, ""); } } catch (e) { /* bad referrer */ }
+    if (ref) stat("referrer", ref);
+  })();
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flush(); });
+  addEventListener("pagehide", flush);
+
+  /* public: CLK.track(name, params) → own statistics and GA */
   function track(name, params) {
     try {
+      toStats(name, params);
       if (ga) send(name, params);
-      else if (!optOut && pending.length < 30) pending.push([name, params]);
     } catch (e) { /* analytics never break the game */ }
   }
   function setUser(props) { try { if (ga) window.gtag("set", "user_properties", props); } catch (e) { /* ignore */ } }
@@ -178,11 +229,13 @@
     track("exception", { description: ("promise: " + String((e.reason && e.reason.message) || e.reason)).slice(0, 100), fatal: false });
   });
 
-  /* ---------- Google Analytics, only with consent ---------- */
-  if (!GA || !web) return;
+  /* ---------- Google Analytics: Consent Mode v2, advanced ---------- */
+  if (!GA || !web || optOut) return;        // GPC / DNT: no Google and no banner
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
-  window.gtag("consent", "default", { analytics_storage: "denied", ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied" });
+  window.gtag("consent", "default", { analytics_storage: "denied", ad_storage: "denied", ad_user_data: "denied",
+    ad_personalization: "denied", wait_for_update: 500 });
+  window.gtag("set", "ads_data_redaction", true);
 
   function visitorType() {
     try {
@@ -191,29 +244,15 @@
       return n > 1 ? "returning" : "new";
     } catch (e) { return "unknown"; }
   }
-  function start() {
-    if (ga) return;
-    ga = true;
-    var c = cfg(), s = dailyStats();
+  /* with consent only: storage for the visitor type, user properties */
+  function grant() {
+    var s = dailyStats();
     window.gtag("consent", "update", { analytics_storage: "granted" });
-    window.gtag("js", new Date());
     window.gtag("set", "user_properties", { visitor_type: visitorType(), device_class: viewport(),
-      daily_streak: band(s["Current Streak"] || 0), daily_played: band(s["Played"] || 0), consent_version: "1" });
-    window.gtag("config", GA, Object.assign({ page_title: document.title, content_group: PAGE, page_type: PAGE,
-      game_mode: c.kind || "", puzzle_number: c.number || undefined, visitor_type: visitorType(),
-      allow_google_signals: false, allow_ad_personalization_signals: false }, debug ? { debug_mode: true } : {}));
-    var tag = document.createElement("script");
-    tag.async = true;
-    tag.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA);
-    document.head.appendChild(tag);
-    pending.splice(0).forEach(function (p) { send(p[0], p[1]); });
-    watchSections();
-    scrolled();
+      daily_streak: band(s["Current Streak"] || 0), daily_played: band(s["Played"] || 0), consent_version: "2" });
   }
-  function stop() {
-    if (ga) window.gtag("consent", "update", { analytics_storage: "denied" });
-    ga = false;
-    pending.length = 0;
+  function deny() {
+    window.gtag("consent", "update", { analytics_storage: "denied" });
     var domain = location.hostname.split(".").slice(-2).join(".");
     document.cookie.split(";").map(function (c) { return c.trim().split("=")[0]; }).filter(function (n) { return /^_ga/.test(n); }).forEach(function (n) {
       [location.hostname, "." + domain, ""].forEach(function (d) { document.cookie = n + "=; Max-Age=0; path=/" + (d ? "; domain=" + d : ""); });
@@ -221,11 +260,26 @@
     store.del("clk-visits");
   }
 
+  var choice = store.get(KEY);
+  if (choice === "granted") grant();         // before config, so the first hit already carries the choice
+  var c0 = cfg();
+  window.gtag("js", new Date());
+  window.gtag("config", GA, Object.assign({ page_title: document.title, content_group: PAGE, page_type: PAGE,
+    game_mode: c0.kind || "", puzzle_number: c0.number || undefined,
+    allow_google_signals: false, allow_ad_personalization_signals: false }, debug ? { debug_mode: true } : {}));
+  var tag = document.createElement("script");
+  tag.async = true;
+  tag.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA);
+  document.head.appendChild(tag);
+  ga = true;
+  watchSections();
+  scrolled();
+
   var box = null;
   function hide() { if (box) { box.remove(); box = null; } }
   function choose(granted) {
     store.set(KEY, granted ? "granted" : "denied");
-    if (granted) { start(); send("consent", { granted: true }); } else stop();
+    if (granted) { grant(); send("consent", { granted: true }); } else deny();
     hide();
   }
   function ask() {
@@ -235,7 +289,7 @@
     box.id = "consentBox";
     box.setAttribute("role", "region");
     box.setAttribute("aria-label", "Cookies");
-    box.innerHTML = "<p>May we count your visit with Google Analytics? It uses cookies; the game works the same without them.</p>" +
+    box.innerHTML = "<p>May we use Google Analytics cookies to see how the game is played? Without them we only keep anonymous counts, and the game works the same.</p>" +
       '<div class="consent-actions"><button class="pbtn small brass" type="button" data-c="1">Accept</button>' +
       '<button class="pbtn small" type="button" data-c="0">Decline</button></div>';
     box.addEventListener("click", function (e) { var b = e.target.closest("button[data-c]"); if (b) choose(b.dataset.c === "1"); });
@@ -243,8 +297,5 @@
   }
   var btn = document.getElementById("consentOpen");
   if (btn) btn.addEventListener("click", ask);
-  if (optOut) return;                       // the browser already said no: no banner, no Google
-  var choice = store.get(KEY);
-  if (choice === "granted") start();
-  else if (choice !== "denied") ask();
+  if (choice !== "granted" && choice !== "denied") ask();
 })();
