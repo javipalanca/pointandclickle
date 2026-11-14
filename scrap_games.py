@@ -1,6 +1,7 @@
+import json
+
 import bs4
 import requests
-import json
 
 BASE_URL = "https://adventuregamers.com"
 
@@ -21,9 +22,11 @@ def scrap_game(url):
             if "Developer:" in p.text:
                 game_info["developer"] = p.text.replace("Developer:", "").strip()
                 break
-        #game_info["cover"] = soup.find("div", {"class": "feat_image"}).find("img")["data-src"]
+        # game_info["cover"] = soup.find("div", {"class": "feat_image"}).find("img")["data-src"]
         game_info["cover"] = soup.find("img", {"id": "gamebox_new"})["data-src"]
-        screenshots = [img["data-src"] for img in soup.find_all("img", {"itemprop": "screenshot"})]
+        screenshots = [
+            img["data-src"] for img in soup.find_all("img", {"itemprop": "screenshot"})
+        ]
         game_info["screenshots"] = screenshots
         table = soup.find("table", {"class": "game_info_table"})
         for tr in table.find_all("tr"):
@@ -35,17 +38,17 @@ def scrap_game(url):
 
 
 if __name__ == "__main__":
-    with open("games.json", "r") as f:
+    with open("games.json") as f:
         games_list = json.load(f)
 
         for game_url in games_list.values():
             game_info = scrap_game(game_url)
 
             if game_info is not None:
-                with open(f"gamesdb.json", "r") as f:
+                with open("gamesdb.json") as f:
                     gamesdb = json.load(f)
                 if game_info["title"] not in gamesdb:
-                    with open(f"gamesdb.json", "w") as f:
+                    with open("gamesdb.json", "w") as f:
                         gamesdb[game_info["title"]] = game_info
                         json.dump(gamesdb, f, indent=4, ensure_ascii=False)
                     # print(json.dumps(game_info, indent=4))

@@ -9,10 +9,9 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from point_and_clickle.games.sitemap import SITEMAPS
 
-
 urlpatterns = [
     path("", include("point_and_clickle.games.urls")),
-    path(settings.ADMIN_URL, include('massadmin.urls')),
+    path(settings.ADMIN_URL, include("massadmin.urls")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -30,8 +29,13 @@ urlpatterns += [
         name="api-docs",
     ),
     # sitemap and robots.txt
-    re_path(r'^sitemap\.xml', sitemap, {'sitemaps': SITEMAPS}, name='django.contrib.sitemaps.views.sitemap'),
-    re_path(r'^robots\.txt', include('robots.urls')),
+    re_path(
+        r"^sitemap\.xml",
+        sitemap,
+        {"sitemaps": SITEMAPS},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+    re_path(r"^robots\.txt", include("robots.urls")),
 ]
 
 if settings.DEBUG:

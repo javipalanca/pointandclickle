@@ -1,6 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
+
 from pathlib import Path
 
 import environ
@@ -81,8 +82,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "point_and_clickle.users",
     "point_and_clickle.games.apps.GamesConfig",
-    'dal',
-    'dal_select2',
+    "dal",
+    "dal_select2",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -97,7 +98,7 @@ MIGRATION_MODULES = {"sites": "point_and_clickle.contrib.sites.migrations"}
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    #"allauth.account.auth_backends.AuthenticationBackend",
+    # "allauth.account.auth_backends.AuthenticationBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
@@ -281,10 +282,10 @@ SOCIALACCOUNT_FORMS = {"signup": "point_and_clickle.users.forms.UserSocialSignup
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
-    #"DEFAULT_AUTHENTICATION_CLASSES": (
+    # "DEFAULT_AUTHENTICATION_CLASSES": (
     #    "rest_framework.authentication.SessionAuthentication",
     #    "rest_framework.authentication.TokenAuthentication",
-    #),
+    # ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
@@ -307,7 +308,7 @@ SPECTACULAR_SETTINGS = {
 # Your stuff...
 # ------------------------------------------------------------------------------
 ROBOTS_USE_SITEMAP = True
-ROBOTS_SITEMAP_VIEW_NAME = 'cached-sitemap'
+ROBOTS_SITEMAP_VIEW_NAME = "cached-sitemap"
 
 # Point and Click Museum (sister site, linked from the header, the game page and the footer)
 # ------------------------------------------------------------------------------

@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 
+from django.db import IntegrityError, models
 from django.http import Http404
 from model_utils.models import TimeStampedModel
-from django.db import models, IntegrityError
 
 
 class Game(TimeStampedModel):
@@ -49,10 +49,23 @@ class Game(TimeStampedModel):
     featured = models.BooleanField(default=False)
     year = models.IntegerField(blank=True, null=True)
 
-    total_played = property(lambda
-                                self: self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6 + self.hits_failed)
+    total_played = property(
+        lambda self: self.hits_at_1
+        + self.hits_at_2
+        + self.hits_at_3
+        + self.hits_at_4
+        + self.hits_at_5
+        + self.hits_at_6
+        + self.hits_failed
+    )
     total_hits = property(
-        lambda self: self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6)
+        lambda self: self.hits_at_1
+        + self.hits_at_2
+        + self.hits_at_3
+        + self.hits_at_4
+        + self.hits_at_5
+        + self.hits_at_6
+    )
     total_hits_failed = property(lambda self: self.hits_failed)
 
     def add_hit(self, guess):
@@ -73,15 +86,23 @@ class Game(TimeStampedModel):
         self.save()
 
     def stats(self):
-        total = self.hits_at_1 + self.hits_at_2 + self.hits_at_3 + self.hits_at_4 + self.hits_at_5 + self.hits_at_6 + self.hits_failed
+        total = (
+            self.hits_at_1
+            + self.hits_at_2
+            + self.hits_at_3
+            + self.hits_at_4
+            + self.hits_at_5
+            + self.hits_at_6
+            + self.hits_failed
+        )
         return {
-            '1': "{:.0f}".format(round(self.hits_at_1 * 100 / total if total > 0 else 0, 0)),
-            '2': "{:.0f}".format(round(self.hits_at_2 * 100 / total if total > 0 else 0, 0)),
-            '3': "{:.0f}".format(round(self.hits_at_3 * 100 / total if total > 0 else 0, 0)),
-            '4': "{:.0f}".format(round(self.hits_at_4 * 100 / total if total > 0 else 0, 0)),
-            '5': "{:.0f}".format(round(self.hits_at_5 * 100 / total if total > 0 else 0, 0)),
-            '6': "{:.0f}".format(round(self.hits_at_6 * 100 / total if total > 0 else 0, 0)),
-            '0': "{:.0f}".format(round(self.hits_failed * 100 / total if total > 0 else 0, 0)),
+            "1": f"{round(self.hits_at_1 * 100 / total if total > 0 else 0, 0):.0f}",
+            "2": f"{round(self.hits_at_2 * 100 / total if total > 0 else 0, 0):.0f}",
+            "3": f"{round(self.hits_at_3 * 100 / total if total > 0 else 0, 0):.0f}",
+            "4": f"{round(self.hits_at_4 * 100 / total if total > 0 else 0, 0):.0f}",
+            "5": f"{round(self.hits_at_5 * 100 / total if total > 0 else 0, 0):.0f}",
+            "6": f"{round(self.hits_at_6 * 100 / total if total > 0 else 0, 0):.0f}",
+            "0": f"{round(self.hits_failed * 100 / total if total > 0 else 0, 0):.0f}",
         }
 
     def __str__(self):
@@ -109,18 +130,46 @@ class DailyGame(TimeStampedModel):
             daily = DailyGame.objects.filter(date=yesterday)
             if len(daily) > 0:
                 daily = daily[0]
-                success = daily.game.hits_at_1 + daily.game.hits_at_2 + daily.game.hits_at_3 + daily.game.hits_at_4 + daily.game.hits_at_5 + daily.game.hits_at_6
+                success = (
+                    daily.game.hits_at_1
+                    + daily.game.hits_at_2
+                    + daily.game.hits_at_3
+                    + daily.game.hits_at_4
+                    + daily.game.hits_at_5
+                    + daily.game.hits_at_6
+                )
                 fails = daily.game.hits_failed
                 if fails > success:
-                    game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True, featured=True).order_by('?').first()
+                    game = (
+                        Game.objects.filter(
+                            shown=False,
+                            is_valid=True,
+                            is_pointandclick=True,
+                            featured=True,
+                        )
+                        .order_by("?")
+                        .first()
+                    )
                 else:
-                    game = Game.objects.filter(shown=False, is_valid=True, is_pointandclick=True).order_by('?').first()
+                    game = (
+                        Game.objects.filter(
+                            shown=False, is_valid=True, is_pointandclick=True
+                        )
+                        .order_by("?")
+                        .first()
+                    )
             else:
                 game = None
             if game is None:
-                game = Game.objects.filter(is_valid=True, is_pointandclick=True).order_by('?').first()
+                game = (
+                    Game.objects.filter(is_valid=True, is_pointandclick=True)
+                    .order_by("?")
+                    .first()
+                )
             try:
-                daily = DailyGame.objects.create(date=datetime.utcnow().date(), game=game)
+                daily = DailyGame.objects.create(
+                    date=datetime.utcnow().date(), game=game
+                )
                 daily.save()
                 game.shown = True
                 game.date_shown = datetime.utcnow().date()
@@ -132,4 +181,4 @@ class DailyGame(TimeStampedModel):
             raise Http404()
 
     def __str__(self):
-        return self.game.title + ' ' + str(self.date)
+        return self.game.title + " " + str(self.date)

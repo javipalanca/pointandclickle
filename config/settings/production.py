@@ -72,7 +72,9 @@ CSRF_TRUSTED_ORIGINS = env.list(
 # https://docs.djangoproject.com/en/dev/ref/settings/#storages
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    },
 }
 # MEDIA
 # ------------------------------------------------------------------------------
