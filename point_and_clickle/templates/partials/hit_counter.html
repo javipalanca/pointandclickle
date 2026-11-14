@@ -1,0 +1,13 @@
+{# Retro visitor counter (home page). visitor = HIT_COUNTER_START + page views counted by games/stats.py, plus this one. #}
+<section class="hitcounter" id="visitor-counter" aria-labelledby="hc-title">
+    <p class="hc-title" id="hc-title"><span class="hc-star" aria-hidden="true">✦</span> You are visitor number <span class="hc-star" aria-hidden="true">✦</span></p>
+    <div class="hc-box" role="img" aria-label="{{ visitor }}">
+        {% for d in visitor_digits %}<span class="hc-digit" aria-hidden="true">{% if forloop.last %}<span class="hc-roll">{{ d }}</span>{% else %}{{ d }}{% endif %}</span>{% endfor %}
+    </div>
+    <p class="hc-since">since {{ counter_since|date:"j F Y" }} · thanks for stopping by!</p>
+    <ul class="hc-badges" aria-label="Badges">
+        <li>Best viewed at 800×600</li>
+        <li>Made with <span class="hc-heart">♥</span> &amp; pixels</li>
+        <li>No cookies were harmed</li>
+    </ul>
+</section>

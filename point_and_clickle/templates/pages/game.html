@@ -229,6 +229,8 @@
     </a>
 
     {% if mode == "daily" %}
+    {% include "partials/hit_counter.html" %}
+
     <section class="seo-block" id="faq" aria-labelledby="faq-title">
         <h2 id="faq-title">Frequently asked questions</h2>
         {% include "partials/faq.html" %}

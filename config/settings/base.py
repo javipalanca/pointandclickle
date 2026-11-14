@@ -326,3 +326,8 @@ SITE_URL = env("SITE_URL", default="https://pointandclickle.com")
 CANONICAL_HOST_REDIRECT = env.bool("CANONICAL_HOST_REDIRECT", default=False)
 # Google Analytics 4. Loaded only after the visitor accepts the cookie banner (Consent Mode).
 GA_MEASUREMENT_ID = env("GA_MEASUREMENT_ID", default="G-53DQCDDVNJ")
+# Retro visitor counter on the home page: this number plus every page view counted by the own statistics
+# (games/stats.py). 11022 = daily games finished from the launch (29 May 2022) to 14 Nov 2026, when page views
+# started being counted.
+HIT_COUNTER_START = env.int("HIT_COUNTER_START", default=11022)
+HIT_COUNTER_SINCE = "2022-05-29"
