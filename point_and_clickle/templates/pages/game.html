@@ -63,7 +63,9 @@
                                 <li class="list-group-item" id="card-genre"></li>
                             </ul>
                             <a href="#" class="pbtn" id="result-link" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> Adventure Gamers</a>
-                            <div class="museum-ribbon">
+                            <p class="compare modal-compare" hidden></p>
+                            <div class="museum-game" id="museum-game" hidden></div>
+                            <div class="museum-ribbon" id="museum-generic">
                                 <img class="pixel" src="{% static 'images/museum/icon-192.png' %}" alt="">
                                 <span>Discover the studios, engines and eras behind this game at the <a href="{{ MUSEUM_URL }}?utm_source=pointandclickle&amp;utm_medium=result" target="_blank" rel="noopener" data-museum="result">Point and Click Museum ▸</a></span>
                             </div>
@@ -160,7 +162,7 @@
     <div id="searchbox">
         <div id="remote">
             <label class="vh" for="input">Game title</label>
-            <input type="text" class="typeahead" id="input" placeholder="Type a point & click game…" autocomplete="off" enterkeyhint="send">
+            <input type="text" class="title-input" id="input" placeholder="Type a point & click game…" autocomplete="off" enterkeyhint="send">
         </div>
         <button type="submit" class="pbtn brass" id="submit">Guess</button>
     </div>
@@ -187,6 +189,8 @@
         {% for n in "012345" %}<i id="result{{ n }}" class="bi bi-hand-index-fill color-grey hide"></i>{% endfor %}
     </div>
     <div class="status px" id="divguesses" aria-live="polite"><span id="remaining"></span> guesses remaining</div>
+    <p class="compare status-compare" aria-live="polite" hidden></p>
+    <section class="hints px" id="hints" aria-live="polite" hidden></section>
     <ul id="guesses-list" class="guesses" aria-label="Your guesses"></ul>
 
     {% if day and mode != "daily" %}
@@ -239,21 +243,10 @@
 {% endblock %}
 
 {% block inline_javascript %}
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script defer src="{% static 'js/autocomplete.js' %}"></script>
     {{ game_config|json_script:"game-config" }}
     <script>
         window.addEventListener('DOMContentLoaded', function () {
-            const titles = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                sufficient: 1,
-                limit: 100,
-                remote: {wildcard: '%QUERY', url: "{% url 'games:game-autocomplete' %}?q=%QUERY"}
-            });
-
-            $('#remote .typeahead').typeahead({minLength: 1, highlight: true, hint: true},
-                {name: 'games', limit: 20, source: titles});
-
             const result = {"code": "{{ result }}", "id": "{{ game.id }}"};
             const csrf_token = $('{% csrf_token %}');
             init_wordle(result, csrf_token.attr("value"), JSON.parse(document.getElementById('game-config').textContent));

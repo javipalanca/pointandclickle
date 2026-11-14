@@ -39,7 +39,17 @@ METRICS = {
     "game_loss": {"daily", "random", "archive"},
     "daily_attempts": {"1", "2", "3", "4", "5", "6", "x"},
     "share": {"x", "whatsapp", "telegram", "clipboard"},
-    "museum_click": {"header", "banner", "result", "howto", "footer", "faq"},
+    "museum_click": {
+        "header",
+        "banner",
+        "result",
+        "result_timeline",
+        "result_arcade",
+        "howto",
+        "footer",
+        "faq",
+    },
+    "hint": {"1", "2", "3", "4"},
     "random_game": {"daily", "random", "archive-day", "archive", "about", "page"},
     "archive_day": {""},
     "donate_click": {""},
@@ -159,6 +169,7 @@ def summary(days=30):
             ("Daily game: guesses needed", sorted(breakdown("daily_attempts"))),
             ("Shares", breakdown("share")),
             ("Museum links", breakdown("museum_click")),
+            ("Hints shown (by number)", sorted(breakdown("hint"))),
         ],
     }
 

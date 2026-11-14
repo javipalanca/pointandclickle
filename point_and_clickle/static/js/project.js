@@ -4,13 +4,17 @@
      ("stats") and in the game's guess distribution (POST /api/v1/game/<id>/hit/).
    - practice: a random game or a past day. Guesses in "practice_<game id>"; never touches the daily keys, the
      stats or the hit counter. Finished archive days are listed in "practice_days" for the archive page.
-   Analytics go through CLK.track (static/js/analytics.js), which does nothing without consent. */
+   Hints: from the 3rd wrong guess, one more clue per miss (year, developer, platform, genre: the ones the game has).
+   At the end: how all players did with this game, and links to the game's pages in the Point and Click Museum.
+   Analytics go through CLK.track (static/js/analytics.js). */
 const MAX_GUESS = 6;
 const GAMES_API = "/api/v1/game/";
 const STREAK_ACHIEVEMENTS = [3, 7, 14, 30, 100];
+const HINTS_FROM = 3;  // wrong guesses before the first hint
 
 let G = { mode: "daily", kind: "daily", number: null, date: null, listKey: "guess_list" };
 let fromList = false;
+let gameData = null;   // the game's public data (developer, platform, year...), fetched once for hints and result
 
 const track = (name, params) => {
     try { if (window.CLK) CLK.track(name, params); } catch (e) { /* never break the game */ }
@@ -30,6 +34,10 @@ function init_wordle(result, csrf_token, config = {}) {
 
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
 
+    // Title autocomplete (static/js/autocomplete.js): its key handler goes first, so Enter on a suggestion picks it
+    const input = document.getElementById("input");
+    if (input && window.Autocomplete) G.ac = Autocomplete(input, { url: config.autocompleteUrl || "/game-autocomplete/" });
+
     // Load save states
     let guess_list = load_game();
     play_guess(guess_list, result, "resume");
@@ -38,7 +46,7 @@ function init_wordle(result, csrf_token, config = {}) {
     $("#input").on("keydown", function (e) {
         if ((e.which || e.keyCode) === 13) submit_title(guess_list, result);
     });
-    $("#input").on("typeahead:select typeahead:autocomplete", () => { fromList = true; });
+    $("#input").on("ac:select", () => { fromList = true; });
     $("#input").on("input", () => { fromList = false; });
     watch_search();
 
@@ -82,7 +90,7 @@ function init_wordle(result, csrf_token, config = {}) {
 // Autocomplete searches, sent 1.5 s after typing stops (only the title typed and how many games matched)
 function watch_search() {
     let timer = null, rendered = 0, last = "";
-    $("#input").on("typeahead:render", (e, ...suggestions) => { rendered = suggestions.length; });
+    $("#input").on("ac:results", e => { rendered = e.originalEvent.detail.count; });
     $("#input").on("input", function () {
         clearTimeout(timer);
         const term = this.value.trim();
@@ -160,7 +168,65 @@ function play_guess(guess_list, result, how = "play") {
             show_game_data(false, result, how === "resume" ? "resume" : "end");
         }
     }
-    show_win_bar(is_result_correct(guess, result));
+    const won = is_result_correct(guess, result);
+    show_win_bar(won);
+    show_hints(won || guess_list.length >= MAX_GUESS ? 0 : guess_list.length);
+}
+
+// The game's public data, fetched once (developer, platform, genre, year, cover, url)
+function game_data(result) {
+    if (!gameData) gameData = $.getJSON(GAMES_API + result["id"] + "/");
+    return gameData;
+}
+
+// From the HINTS_FROM-th wrong guess, one more clue per miss; none once the game is over
+function show_hints(misses) {
+    const box = $("#hints");
+    if (!box.length) return;
+    const count = misses - HINTS_FROM + 1;
+    if (count <= 0) { box.attr("hidden", true).empty(); return; }
+    game_data(window.result).done(function (d) {
+        const clues = [["Year", d.year], ["Developer", d.developer], ["Platform", d.platform], ["Genre", d.genre]]
+            .filter(c => c[1] !== null && c[1] !== undefined && String(c[1]).trim() !== "");
+        const shown = clues.slice(0, count);
+        if (!shown.length) return;
+        box.html('<h2 class="hint-title"><i class="bi bi-lightbulb-fill"></i> ' + (shown.length > 1 ? "Hints" : "Hint") + "</h2><ul>" +
+            shown.map(c => "<li><b>" + c[0] + ":</b> " + escapeHTML(String(c[1])) + "</li>").join("") + "</ul>").removeAttr("hidden");
+        if (box.data("shown") !== shown.length) {
+            box.data("shown", shown.length);
+            track("hint_view", { hint_number: shown.length, hint_type: shown[shown.length - 1][0].toLowerCase() });
+        }
+    });
+}
+
+// How everybody did with this game: "Today 62% of 840 players solved it, most of them on guess 2."
+function show_comparison(result) {
+    $.getJSON(GAMES_API + result["id"] + "/stats/").done(function (st) {
+        const played = parseInt(st.played || 0, 10);
+        let text = "";
+        if (played > 0) {
+            const solved = Math.max(0, 100 - parseInt(st["0"] || 0, 10));
+            let most = 1;
+            for (let i = 2; i <= MAX_GUESS; i++) if (parseInt(st[i], 10) > parseInt(st[most], 10)) most = i;
+            const who = played + (played === 1 ? " player" : " players");
+            const how = solved > 0 ? solved + "% of " + who + " solved it" + (solved < 100 || played > 1 ? ", most of them on guess " + most : " on guess " + most) : "nobody solved it (" + who + ")";
+            text = (isDaily() ? "Today " : "When it was the daily game, ") + how + ".";
+        } else if (isDaily()) {
+            text = "You are among the first to finish today's game!";
+        }
+        $(".compare").text(text).attr("hidden", !text);
+    });
+}
+
+// Links to this game's pages in the Point and Click Museum, when it has them
+function show_museum_links(result) {
+    $.getJSON(GAMES_API + result["id"] + "/museum/").done(function (r) {
+        const links = (r && r.links) || [];
+        if (!links.length) return;
+        $("#museum-game").html(links.map(l => '<a class="pbtn small brass" href="' + escapeHTML(l.url) + '" target="_blank" rel="noopener" data-museum="result_' +
+            l.kind + '"><i class="bi ' + (l.kind === "arcade" ? "bi-joystick" : "bi-bank2") + '"></i> ' + escapeHTML(l.label) + "</a>").join("")).removeAttr("hidden");
+        $("#museum-generic").attr("hidden", true);
+    });
 }
 
 function escapeHTML(string) {
@@ -171,8 +237,7 @@ function escapeHTML(string) {
 
 function submit_title(guess_list, result) {
     let user_title = escapeHTML($("#input").val());
-    if ($.fn.typeahead) $("#input").typeahead("val", "");  // also clears the hint and closes the list
-    $("#input").val("");
+    if (G.ac) G.ac.clear(); else $("#input").val("");
     if (!user_title || guess_list.length >= MAX_GUESS || is_result_correct(guess_list[guess_list.length - 1], result)) return;
 
     guess_list.push(user_title);
@@ -237,7 +302,7 @@ function show_stats(result) {
 function show_game_data(is_winner, result, trigger = "link") {
     $("#result-modal-title").text(fromBinary(result["code"]));
 
-    $.getJSON(GAMES_API + result["id"]).done(function (data) {
+    game_data(result).done(function (data) {
         $("#result-card-img-top").attr("src", data["cover"]
             .replace("cdn.nivoli.com/adventuregamers", "adventuregamers.com")
             .replace("adventuregamers.com/images", "adventuregamers.com/wp-content/uploads/images"))
@@ -249,6 +314,8 @@ function show_game_data(is_winner, result, trigger = "link") {
         $("#result-modal").show();
     });
     track("view_solution", { trigger: trigger });
+    show_comparison(result);
+    show_museum_links(result);
 
     show_mini_bar(is_winner);
     show_image(0);
@@ -273,7 +340,7 @@ function send_hit(result, hit) {
         type: "POST",
         beforeSend: xhr => xhr.setRequestHeader("X-CSRFToken", window.csrftoken),
         data: { "hit": hit },
-    });
+    }).always(() => show_comparison(result));
 }
 
 function show_win_bar(is_winner) {

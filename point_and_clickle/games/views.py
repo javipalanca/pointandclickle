@@ -9,6 +9,7 @@ from django import http
 from django.conf import settings
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
@@ -56,6 +57,7 @@ class GameView(TemplateView):
                 "kind": (
                     "daily" if mode == "daily" else ("archive" if day else "random")
                 ),
+                "autocompleteUrl": reverse("games:game-autocomplete"),
             },
         }
 
