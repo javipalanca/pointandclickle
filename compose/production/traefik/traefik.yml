@@ -38,6 +38,23 @@ http:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
 
+    museum-router:
+      rule: "Host(`museum.pointandclickle.com`)"
+      entryPoints:
+        - web-secure
+      service: museum
+      tls:
+        certResolver: letsencrypt
+    museum-path-router:      # pointandclickle.com/museum/... -> museum.pointandclickle.com/... (301)
+      rule: "(Host(`pointandclickle.com`) || Host(`www.pointandclickle.com`)) && PathPrefix(`/museum`)"
+      entryPoints:
+        - web-secure
+      middlewares:
+        - museum-redirect
+      service: museum
+      tls:
+        certResolver: letsencrypt
+
   middlewares:
     csrf:
       # https://docs.traefik.io/master/middlewares/headers/#hostsproxyheaders
@@ -45,11 +62,22 @@ http:
       headers:
         hostsProxyHeaders: ["X-CSRFToken"]
 
+    museum-redirect:
+      redirectRegex:
+        regex: "^https?://[^/]+/museum/?(.*)$"
+        replacement: "https://museum.pointandclickle.com/${1}"
+        permanent: true
+
   services:
     django:
       loadBalancer:
         servers:
           - url: http://django:5000
+
+    museum:
+      loadBalancer:
+        servers:
+          - url: http://museum-web:80
 
 providers:
   # https://docs.traefik.io/master/providers/file/

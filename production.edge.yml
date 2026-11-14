@@ -1,0 +1,6 @@
+services:
+  traefik:
+    networks: [default, edge]
+networks:
+  edge:
+    external: true
