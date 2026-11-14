@@ -78,7 +78,7 @@
     {% endblock javascript %}
 </head>
 
-<body data-ga="{{ GA_MEASUREMENT_ID }}" data-page="{% block page_id %}page{% endblock %}">
+<body data-ga="{{ GA_MEASUREMENT_ID }}" data-stats="{% url 'games:stats-collect' %}" data-page="{% block page_id %}page{% endblock %}">
 <a class="skip" href="#main">Skip to the content</a>
 
 <header class="site-header">

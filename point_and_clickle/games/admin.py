@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from point_and_clickle.games.models import DailyGame, Game
+from point_and_clickle.games.models import DailyGame, DailyStat, Game
 
 
 class GameAdmin(admin.ModelAdmin):
@@ -28,3 +28,13 @@ class DailyGameAdmin(admin.ModelAdmin):
 
 
 admin.site.register(DailyGame, DailyGameAdmin)
+
+
+@admin.register(DailyStat)
+class DailyStatAdmin(admin.ModelAdmin):
+    """Own statistics (anonymous daily counters). The summary is at /stats/."""
+
+    list_display = ("date", "metric", "label", "count")
+    list_filter = ("metric", "date")
+    search_fields = ("label",)
+    date_hierarchy = "date"

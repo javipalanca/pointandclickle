@@ -182,3 +182,25 @@ class DailyGame(TimeStampedModel):
 
     def __str__(self):
         return self.game.title + " " + str(self.date)
+
+
+class DailyStat(models.Model):
+    """Anonymous daily counters (own statistics, see games/stats.py): one row per day, metric and label.
+    No visitor identifiers, IPs or cookies are stored, only how many times something happened.
+    """
+
+    date = models.DateField(db_index=True)
+    metric = models.CharField(max_length=32)
+    label = models.CharField(max_length=64, blank=True, default="")
+    count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["date", "metric", "label"], name="unique_daily_stat"
+            )
+        ]
+        ordering = ["-date", "metric", "-count"]
+
+    def __str__(self):
+        return f"{self.date} {self.metric}:{self.label} = {self.count}"
