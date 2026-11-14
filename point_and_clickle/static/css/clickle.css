@@ -148,11 +148,15 @@ main { padding-block: 28px 8px; }
 .screen-label { display: flex; justify-content: space-between; gap: 8px; font-family: var(--display); font-size: 8px; color: var(--dim); padding: 10px 2px 0; }
 .screen-label .led { color: var(--verb); }
 
-.frames { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; margin: 16px 0 6px; }
-.frames .guess { min-width: 46px; }
+/* the buttons and the hands share one 6-column grid, so each hand sits centred under its number */
+.frames, .hands { display: grid; grid-template-columns: repeat(6, minmax(0, 50px)); justify-content: center; gap: 12px; }
+.frames { margin: 16px 0 6px; }
+.frames .guess { width: 100%; min-width: 0; margin: 0; padding-left: 0; padding-right: 0; }
+.frames .guess.hide { display: block !important; visibility: hidden; } /* frames not unlocked yet keep their column */
 .frames .guess.current { background: var(--amber); color: var(--ink); }
-.hands { display: flex; justify-content: center; gap: 10px; min-height: 40px; align-items: center; }
+.hands { min-height: 40px; align-items: center; justify-items: center; }
 .hands .bi { font-size: 28px; line-height: 1; }
+.hands .bi.hide { display: inline-block !important; visibility: hidden; } /* keep the slot of a hand not shown yet */
 .color-grey { color: #4f5d55; }
 .color-red { color: var(--rose); }
 .color-green { color: var(--verb); }
